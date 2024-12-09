@@ -1,5 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import Login from '../components/Login';
 import { customStyles } from '../utils/CustomStyle';
 import {
   StyleSheet,
@@ -8,19 +6,24 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import Register from '../components/Register';
+import SignUp from '../components/SignUp';
+import SignIn from '../components/SignIn'
 
-export default function Authentification() {
+export default function Authentification({navigation}) {
+
+  const handlesubmit = () => {
+    navigation.navigate('TabNavigator')
+  }
+
+
+
   return (
     <View style={styles.container}>
-      <Login/>
-      <Register />
+      
       <Text>Yom</Text>
       <Text>Kata</Text>
-      <TouchableOpacity style={styles.login}> <Text> Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.login}> <Text> Register</Text>
-      </TouchableOpacity>
+      <SignUp/>
+      <SignIn/>
     </View>
   );
 }

@@ -7,13 +7,11 @@ export default function HomeScreen({navigation}) {
 
 
   const handlesubmit = () => {
-    navigation.navigate('TabNavigator')
+    navigation.navigate('Authentification')
   }
  
   return (
     <KeyboardAvoidingView  style={styles.container}>
-      <SignUp/>
-      <SignIn/>
       <Text onPress={() => handlesubmit()} >HomeScreen</Text>
     </KeyboardAvoidingView>
   )

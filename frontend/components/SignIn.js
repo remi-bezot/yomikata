@@ -40,18 +40,39 @@ export default function SignUp() {
     <Text style={styles.inputTitle}>Password</Text>
     <TextInput style={styles.inputStyles} onChangeText={(value) => setSignInPassword(value)} value={signInPassword} placeholder='password'>
   </TextInput>
-    <TouchableOpacity style={styles.login} onPress={() => handleConnect()}> <Text>SignIn</Text>
+    <TouchableOpacity style={styles.button} onPress={() => handleConnect()}> <Text>SignIn</Text>
     </TouchableOpacity>
     </KeyboardAvoidingView>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
     flex: 1,
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+  inputStyles: {
+    height: 40,
+    width: customStyles.buttonWidth,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  inputTitle: {
+    fontFamily: "noto sans jp",
+    fontSize: 15,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    fontFamily: customStyles.defaultFontFamily,
+  },
+  text: {
+    fontFamily: customStyles.defaultFontFamily,
   },
   button: {
     backgroundColor: customStyles.buttonBackgroundColor,
@@ -62,8 +83,9 @@ const styles = StyleSheet.create({
     flexDirection: customStyles.buttonFlexDirection,
     alignItems: customStyles.buttonAlignItems,
     justifyContent: customStyles.buttonJustifyContent,
-  },
-  text: {
-    fontFamily: customStyles.defaultFontFamily,
-  },
-});
+
+  }
+
+
+
+})
