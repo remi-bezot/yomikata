@@ -11,6 +11,10 @@ import { customStyles } from "../utils/CustomStyle";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSubmit = () => {
+    // dispatch(updateNickname(nickname));
+    // navigation.navigate("TabNavigator");
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>LOGIN</Text>
