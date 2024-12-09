@@ -5,9 +5,10 @@ require('../models/connection');
 const User = require('../models/users');
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
+const { checkBody } = require('../modules/checkbody');
 
 router.post('/signup', (req, res) => {
-  if (req.body, ['firstname','username', 'password']) {
+  if (!checkBody(req.body, ['firstname','username', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -42,6 +43,25 @@ router.post('/signin', (req, res) => {
     }
   });
 });
+
+router.delete('/:token', (req, res) => {
+  const { token } = req.params;
+
+  // Recherche et suppression de l'élément
+  User.findByIdAndDelete(token)
+    .then((deletedElement) => {
+      if (deletedElement) {
+        res.json({ result: true, message: 'Élément supprimé avec succès' });
+      } else {
+        res.status(404).json({ result: false, message: 'Élément non trouvé' });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ result: false, error: `Erreur serveur: ${err.message}` });
+    });
+});
+
+
 
 
 
