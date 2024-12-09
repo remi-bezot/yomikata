@@ -10,9 +10,6 @@ import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
