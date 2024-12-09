@@ -8,8 +8,9 @@ import DashboardScreen from "./screens/DashboardScreen";
 import BookScreen from "./screens/BookScreen";
 import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-import _FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +23,7 @@ const TabNavigator = () => {
         let iconName = '';
 
         if (route.name === 'dashboard') {
-          iconName = 'house';
+          iconName = 'torii-gate';
         } else if (route.name === 'book') {
           iconName = 'book';
         } else if(route.name === 'favorite'){
@@ -31,7 +32,7 @@ const TabNavigator = () => {
           iconName = 'user'
         }
 
-        return <FontAwesome name={iconName} size={size} color={color} />;
+        return <FontAwesome6 name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: '#e8be4b',
       tabBarInactiveTintColor: '#b2b2b2',

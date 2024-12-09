@@ -1,7 +1,7 @@
 import { Text, StyleSheet, View } from 'react-native'
 import React from 'react'
 
-export function UserScreen() {
+export default function UserScreen() {
  
     return (
       <View>

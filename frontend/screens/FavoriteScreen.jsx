@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native'
 import React from 'react'
 
-export function FavoriteScreen() {
+export default function FavoriteScreen() {
   
     return (
       <View>
