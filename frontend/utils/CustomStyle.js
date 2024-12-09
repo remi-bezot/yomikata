@@ -9,6 +9,7 @@ export const Icons = {
     user: faUserGraduate,
     authuser: faUser, 
     authpwd: faEyeSlash,
+
 };
 
 
