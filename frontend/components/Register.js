@@ -4,12 +4,14 @@ import {
   Text,
   KeyboardAvoidingView,
   StyleSheet,
+  TextInput,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 
 export default function Register() {
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <TextInput></TextInput>
       <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
         <Text style={styles.text}>Register</Text>
       </TouchableOpacity>
