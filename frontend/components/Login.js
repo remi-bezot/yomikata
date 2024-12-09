@@ -52,7 +52,15 @@ const styles = StyleSheet.create({
     fontFamily: customStyles.defaultFontFamily, 
   }, 
   login:{
-    
+    backgroundColor: customStyles.buttonBackgroundColor,
+    borderRadius: customStyles.buttonRadius,
+    width: customStyles.buttonWidth,
+    height: customStyles.buttonHeight,
+    display: customStyles.buttonDisplay,
+    flexDirection: customStyles.buttonFlexDirection,
+    alignItems: customStyles.buttonAlignItems,
+    justifyContent: customStyles.buttonJustifyContent,
+
   }
 
 
