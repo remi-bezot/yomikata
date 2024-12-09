@@ -1,14 +1,13 @@
 import { Text, View } from 'react-native'
-import React, { Component } from 'react'
+import React from 'react'
 
-export class bookScreen extends Component {
-  render() {
+export function BookScreen() {
+  
     return (
       <View>
         <Text>bookScreen</Text>
       </View>
     )
   }
-}
 
-export default bookScreen
+

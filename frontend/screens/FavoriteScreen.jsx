@@ -1,14 +1,12 @@
 import { Text, View } from 'react-native'
-import React, { Component } from 'react'
+import React from 'react'
 
-export class FavoriteScreen extends Component {
-  render() {
+export function FavoriteScreen() {
+  
     return (
       <View>
         <Text>FavoriteScreen</Text>
       </View>
     )
   }
-}
 
-export default FavoriteScreen

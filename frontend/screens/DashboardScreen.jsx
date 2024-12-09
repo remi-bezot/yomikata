@@ -1,14 +1,13 @@
 import { Text, View } from 'react-native'
-import React, { Component } from 'react'
+import React from 'react'
 
-export class dashboardScreen extends Component {
-  render() {
+export function DashboardScreen() {
+
     return (
       <View>
         <Text>dashboardScreen</Text>
       </View>
     )
   }
-}
 
-export default dashboardScreen
+
