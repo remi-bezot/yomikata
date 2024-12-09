@@ -5,25 +5,27 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { customStyles } from "../utils/CustomStyle";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <View style={styles.container}>
       <Text style={styles.title}>LOGIN</Text>
       <Text style={styles.inputTitle}>Email</Text>
       <TextInput
-        //   onChangeText={onChangeNumber}
-        //   value={number}
+        onChangeText={(value) => setEmail(value)}
+        value={email}
         style={styles.inputStyles}
         placeholder="email"
       ></TextInput>
       <Text style={styles.inputTitle}>Password</Text>
       <TextInput
         style={styles.inputStyles}
-        //   onChangeText={onChangeNumber}
-        //   value={number}
+        onChangeText={(value) => setPassword(value)}
+        value={password}
         placeholder="password"
       ></TextInput>
       <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>

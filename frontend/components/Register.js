@@ -9,19 +9,25 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = () => {
+    dispatch(updateNickname(nickname));
+    navigation.navigate("TabNavigator");
+  };
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Text style={styles.inputTitle}>Email</Text>
       <TextInput
-        //   onChangeText={onChangeNumber}
-        //   value={number}
+        onChangeText={(value) => setEmail(value)}
+        value={email}
         style={styles.inputStyles}
         placeholder="email"
       ></TextInput>
       <Text style={styles.inputTitle}>Password</Text>
       <TextInput
-        //   onChangeText={onChangeNumber}
-        //   value={number}
+        onChangeText={(value) => setPassword(value)}
+        value={password}
         style={styles.inputStyles}
         placeholder="password"
         secureTextEntry={true}
