@@ -11,7 +11,21 @@ import { customStyles } from "../utils/CustomStyle";
 export default function Register() {
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <TextInput></TextInput>
+      <Text style={styles.inputTitle}>Email</Text>
+      <TextInput
+        //   onChangeText={onChangeNumber}
+        //   value={number}
+        style={styles.inputStyles}
+        placeholder="email"
+      ></TextInput>
+      <Text style={styles.inputTitle}>Password</Text>
+      <TextInput
+        //   onChangeText={onChangeNumber}
+        //   value={number}
+        style={styles.inputStyles}
+        placeholder="password"
+        secureTextEntry={true}
+      ></TextInput>
       <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
         <Text style={styles.text}>Register</Text>
       </TouchableOpacity>
@@ -37,6 +51,22 @@ const styles = StyleSheet.create({
     justifyContent: customStyles.buttonJustifyContent,
   },
   text: {
+    fontFamily: customStyles.defaultFontFamily,
+  },
+  inputStyles: {
+    height: 40,
+    width: customStyles.buttonWidth,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  inputTitle: {
+    fontFamily: "noto sans jp",
+    fontSize: 15,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
     fontFamily: customStyles.defaultFontFamily,
   },
 });
