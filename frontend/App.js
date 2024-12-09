@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { customStyles } from './utils/CustomStyle';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { customStyles } from "./utils/CustomStyle";
 export default function App() {
   return (
     <View style={styles.container}>
@@ -24,44 +24,41 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   btn: {
-    display: 'flex', 
-    alignItems:'center', 
-    justifyContent:'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#EEC1C0",
-    width: '80%', 
-    height: 50, 
-    borderRadius: customStyles.borderRadius, 
-  }, 
+    width: "80%",
+    height: 50,
+    borderRadius: customStyles.borderRadius,
+  },
   btntext: {
-    fontSize: 20, 
-  }, 
+    fontSize: 20,
+  },
   h1: {
-    fontSize: 32, 
-    color: '#CC4646',
-    fontFamily: 'satoshi',
-  }, 
+    fontSize: 32,
+    color: "#CC4646",
+    fontFamily: "satoshi",
+  },
   h2: {
-    fontSize: 24, 
-    color: 'black',
-    fontFamily: 'noto sans jp',
-  }, 
+    fontSize: 24,
+    color: "black",
+    fontFamily: "noto sans jp",
+  },
   navbar: {
-    width: '90%', 
-    height: 50, 
-    borderRadius: 24, 
+    width: "90%",
+    height: 50,
+    borderRadius: 24,
     backgroundColor: "#EEC1C0",
-  }, 
+  },
   navcircle: {
-    height: '7%', 
-    borderRadius: 100, 
+    height: "7%",
+    borderRadius: 100,
     backgroundColor: "black",
-  }, 
-
-  
-  
+  },
 });
