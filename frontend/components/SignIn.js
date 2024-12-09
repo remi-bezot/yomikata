@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import {
-  TouchableOpacity,
-  Text,
-  KeyboardAvoidingView,
-  StyleSheet,
-} from "react-native";
-import { customStyles } from "../utils/CustomStyle";
+import { KeyboardAvoidingView, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { customStyles } from "../utils/CustomStyle"; 
+import {useDispatch, useSelector} from 'react-redux'
+import { login } from '../reducers/users'
 
 export default function SignUp() {
 
@@ -16,7 +13,7 @@ export default function SignUp() {
   
 
   const handleConnect = () => {
-    fetch('http://localhost:3000/users/signup', {
+    fetch('http://10.10.200.23:3000/users/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({  username: signInUsername, password: signInPassword}),
