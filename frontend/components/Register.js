@@ -12,8 +12,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = () => {
-    dispatch(updateNickname(nickname));
-    navigation.navigate("TabNavigator");
+    // dispatch(updateNickname(nickname));
+    // navigation.navigate("TabNavigator");
   };
   return (
     <KeyboardAvoidingView style={styles.container}>
