@@ -76,9 +76,5 @@ const styles = StyleSheet.create({
     flexDirection: customStyles.buttonFlexDirection,
     alignItems: customStyles.buttonAlignItems,
     justifyContent: customStyles.buttonJustifyContent,
-
-  }
-
-
-
-})
+  },
+});
