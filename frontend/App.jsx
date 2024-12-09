@@ -12,12 +12,13 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Tuple } from '@reduxjs/toolkit'
 //configuration du store
 
 const store = configureStore({
 	reducer: { user },
 });
+
 
 
 const Stack = createNativeStackNavigator();

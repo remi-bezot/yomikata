@@ -6,7 +6,6 @@ import SignIn from '../components/SignIn'
 export default function HomeScreen({navigation}) {
 
 
-
   const handlesubmit = () => {
     navigation.navigate('TabNavigator')
   }
@@ -19,7 +18,6 @@ export default function HomeScreen({navigation}) {
     </KeyboardAvoidingView>
   )
 }
-
 
 const styles = StyleSheet.create({
   background: {
