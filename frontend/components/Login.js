@@ -2,7 +2,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import React from 'react'
 import { customStyles } from '../utils/CustomStyle'
 
-export default function LoginCode() {
+export default function Login() {
   return (
     <View style={styles.container} >
       <Text style={styles.title}>LOGIN</Text>
