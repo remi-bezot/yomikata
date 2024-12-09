@@ -4504,6 +4504,11 @@ react-is@^18.0.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
+react-native-expo-viewport-units@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-expo-viewport-units/-/react-native-expo-viewport-units-0.0.8.tgz#13d9bcb3e95abcc55f800cfa5f3e4b571860e726"
+  integrity sha512-duAEaoVF41puhXhpI1BuDFc2AMBqfWT2S74EJqaQ5dnuZVhsP++AExJwVo7/2/lHmb6+gYWGyBZOxxPCMWe+Ew==
+
 react-native@0.76.3:
   version "0.76.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.76.3.tgz"

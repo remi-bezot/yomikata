@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
 import Register from "./components/Register";
+import { vw, vh, vmin, vmax } from "react-native-expo-viewport-units";
 
 export default function App() {
   return (
@@ -18,6 +25,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    width: vw(100),
+    height: "100%",
   },
   btn: {},
 });
