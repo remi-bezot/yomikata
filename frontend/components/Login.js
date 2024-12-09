@@ -20,7 +20,7 @@ export default function Login() {
 //   value={number}
     placeholder="password">
     </TextInput>
-    <TouchableOpacity style={styles.login}> <Text> Login</Text>
+    <TouchableOpacity style={styles.submit}> <Text> Submit</Text>
     </TouchableOpacity>
     </View>
   )
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     fontWeight:'700',
     fontFamily: customStyles.defaultFontFamily, 
   }, 
-  login:{
+   submit:{
     backgroundColor: customStyles.buttonBackgroundColor,
     borderRadius: customStyles.buttonRadius,
     width: customStyles.buttonWidth,
