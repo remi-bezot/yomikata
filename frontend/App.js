@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { customStyles } from './utils/CustomStyle';
+import LoginCode from './modules/LoginCode';
 
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start  working on your app!</Text>
+      <LoginCode/>
+
       <StatusBar style="auto" />
     </View>
   );
