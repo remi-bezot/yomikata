@@ -4,7 +4,6 @@ import React from 'react'
 export default function HomeScreen({navigation}) {
 
 
-
   const handlesubmit = () => {
     navigation.navigate('TabNavigator')
   }
@@ -15,7 +14,6 @@ export default function HomeScreen({navigation}) {
     </View>
   )
 }
-
 
 const styles = StyleSheet.create({
   background: {
