@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const { checkBody } = require('../modules/checkbody');
 
 router.post('/signup', (req, res) => {
-  if (!checkBody(req.body, ['firstname','username', 'password'])) {
+  if (!checkBody(req.body, ['name','username','email', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -18,10 +18,14 @@ router.post('/signup', (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        firstname : req.body.firstname,
-        username: req.body.username,
+        name : req.body.name,
+        username : req.body.username,
+        email : req.body.email,
         password: hash,
         token: uid2(32),
+        level : String,
+        avatar : String, 
+        progress : String,
       });
 
       newUser.save().then(data => {
@@ -48,7 +52,7 @@ router.delete('/:token', (req, res) => {
   const { token } = req.params;
 
   // Recherche et suppression de l'élément
-  User.findByIdAndDelete(token)
+  User.deleteOne({token : token})
     .then((deletedElement) => {
       if (deletedElement) {
         res.json({ result: true, message: 'Élément supprimé avec succès' });
@@ -57,7 +61,7 @@ router.delete('/:token', (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).json({ result: false, error: `Erreur serveur: ${err.message}` });
+      res.status(500).json({ result: false, error: 'Erreur serveur' });
     });
 });
 

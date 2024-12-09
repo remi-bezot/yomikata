@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
 
-  nom : String,
-  prenom : String,
+  name : String,
+  username : String,
   email : String,
   password: String,
   token: String,
-  niveau : String,
+  level : String,
   avatar : String, 
   progress : String,
 
