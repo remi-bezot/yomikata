@@ -1,3 +1,7 @@
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Login from './components/Login';
+
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -12,6 +16,8 @@ import { vw, vh, vmin, vmax } from "react-native-expo-viewport-units";
 export default function App() {
   return (
     <View style={styles.container}>
+      <Text>Open up App.js to start  working on your app!</Text>
+      <Login/>
       <Register />
 
       <StatusBar style="auto" />
