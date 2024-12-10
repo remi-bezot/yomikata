@@ -15,7 +15,6 @@ import LessonsScreen from  './screens/LessonsScreen'
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 //configuration du store
-
 const store = configureStore({
 	reducer: { user },
 });
@@ -60,7 +59,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="Auth" component={Authentification} />
+					<Stack.Screen name="Auth" component={LessonsScreen} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 				</Stack.Navigator>
 			</NavigationContainer>

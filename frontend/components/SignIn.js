@@ -10,9 +10,8 @@ import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
 import { Const } from "../utils/Const";
-
+const uri = Const.uri;
 export default function SignUp() {
-  const uri = Const.uri;
   const [signInUsername, setSignInUsername] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   const dispatch = useDispatch();

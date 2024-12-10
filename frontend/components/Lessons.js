@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Text,
@@ -9,69 +9,77 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
+import { Const } from "../utils/Const";
+const uri = Const.uri;
 
 export default function Lessons() {
-  const [lessonId, setLessonId] = useState(0);
+  const [lessonData, setLessonData] = useState({});
+  const [allLessons, setallLessons] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
-  const handleGoLesson = (id) => {
-    let token = "jkfhd154fd6";
-    // user.token
-    setLessonId(id);
-    fetch(`http://10.172.88.9:3000/lessons/showLessons/${id}/${token}`, {})
+  useEffect(() => {
+    fetch(`http://${uri}:3000/lessons/showAllLessons`, {})
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data);
+          if (data && data.message) {
+            setallLessons(data.message);
+          }
+        }
+      });
+  }, []);
 
-          setLessonId(id);
+  const handleGoLesson = (id) => {
+    let token = "jkfhd154fd6";
+    fetch(`http://${uri}:3000/lessons/showLessons/${id}/${token}`, {})
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          console.log(data.dialogues);
+
+          setLessonData(data);
         }
       });
   };
 
-  let dataReturn = [
-    {
-      theme: "train",
-      number: 1,
-      id: 1,
-    },
-    {
-      theme: "travel",
-      number: 1,
-      id: 2,
-    },
-    {
-      theme: "train",
-      number: 2,
-      id: 3,
-    },
-    {
-      theme: "restaurant",
-      number: 1,
-      id: 4,
-    },
-  ];
+  const lessons = allLessons.map((lesson, i) => (
+    <View key={i}>
+      <Text>{lesson.theme}</Text>
+      <Text>Number: {lesson.number}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => handleGoLesson(lesson.id)}
+      >
+        <Text>Go to</Text>
+      </TouchableOpacity>
+    </View>
+  ));
 
-  const lessons = dataReturn.map((data, i) => {
-    return (
-      <View key={i}>
-        <Text>{data.theme}</Text>
-        <Text>{data.number}</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleGoLesson(data.id)}
-        >
-          <Text>Go to</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  });
+  const dialogues = lessonData.dialogues
+    ? lessonData.dialogues.map((dialogue, i) => (
+        <View key={i}>
+          <Text>Speaker {dialogue.speaker}</Text>
+          <Text>Japanese: {dialogue.japanese}</Text>
+          <Text>English: {dialogue.english}</Text>
+          <Text>Romanji: {dialogue.romanji}</Text>
+        </View>
+      ))
+    : null;
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>Lessons</Text>
-      {lessonId === 0 ? lessons : <Text>id</Text>}
+      {allLessons.length !== 0 ? (
+        <View>
+          <Text style={styles.title}>Lessons</Text>
+          {lessons}
+        </View>
+      ) : (
+        <View>
+          <Text style={styles.title}>Dialogues</Text>
+          {dialogues}
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }

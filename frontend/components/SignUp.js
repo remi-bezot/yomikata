@@ -11,16 +11,14 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
 import { Const } from "../utils/Const";
-
+const uri = Const.uri;
 export default function SignUp() {
-  const uri = Const.uri;
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpname, setSignUpname] = useState("");
   const [signUpemail, setSignUpemail] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log(uri);
   const handleConnect = () => {
     fetch(`http://${uri}:3000/users/signup`, {
       method: "POST",
