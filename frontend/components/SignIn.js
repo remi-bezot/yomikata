@@ -38,7 +38,6 @@ export default function SignUp() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignIn</Text>
 
       <Text style={styles.inputTitle}>Username</Text>
       <TextInput
@@ -56,9 +55,9 @@ export default function SignUp() {
         placeholder="password"
       ></TextInput>
       <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        {" "}
         <Text>SignIn</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
+
     </KeyboardAvoidingView>
   );
 }
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    // fontFamily: "noto sans jp",
+    fontFamily: "noto sans jp",
     fontSize: 15,
   },
   title: {

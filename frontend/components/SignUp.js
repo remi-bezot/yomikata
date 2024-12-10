@@ -45,7 +45,6 @@ export default function SignUp() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
       <Text style={styles.inputTitle}>Name</Text>
       <TextInput
         onChangeText={(value) => setSignUpname(value)}
@@ -75,7 +74,6 @@ export default function SignUp() {
         placeholder="password"
       ></TextInput>
       <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        {" "}
         <Text>SignUp</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
