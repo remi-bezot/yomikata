@@ -11,10 +11,10 @@ import { customStyles } from "../utils/CustomStyle";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = () => {
-    dispatch(updateNickname(nickname));
-    navigation.navigate("TabNavigator");
-  };
+  //   const handleSubmit = () => {
+  //     // dispatch(updateNickname(nickname));
+  //     // navigation.navigate("TabNavigator");
+  //   };
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Text style={styles.inputTitle}>Email</Text>
@@ -32,7 +32,7 @@ export default function Register() {
         placeholder="password"
         secureTextEntry={true}
       ></TextInput>
-      <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.text}>Register</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

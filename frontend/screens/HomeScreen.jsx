@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { KeyboardAvoidingView , Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { Link } from '@react-navigation/native'
+import SignUp from '../components/SignUp'
+import SignIn from '../components/SignIn'
 
 export default function HomeScreen({navigation}) {
-
 
 
   const handlesubmit = () => {
@@ -11,12 +12,13 @@ export default function HomeScreen({navigation}) {
   }
  
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView  style={styles.container}>
+      <SignUp/>
+      <SignIn/>
       <Text onPress={() => handlesubmit()} >HomeScreen</Text>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
-
 
 const styles = StyleSheet.create({
   background: {
