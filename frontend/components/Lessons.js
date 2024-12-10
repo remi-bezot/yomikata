@@ -19,21 +19,39 @@ export default function Lessons() {
   const [currentLessonId, setCurrentLessonId] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
 
   useEffect(() => {
-    fetch(`http://${uri}:3000/lessons/showAllLessons`, {})
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          if (data && data.message) {
-            setallLessons(data.message);
-          }
+    const handleResize = () => {
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    const subscription = Dimensions.addEventListener("change", handleResize);
+
+    return () => subscription?.remove();
+  }, []);
+  useEffect(() => {
+    fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`, {})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP : ${response.status}`);
         }
+        return response.json();
+      })
+      .then((data) => {
+        if (data && Array.isArray(data.data)) {
+          setallLessons(data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur with lessons :", error);
       });
   }, []);
 
   const handleGoLesson = (id) => {
-    let token = "jkfhd154fd6";
     fetch(`http://${uri}:3000/lessons/showLessons/${id}/${token}`, {})
       .then((response) => response.json())
       .then((data) => {
@@ -44,24 +62,26 @@ export default function Lessons() {
       });
   };
 
-  const lessons = allLessons.map((lesson, i) => (
-    <View key={i}>
-      <Text>{lesson.theme}</Text>
-      <Text>Number: {lesson.number}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => handleGoLesson(lesson.id)}
-      >
-        <Text>Go to</Text>
-      </TouchableOpacity>
-    </View>
-  ));
+  const lessons = Array.isArray(allLessons)
+    ? allLessons.map((lesson, i) => (
+        <View key={i}>
+          <Text>{lesson.theme}</Text>
+          <Text>Number: {lesson.number}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleGoLesson(lesson.id)}
+          >
+            <Text>Go to</Text>
+          </TouchableOpacity>
+        </View>
+      ))
+    : null;
 
-  const dialogues = lessonData
+  const dialogues = Array.isArray(lessonData)
     ? lessonData.map((dialogue, i) => {
         const alignment = i % 2 === 0 ? "flex-start" : "flex-end";
         return (
-          <View key={i} style={[styles.dialogue, { alignItems: alignment }]}>
+          <View key={i} style={[styles.dialogue, { alignSelf: alignment }]}>
             <View style={styles.dialogueChild}>
               <Text>Speaker {dialogue.speaker}</Text>
               <Text>Japanese: {dialogue.japanese}</Text>
@@ -96,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    width: Dimensions.get("window").width,
+    width: screenWidth,
   },
   inputStyles: {
     height: 40,
@@ -128,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: customStyles.buttonJustifyContent,
   },
   dialogue: {
-    width: "350",
+    width: 350,
   },
   dialogueChild: {
     borderWidth: 1,
