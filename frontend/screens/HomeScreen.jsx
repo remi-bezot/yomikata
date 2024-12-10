@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView , Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { Link } from '@react-navigation/native'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 
