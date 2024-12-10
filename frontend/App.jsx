@@ -11,7 +11,7 @@ import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
-
+import LessonsScreen from "./screens/LessonsScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from '@reduxjs/toolkit'
 
@@ -20,7 +20,6 @@ import { configureStore, Tuple } from '@reduxjs/toolkit'
 const store = configureStore({
 	reducer: { user },
 });
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

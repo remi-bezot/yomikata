@@ -1,51 +1,53 @@
 import React, { useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+	KeyboardAvoidingView,
+	Text,
+	TextInput,
+	StyleSheet,
+	TouchableOpacity,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
+import { Const } from "../utils/Const";
 
 export default function SignUp() {
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
+	const uri = Const.uri;
+	const [signInUsername, setSignInUsername] = useState("");
+	const [signInPassword, setSignInPassword] = useState("");
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
 
-  const handleConnect = () => {
-    fetch("http://10.10.200.23:3000/users/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signInUsername,
-        password: signInPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log(data);
-          dispatch(login({ username: signInUsername, token: data.token }));
-          setSignInUsername("");
-          setSignInPassword("");
-        }
-      });
-  };
+	const handleConnect = () => {
+		fetch(`http://${uri}:3000/users/signin`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				username: signInUsername,
+				password: signInPassword,
+			}),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data) {
+					console.log(data);
+					dispatch(login({ username: signInUsername, token: data.token }));
+					setSignInUsername("");
+					setSignInPassword("");
+				}
+			});
+	};
 
   return (
     <KeyboardAvoidingView style={styles.container}>
 
-      <Text style={styles.inputTitle}>Username</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignInUsername(value)}
-        value={signInUsername}
-        placeholder="username"
-      ></TextInput>
+			<Text style={styles.inputTitle}>Username</Text>
+			<TextInput
+				style={styles.inputStyles}
+				onChangeText={(value) => setSignInUsername(value)}
+				value={signInUsername}
+				placeholder="username"
+			></TextInput>
 
       <Text style={styles.inputTitle}>Password</Text>
       <TextInput
@@ -101,4 +103,3 @@ const styles = StyleSheet.create({
     justifyContent: customStyles.buttonJustifyContent,
   },
 });
-
