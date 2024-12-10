@@ -13,16 +13,16 @@ import { login } from "../reducers/users";
 import { Const } from "../utils/Const";
 
 export default function SignUp() {
-<<<<<<< HEAD
+	const uri = Const.uri;
 	const [signUpUsername, setSignUpUsername] = useState("");
 	const [signUpPassword, setSignUpPassword] = useState("");
 	const [signUpname, setSignUpname] = useState("");
 	const [signUpemail, setSignUpemail] = useState("");
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-
+	console.log(uri);
 	const handleConnect = () => {
-		fetch("http://10.10.200.23:3000/users/signup", {
+		fetch(`http://${uri}:3000/users/signup`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -81,76 +81,6 @@ export default function SignUp() {
 			</TouchableOpacity>
 		</KeyboardAvoidingView>
 	);
-=======
-  const uri = Const.uri;
-  const [signUpUsername, setSignUpUsername] = useState("");
-  const [signUpPassword, setSignUpPassword] = useState("");
-  const [signUpname, setSignUpname] = useState("");
-  const [signUpemail, setSignUpemail] = useState("");
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  console.log(uri);
-  const handleConnect = () => {
-    fetch(`http://${uri}:3000/users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: signUpname,
-        username: signUpUsername,
-        email: signUpemail,
-        password: signUpPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log(data);
-          dispatch(login({ username: signUpUsername, token: data.token }));
-          setSignUpUsername("");
-          setSignUpPassword("");
-          setSignUpname("");
-          setSignUpemail("");
-        }
-      });
-  };
-
-  return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
-      <Text style={styles.inputTitle}>Name</Text>
-      <TextInput
-        onChangeText={(value) => setSignUpname(value)}
-        value={signUpname}
-        style={styles.inputStyles}
-        placeholder="name"
-      ></TextInput>
-      <Text style={styles.inputTitle}>Username</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignUpUsername(value)}
-        value={signUpUsername}
-        placeholder="username"
-      ></TextInput>
-      <Text style={styles.inputTitle}>Email</Text>
-      <TextInput
-        onChangeText={(value) => setSignUpemail(value)}
-        value={signUpemail}
-        style={styles.inputStyles}
-        placeholder="email"
-      ></TextInput>
-      <Text style={styles.inputTitle}>Password</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignUpPassword(value)}
-        value={signUpPassword}
-        placeholder="password"
-      ></TextInput>
-      <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        <Text>SignUp</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
-  );
->>>>>>> 2bcec5679aec0325d7dbeaa632a1e23b8c1408cc
 }
 
 const styles = StyleSheet.create({
