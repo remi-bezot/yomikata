@@ -62,6 +62,7 @@ export default function SignUp() {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

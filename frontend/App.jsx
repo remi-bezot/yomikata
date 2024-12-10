@@ -14,6 +14,7 @@ import user from "./reducers/users";
 
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from '@reduxjs/toolkit'
+import Authentification from "./screens/Authentification";
 //configuration du store
 
 const store = configureStore({
