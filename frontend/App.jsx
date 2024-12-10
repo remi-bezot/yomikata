@@ -9,17 +9,16 @@ import BookScreen from "./screens/BookScreen";
 import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import user from "../reducers/user";
+import user from "./reducers/users";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
+
 //configuration du store
 
 const store = configureStore({
 	reducer: { user },
 });
-
-const reducers = combineReducers({ user });
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
