@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
-	KeyboardAvoidingView,
-	Text,
-	TextInput,
-	StyleSheet,
-	TouchableOpacity,
+  KeyboardAvoidingView,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
 import { Const } from "../utils/Const";
-
+const uri = Const.uri;
 export default function SignUp() {
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const uri = Const.uri;

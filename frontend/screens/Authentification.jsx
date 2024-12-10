@@ -3,10 +3,9 @@ import { customStyles } from "../utils/CustomStyle";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
+import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 import { useFonts } from "expo-font";
-
 
 import {
 	StyleSheet,
@@ -42,12 +41,12 @@ export default function Authentification() {
 		setSignUpModalVisible(!signUpModalVisible);
 	};
 
-  const handleCancelSignIn = () => {
+	const handleCancelSignIn = () => {
 		setSignInModalVisible(!signInModalVisible);
 	};
 
 	return (
-  <View style={styles.container}>
+		<View style={styles.container}>
 			<View style={styles.title}>
 				<Text style={styles.title_text}>YO</Text>
 				<FontAwesome5 name="torii-gate" size={60} color="black" />
@@ -57,45 +56,36 @@ export default function Authentification() {
 				source={require("../assets/FondJap.jpg")}
 				style={styles.photoItem}
 			/>
- 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={signUpModalVisible}
-        onRequestClose={handleCancelSignUp} 
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContentSignup}>
-            <View style={styles.deleteIcon}>
-                <FontAwesome name="close" size={20} color="#000000" onPress={handleCancelSignUp}  />
-            </View>
-            <SignUp/>
-          </View>
-        </View>
-      </Modal>
 
-    
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={signInModalVisible}
-        onRequestClose={handleCancelSignIn} 
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContentSignin}>
-          <View style={styles.deleteIcon}>
-                <FontAwesome name="close" size={20} color="#000000" onPress={handleCancelSignIn}  />
-          </View>
-          <SignIn/>
-          </View>
-        </View>
-      </Modal>
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={signUpModalVisible}
+				onRequestClose={handleCancelSignUp}
+			>
+				<View style={styles.modalOverlay}>
+					<View style={styles.modalContentSignup}>
+						<View style={styles.deleteIcon}>
+							<FontAwesome
+								name="close"
+								size={20}
+								color="#000000"
+								onPress={handleCancelSignUp}
+							/>
+						</View>
+						<SignUp />
+					</View>
+				</View>
+			</Modal>
 
       
       <TouchableOpacity onPress={showSignInModal} style={styles.login}>
         <Text style={styles.buttonTitle}>Already have an account ?</Text>
       </TouchableOpacity>
 
+			<TouchableOpacity onPress={showSignInModal} style={styles.login}>
+				<Text>Signin</Text>
+			</TouchableOpacity>
 
       <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
         <Text style={styles.buttonTitle}>New here? Create an account!</Text>
@@ -103,8 +93,6 @@ export default function Authentification() {
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
