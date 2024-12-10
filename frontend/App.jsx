@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./screens/HomeScreen";
+import Authentification from "./screens/Authentification";
 import DashboardScreen from "./screens/DashboardScreen";
 import BookScreen from "./screens/BookScreen";
 import FavoriteScreen from "./screens/FavoriteScreen";
@@ -12,8 +13,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-
+import { configureStore, Tuple } from "@reduxjs/toolkit";
+import Authentification from "./screens/Authentification";
 //configuration du store
 
 const store = configureStore({
@@ -60,7 +61,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="Home" component={HomeScreen} />
+					<Stack.Screen name="Auth" component={Authentification} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 				</Stack.Navigator>
 			</NavigationContainer>

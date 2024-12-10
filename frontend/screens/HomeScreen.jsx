@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
+=======
+import { KeyboardAvoidingView , Text, StyleSheet } from 'react-native'
+import React from 'react'
+import { Link } from '@react-navigation/native'
+import SignUp from '../components/SignUp'
+import SignIn from '../components/SignIn'
+>>>>>>> 9f1644e059ddfe92bee41a5bc07e6a23adab8d65
 
 export default function HomeScreen({ navigation }) {
 	const handlesubmit = () => {
 		navigation.navigate("TabNavigator");
 	};
 
+<<<<<<< HEAD
 	return (
 		<View style={styles.container}>
 			<Text onPress={() => handlesubmit()}>HomeScreen</Text>
@@ -15,6 +24,18 @@ export default function HomeScreen({ navigation }) {
 			<Register />
 		</View>
 	);
+=======
+
+  const handlesubmit = () => {
+    navigation.navigate('Authentification')
+  }
+ 
+  return (
+    <KeyboardAvoidingView  style={styles.container}>
+      <Text onPress={() => handlesubmit()} >HomeScreen</Text>
+    </KeyboardAvoidingView>
+  )
+>>>>>>> 9f1644e059ddfe92bee41a5bc07e6a23adab8d65
 }
 
 const styles = StyleSheet.create({
