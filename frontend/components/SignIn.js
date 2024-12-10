@@ -9,32 +9,34 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
+import { Const } from "../utils/Const";
 
 export default function SignUp() {
-	const [signInUsername, setSignInUsername] = useState("");
-	const [signInPassword, setSignInPassword] = useState("");
-	const dispatch = useDispatch();
-	const user = useSelector((state) => state.user.value);
+  const uri = Const.uri;
+  const [signInUsername, setSignInUsername] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
 
-	const handleConnect = () => {
-		fetch("http://10.10.200.23:3000/users/signin", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				username: signInUsername,
-				password: signInPassword,
-			}),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				if (data) {
-					console.log(data);
-					dispatch(login({ username: signInUsername, token: data.token }));
-					setSignInUsername("");
-					setSignInPassword("");
-				}
-			});
-	};
+  const handleConnect = () => {
+    fetch(`http://${uri}:3000/users/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: signInUsername,
+        password: signInPassword,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          dispatch(login({ username: signInUsername, token: data.token }));
+          setSignInUsername("");
+          setSignInPassword("");
+        }
+      });
+  };
 
 	return (
 		<KeyboardAvoidingView style={styles.container}>
@@ -48,6 +50,7 @@ export default function SignUp() {
 				placeholder="username"
 			></TextInput>
 
+<<<<<<< HEAD
 			<Text style={styles.inputTitle}>Password</Text>
 			<TextInput
 				style={styles.inputStyles}
@@ -60,6 +63,20 @@ export default function SignUp() {
 			</TouchableOpacity>
 		</KeyboardAvoidingView>
 	);
+=======
+      <Text style={styles.inputTitle}>Password</Text>
+      <TextInput
+        style={styles.inputStyles}
+        onChangeText={(value) => setSignInPassword(value)}
+        value={signInPassword}
+        placeholder="password"
+      ></TextInput>
+      <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
+        <Text>SignIn</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
+  );
+>>>>>>> 2bcec5679aec0325d7dbeaa632a1e23b8c1408cc
 }
 
 const styles = StyleSheet.create({
