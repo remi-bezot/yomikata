@@ -10,17 +10,19 @@ import { customStyles } from "../utils/CustomStyle";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
+import { Const } from "../utils/Const";
 
 export default function SignUp() {
+  const uri = Const.uri;
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpname, setSignUpname] = useState("");
   const [signUpemail, setSignUpemail] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-
+  console.log(uri);
   const handleConnect = () => {
-    fetch("http://10.10.200.23:3000/users/signup", {
+    fetch(`http://${uri}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

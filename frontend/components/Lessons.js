@@ -5,61 +5,73 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../reducers/users";
-import { Const } from "../utils/Const";
 
-export default function SignUp() {
-  const uri = Const.uri;
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
+export default function Lessons() {
+  const [lessonId, setLessonId] = useState(0);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
-  const handleConnect = () => {
-    fetch(`http://${uri}:3000/users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signInUsername,
-        password: signInPassword,
-      }),
-    })
+  const handleGoLesson = (id) => {
+    let token = "jkfhd154fd6";
+    // user.token
+    setLessonId(id);
+    fetch(`http://10.172.88.9:3000/lessons/showLessons/${id}/${token}`, {})
       .then((response) => response.json())
       .then((data) => {
         if (data) {
           console.log(data);
-          dispatch(login({ username: signInUsername, token: data.token }));
-          setSignInUsername("");
-          setSignInPassword("");
+
+          setLessonId(id);
         }
       });
   };
 
+  let dataReturn = [
+    {
+      theme: "train",
+      number: 1,
+      id: 1,
+    },
+    {
+      theme: "travel",
+      number: 1,
+      id: 2,
+    },
+    {
+      theme: "train",
+      number: 2,
+      id: 3,
+    },
+    {
+      theme: "restaurant",
+      number: 1,
+      id: 4,
+    },
+  ];
+
+  const lessons = dataReturn.map((data, i) => {
+    return (
+      <View key={i}>
+        <Text>{data.theme}</Text>
+        <Text>{data.number}</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleGoLesson(data.id)}
+        >
+          <Text>Go to</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  });
+
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignIn</Text>
-
-      <Text style={styles.inputTitle}>Username</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignInUsername(value)}
-        value={signInUsername}
-        placeholder="username"
-      ></TextInput>
-
-      <Text style={styles.inputTitle}>Password</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignInPassword(value)}
-        value={signInPassword}
-        placeholder="password"
-      ></TextInput>
-      <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        <Text>SignIn</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>Lessons</Text>
+      {lessonId === 0 ? lessons : <Text>id</Text>}
     </KeyboardAvoidingView>
   );
 }
