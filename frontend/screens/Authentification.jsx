@@ -78,111 +78,103 @@ export default function Authentification() {
 				</View>
 			</Modal>
 
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={signInModalVisible}
-				onRequestClose={handleCancelSignIn}
-			>
-				<View style={styles.modalOverlay}>
-					<View style={styles.modalContentSignin}>
-						<View style={styles.deleteIcon}>
-							<FontAwesome
-								name="close"
-								size={20}
-								color="#000000"
-								onPress={handleCancelSignIn}
-							/>
-						</View>
-						<SignIn />
-					</View>
-				</View>
-			</Modal>
+      
+      <TouchableOpacity onPress={showSignInModal} style={styles.login}>
+        <Text style={styles.buttonTitle}>Already have an account ?</Text>
+      </TouchableOpacity>
 
 			<TouchableOpacity onPress={showSignInModal} style={styles.login}>
 				<Text>Signin</Text>
 			</TouchableOpacity>
 
-			<TouchableOpacity onPress={showSignUpModal} style={styles.login}>
-				<Text>Signup</Text>
-			</TouchableOpacity>
-		</View>
-	);
+      <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
+        <Text style={styles.buttonTitle}>New here? Create an account!</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "rgba(228,224,207,1)",
-		alignItems: "center",
-		justifyContent: "center",
-		width: "100%",
-		height: "100%",
-	},
-	login: {
-		backgroundColor: customStyles.buttonBackgroundColor,
-		borderRadius: customStyles.buttonRadius,
-		width: customStyles.buttonWidth,
-		height: customStyles.buttonHeight,
-		display: customStyles.buttonDisplay,
-		flexDirection: customStyles.buttonFlexDirection,
-		alignItems: customStyles.buttonAlignItems,
-		justifyContent: customStyles.buttonJustifyContent,
-		margin: 10,
-		top: 120,
-	},
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: "rgba(0, 0, 0, 0.1)",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	title: {
-		justifyContent: "center",
-		alignItems: "center",
-		height: "80",
-		flexDirection: "row",
-		bottom: 80,
-	},
-	title_text: {
-		fontSize: "70",
-		fontFamily: "Satoshi-Black",
-	},
-	photoItem: {
-		width: "90%",
-		height: "30%",
-	},
-	closeButton: {
-		marginTop: 20,
-		backgroundColor: "#2196F3",
-		padding: 10,
-		borderRadius: 5,
-	},
-	closeButtonText: {
-		color: "#fff",
-		fontWeight: "bold",
-		textAlign: "center",
-	},
-	deleteIcon: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "flex-end",
-		width: "100%",
-	},
-	modalContentSignin: {
-		backgroundColor: "#fff",
-		padding: 20,
-		borderRadius: 10,
-		alignItems: "center",
-		width: "80%",
-		height: "35%",
-	},
-	modalContentSignup: {
-		backgroundColor: "#fff",
-		padding: 20,
-		borderRadius: 10,
-		alignItems: "center",
-		width: "80%",
-		height: "55%",
-	},
-});
+  container: {
+      flex: 1,
+      backgroundColor: "rgba(228,224,207,1)",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100%",
+      height: "100%",
+  },
+  login: {
+      backgroundColor: '#ee2537',
+      borderRadius: customStyles.buttonRadius,
+      width: customStyles.buttonWidth,
+      height: customStyles.buttonHeight,
+      display: customStyles.buttonDisplay,
+      flexDirection: customStyles.buttonFlexDirection,
+      alignItems: customStyles.buttonAlignItems,
+      justifyContent: customStyles.buttonJustifyContent,
+      margin: 10,
+      top: 120,
+
+  },
+  modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0, 0, 0, 0.1)",
+      justifyContent: "center",
+      alignItems: "center",
+  },
+  title: {
+      justifyContent: "center",
+      alignItems: "center",
+      height: "80",
+      flexDirection: "row",
+      bottom: 80,
+  },
+  title_text: {
+      fontSize: "70",
+      fontFamily: "Satoshi-Black",
+      color:'black'
+  },
+  photoItem: {
+      width: "90%",
+      height: "30%",
+  },
+  closeButton: {
+      marginTop: 20,
+      backgroundColor: "#2196F3",
+      padding: 10,
+      borderRadius: 5,
+  },
+  closeButtonText: {
+      color: "#fff",
+      fontWeight: "bold",
+      textAlign: "center",
+  },
+  deleteIcon: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      width: "100%",
+  },
+  modalContentSignin: {
+      backgroundColor: "#fff",
+      padding: 20,
+      borderRadius: 10,
+      alignItems: "center",
+      width: "80%",
+      height: "35%",
+  },
+  modalContentSignup: {
+      backgroundColor: "#fff",
+      padding: 20,
+      borderRadius: 10,
+      alignItems: "center",
+      width: "80%",
+      height: "55%",
+  },
+  buttonTitle: {
+    fontWeight:'bold',
+    color:'white',
+  }
+})
+
+

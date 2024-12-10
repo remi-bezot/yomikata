@@ -12,9 +12,12 @@ router.post('/signup', (req, res) => {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
-  
-  User.findOne({ username: req.body.username }).then(data => {
-    if (data === null) {
+
+  User.findOne({ email: req.body.email })
+  .then((data) => {
+    if (data !== null) {
+      return res.status(400).json({ error: "Email already exists" })}
+      
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
@@ -23,18 +26,15 @@ router.post('/signup', (req, res) => {
         email : req.body.email,
         password: hash,
         token: uid2(32),
-        level : String,
-        avatar : String, 
-        progress : String,
+        // level : String,
+        // avatar : String, 
+        // progress : String,
       });
 
       newUser.save().then(data => {
         res.json({ result: true, token: data.token });
       });
-    } else {
-     
-      res.json({ result: false, error: 'User already exists' });
-    }
+    
   });
 });
 
