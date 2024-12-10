@@ -60,6 +60,18 @@ router.get("/showLessons/:lessonId/:token", (req, res) => {
         english: "jhkeerzeezdsf",
         romanji: "ghjuu rte ter",
       },
+      {
+        speaker: 1,
+        japanese: "fhdskjf",
+        english: "jhkdsf",
+        romanji: "jdfjklsd",
+      },
+      {
+        speaker: 2,
+        japanese: "gfd",
+        english: "jhkeerzeezdsf",
+        romanji: "ghjuu rte ter",
+      },
     ],
   });
 });

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +14,9 @@ import { Const } from "../utils/Const";
 const uri = Const.uri;
 
 export default function Lessons() {
-  const [lessonData, setLessonData] = useState({});
+  const [lessonData, setLessonData] = useState([]);
   const [allLessons, setallLessons] = useState([]);
+  const [currentLessonId, setCurrentLessonId] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
@@ -36,9 +38,8 @@ export default function Lessons() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data.dialogues);
-
-          setLessonData(data);
+          setLessonData(data.dialogues);
+          setCurrentLessonId(id);
         }
       });
   };
@@ -56,20 +57,25 @@ export default function Lessons() {
     </View>
   ));
 
-  const dialogues = lessonData.dialogues
-    ? lessonData.dialogues.map((dialogue, i) => (
-        <View key={i}>
-          <Text>Speaker {dialogue.speaker}</Text>
-          <Text>Japanese: {dialogue.japanese}</Text>
-          <Text>English: {dialogue.english}</Text>
-          <Text>Romanji: {dialogue.romanji}</Text>
-        </View>
-      ))
+  const dialogues = lessonData
+    ? lessonData.map((dialogue, i) => {
+        const alignment = i % 2 === 0 ? "flex-start" : "flex-end";
+        return (
+          <View key={i} style={[styles.dialogue, { alignItems: alignment }]}>
+            <View style={styles.dialogueChild}>
+              <Text>Speaker {dialogue.speaker}</Text>
+              <Text>Japanese: {dialogue.japanese}</Text>
+              <Text>English: {dialogue.english}</Text>
+              <Text>Romanji: {dialogue.romanji}</Text>
+            </View>
+          </View>
+        );
+      })
     : null;
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      {allLessons.length !== 0 ? (
+      {currentLessonId === null ? (
         <View>
           <Text style={styles.title}>Lessons</Text>
           {lessons}
@@ -90,8 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
-    height: "100%",
+    width: Dimensions.get("window").width,
   },
   inputStyles: {
     height: 40,
@@ -121,5 +126,15 @@ const styles = StyleSheet.create({
     flexDirection: customStyles.buttonFlexDirection,
     alignItems: customStyles.buttonAlignItems,
     justifyContent: customStyles.buttonJustifyContent,
+  },
+  dialogue: {
+    width: "350",
+  },
+  dialogueChild: {
+    borderWidth: 1,
+    borderColor: "black",
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
   },
 });
