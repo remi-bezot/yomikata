@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { Link } from '@react-navigation/native'
 
 export default function HomeScreen({navigation}) {
 
