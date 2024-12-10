@@ -75,7 +75,6 @@ export default function SignUp() {
         placeholder="password"
       ></TextInput>
       <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        {" "}
         <Text>SignUp</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

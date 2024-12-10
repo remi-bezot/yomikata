@@ -14,7 +14,7 @@ import user from "./reducers/users";
 
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from '@reduxjs/toolkit'
-import Authentification from "./screens/Authentification";
+
 //configuration du store
 
 const store = configureStore({
@@ -62,7 +62,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="Auth" component={Authentification} />
+					<Stack.Screen name="dashboard" component={DashboardScreen} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 				</Stack.Navigator>
 			</NavigationContainer>
