@@ -13,13 +13,13 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from  './screens/LessonsScreen'
 import { Provider } from "react-redux";
-import { configureStore, Tuple } from '@reduxjs/toolkit'
+import { configureStore, Tuple } from "@reduxjs/toolkit";
+import Authentification from "./screens/Authentification";
 //configuration du store
 
 const store = configureStore({
 	reducer: { user },
 });
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

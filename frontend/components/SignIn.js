@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    fontFamily: "noto sans jp",
+    // fontFamily: "noto sans jp",
     fontSize: 15,
   },
   title: {
