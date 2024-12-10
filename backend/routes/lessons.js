@@ -11,3 +11,6 @@ router.post("/showLessons/lessonId/:token", (req, res) => {
     message: `lessons id ${lessonId} from user ${token}`,
   });
 });
+
+
+module.exports = router;

@@ -93,12 +93,12 @@ export default function Authentification() {
 
       
       <TouchableOpacity onPress={showSignInModal} style={styles.login}>
-        <Text>Signin</Text>
+        <Text style={styles.buttonTitle}>Already have an account ?</Text>
       </TouchableOpacity>
 
 
       <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
-        <Text>Signup</Text>
+        <Text style={styles.buttonTitle}>New here? Create an account!</Text>
       </TouchableOpacity>
     </View>
   );
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
       height: "100%",
   },
   login: {
-      backgroundColor: customStyles.buttonBackgroundColor,
+      backgroundColor: '#ee2537',
       borderRadius: customStyles.buttonRadius,
       width: customStyles.buttonWidth,
       height: customStyles.buttonHeight,
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
       justifyContent: customStyles.buttonJustifyContent,
       margin: 10,
       top: 120,
+
   },
   modalOverlay: {
       flex: 1,
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
   title_text: {
       fontSize: "70",
       fontFamily: "Satoshi-Black",
+      color:'black'
   },
   photoItem: {
       width: "90%",
@@ -181,6 +183,10 @@ const styles = StyleSheet.create({
       width: "80%",
       height: "55%",
   },
+  buttonTitle: {
+    fontWeight:'bold',
+    color:'white',
+  }
 })
 
 
