@@ -9,7 +9,8 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
-
+import { Const } from "../utils/Const";
+const uri = Const.uri;
 export default function SignUp() {
   const [signInUsername, setSignInUsername] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
@@ -17,7 +18,7 @@ export default function SignUp() {
   const user = useSelector((state) => state.user.value);
 
   const handleConnect = () => {
-    fetch("http://10.10.200.23:3000/users/signin", {
+    fetch(`http://${uri}:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,8 +39,6 @@ export default function SignUp() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignIn</Text>
-
       <Text style={styles.inputTitle}>Username</Text>
       <TextInput
         style={styles.inputStyles}
@@ -101,4 +100,3 @@ const styles = StyleSheet.create({
     justifyContent: customStyles.buttonJustifyContent,
   },
 });
-

@@ -11,16 +11,16 @@ import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
-
+import LessonsScreen from "./screens/LessonsScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from '@reduxjs/toolkit'
 
 //configuration du store
 
+//configuration du store
 const store = configureStore({
 	reducer: { user },
 });
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +63,7 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="dashboard" component={DashboardScreen} />
+					<Stack.Screen name="Auth" component={LessonsScreen} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 				</Stack.Navigator>
 			</NavigationContainer>
