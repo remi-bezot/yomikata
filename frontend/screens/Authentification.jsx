@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { customStyles } from "../utils/CustomStyle";
 import { useState } from "react";
-import Login from '../components/Login';
-import Register from '../components/Register';
+import SignIn from '../components/SignIn';
+import SignUp from '../components/SignUp';
 import {
   StyleSheet,
   Text,
@@ -46,7 +46,7 @@ export default function Authentification() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Register/>
+            <SignUp/>
             <Pressable
               style={styles.closeButton}
               onPress={handleCancelSignUp}
@@ -66,7 +66,7 @@ export default function Authentification() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Login/>
+            <SignIn/>
             <Pressable
               style={styles.closeButton}
               onPress={handleCancelSignIn}
@@ -79,12 +79,12 @@ export default function Authentification() {
 
       
       <TouchableOpacity onPress={showSignInModal} style={styles.login}>
-        <Text>Login</Text>
+        <Text>Signin</Text>
       </TouchableOpacity>
 
 
       <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
-        <Text>Register</Text>
+        <Text>Signup</Text>
       </TouchableOpacity>
     </View>
   );
