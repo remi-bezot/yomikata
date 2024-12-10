@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView , Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { Link } from '@react-navigation/native'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 
@@ -7,13 +8,11 @@ export default function HomeScreen({navigation}) {
 
 
   const handlesubmit = () => {
-    navigation.navigate('TabNavigator')
+    navigation.navigate('Authentification')
   }
  
   return (
     <KeyboardAvoidingView  style={styles.container}>
-      <SignUp/>
-      <SignIn/>
       <Text onPress={() => handlesubmit()} >HomeScreen</Text>
     </KeyboardAvoidingView>
   )
