@@ -39,8 +39,6 @@ export default function SignUp() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignIn</Text>
-
       <Text style={styles.inputTitle}>Username</Text>
       <TextInput
         style={styles.inputStyles}
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    // fontFamily: "noto sans jp",
+    fontFamily: "noto sans jp",
     fontSize: 15,
   },
   title: {

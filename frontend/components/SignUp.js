@@ -45,7 +45,6 @@ export default function SignUp() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
       <Text style={styles.inputTitle}>Name</Text>
       <TextInput
         onChangeText={(value) => setSignUpname(value)}
