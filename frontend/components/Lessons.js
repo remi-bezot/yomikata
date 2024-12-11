@@ -20,9 +20,6 @@ export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
   const [allLessons, setallLessons] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const [screenWidth, setScreenWidth] = useState(
-    Dimensions.get("window").width
-  );
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
@@ -49,7 +46,6 @@ export default function Lessons() {
       });
   };
 
-  // Fonction pour mettre la première lettre en majuscule
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
@@ -57,86 +53,95 @@ export default function Lessons() {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container}>
-        {currentLessonId === null ? (
-          <FlatList
-            data={allLessons}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.lessonContainer}>
-                <Text style={styles.lessonTitle}>
-                  {capitalizeFirstLetter(item.theme)}
-                </Text>
-                <Text>Number: {item.number}</Text>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => handleGoLesson(item._id)}
-                >
-                  <Text>Go to</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            ListHeaderComponent={
-              <Text style={[styles.title, styles.lessonHeader]}>Lessons</Text>
-            }
-          />
-        ) : (
-          <FlatList
-            data={lessonData}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item, index }) => {
-              const alignment = index % 2 === 0 ? "row" : "row-reverse";
-              const iconColor = index % 2 === 0 ? "#4CAF50" : "#2196F3";
-
-              return (
-                <View key={index} style={[styles.dialogue]}>
-                  <View
-                    style={[styles.dialogue1, { flexDirection: alignment }]}
+        <View style={styles.content}>
+          {currentLessonId === null ? (
+            <FlatList
+              data={allLessons}
+              keyExtractor={(item) => item._id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.lessonContainer}>
+                  <Text style={styles.lessonTitle}>
+                    {capitalizeFirstLetter(item.theme)}
+                  </Text>
+                  <Text>Number: {item.number}</Text>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handleGoLesson(item._id)}
                   >
-                    <Icon
-                      name="user"
-                      size={24}
-                      color={iconColor}
-                      style={styles.icon}
-                    />
-                    <View style={styles.dialogueChild}>
-                      <View>
-                        <Text>Speaker : {item.speaker}</Text>
-                      </View>
-                      <View>
+                    <Text>Go to</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              ListHeaderComponent={
+                <Text style={[styles.title, styles.lessonHeader]}>Lessons</Text>
+              }
+            />
+          ) : (
+            <FlatList
+              data={lessonData}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item, index }) => {
+                const alignment = index % 2 === 0 ? "row" : "row-reverse";
+                const iconColor = index % 2 === 0 ? "#4CAF50" : "#2196F3";
+
+                return (
+                  <View key={index} style={[styles.dialogue]}>
+                    <View
+                      style={[styles.dialogue1, { flexDirection: alignment }]}
+                    >
+                      <Icon
+                        name="user"
+                        size={24}
+                        color={iconColor}
+                        style={styles.icon}
+                      />
+                      <View style={styles.dialogueChild}>
                         <View>
-                          <Text>Japanese :</Text>
+                          <Text>Speaker : {item.speaker}</Text>
                         </View>
                         <View>
-                          <Text>{item.japanese}</Text>
-                        </View>
-                      </View>
-                      <View>
-                        <View>
-                          <Text>English :</Text>
-                        </View>
-                        <View>
-                          <Text>{item.english}</Text>
-                        </View>
-                      </View>
-                      <View>
-                        <View>
-                          <Text>Romanji :</Text>
+                          <View>
+                            <Text>Japanese :</Text>
+                          </View>
+                          <View>
+                            <Text>{item.japanese}</Text>
+                          </View>
                         </View>
                         <View>
-                          <Text>{item.romanji}</Text>
+                          <View>
+                            <Text>English :</Text>
+                          </View>
+                          <View>
+                            <Text>{item.english}</Text>
+                          </View>
+                        </View>
+                        <View>
+                          <View>
+                            <Text>Romanji :</Text>
+                          </View>
+                          <View>
+                            <Text>{item.romanji}</Text>
+                          </View>
                         </View>
                       </View>
                     </View>
                   </View>
+                );
+              }}
+              ListHeaderComponent={
+                <View>
+                  <Text style={[styles.title, styles.dialogueHeader]}>
+                    Dialogues
+                  </Text>
                 </View>
-              );
-            }}
-            ListHeaderComponent={
-              <Text style={[styles.title, styles.dialogueHeader]}>
-                Dialogues
-              </Text>
-            }
-          />
+              }
+            />
+          )}
+        </View>
+        {currentLessonId && (
+          <TouchableOpacity style={styles.nextButton}>
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
         )}
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -150,6 +155,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
+  content: {
+    flex: 1,
+  },
   title: {
     fontSize: 20,
     fontWeight: "700",
@@ -158,10 +166,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   lessonHeader: {
-    marginTop: 20, // Ajoute un espacement supérieur pour Lessons
+    marginTop: 20,
   },
   dialogueHeader: {
-    marginTop: 20, // Ajoute un espacement supérieur pour Dialogues
+    marginTop: 20,
   },
   lessonContainer: {
     borderWidth: 2,
@@ -208,5 +216,16 @@ const styles = StyleSheet.create({
   icon: {
     flexShrink: 0,
     marginHorizontal: 10,
+  },
+  nextButton: {
+    backgroundColor: "#007BFF",
+    padding: 15,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  nextButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

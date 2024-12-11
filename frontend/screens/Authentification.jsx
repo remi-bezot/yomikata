@@ -78,14 +78,26 @@ export default function Authentification() {
 				</View>
 			</Modal>
 
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={signInModalVisible}
+        onRequestClose={handleCancelSignIn} 
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContentSignin}>
+          <View style={styles.deleteIcon}>
+                <FontAwesome name="close" size={20} color="#000000" onPress={handleCancelSignIn}  />
+          </View>
+          <SignIn/>
+          </View>
+        </View>
+      </Modal>
+
       
       <TouchableOpacity onPress={showSignInModal} style={styles.login}>
         <Text style={styles.buttonTitle}>Already have an account ?</Text>
       </TouchableOpacity>
-
-			<TouchableOpacity onPress={showSignInModal} style={styles.login}>
-				<Text>Signin</Text>
-			</TouchableOpacity>
 
       <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
         <Text style={styles.buttonTitle}>New here? Create an account!</Text>
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
       bottom: 80,
   },
   title_text: {
-      fontSize: "70",
+      fontSize: 70,
       fontFamily: "Satoshi-Black",
       color:'black'
   },
