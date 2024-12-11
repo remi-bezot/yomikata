@@ -5,7 +5,7 @@ export default function FavoriteScreen() {
   
     return (
       <View>
-        <Text>FavoriteScreen</Text>
+        <Text>Favorites</Text>
       </View>
     )
   }
