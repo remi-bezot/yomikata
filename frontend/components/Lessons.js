@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -11,28 +10,30 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { Const } from "../utils/Const";
+
 const uri = Const.uri;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
   const [allLessons, setallLessons] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get("window").width
   );
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(Dimensions.get("window").width);
-    };
+  //   useEffect(() => {
+  //     const handleResize = () => {
+  //       setScreenWidth(Dimensions.get("window").width);
+  //     };
 
-    const subscription = Dimensions.addEventListener("change", handleResize);
+  //     const subscription = Dimensions.addEventListener("change", handleResize);
 
-    return () => subscription?.remove();
-  }, []);
+  //     return () => subscription?.remove();
+  //   }, []);
+
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`, {})
       .then((response) => {
@@ -42,7 +43,7 @@ export default function Lessons() {
         return response.json();
       })
       .then((data) => {
-        if (data && Array.isArray(data.data)) {
+        if (data && data.data) {
           setallLessons(data.data);
         }
       })
@@ -52,49 +53,60 @@ export default function Lessons() {
   }, []);
 
   const handleGoLesson = (id) => {
-    fetch(`http://${uri}:3000/lessons/showLessons/${id}/${token}`, {})
+    fetch(`http://${uri}:3000/lessons/showLesson/${id}/${token}`, {})
       .then((response) => response.json())
       .then((data) => {
         if (data) {
+          console.log(data);
+
           setLessonData(data.dialogues);
           setCurrentLessonId(id);
         }
       });
   };
 
-  const lessons = Array.isArray(allLessons)
-    ? allLessons.map((lesson, i) => (
-        <View key={i}>
-          <Text>{lesson.theme}</Text>
-          <Text>Number: {lesson.number}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleGoLesson(lesson.id)}
-          >
-            <Text>Go to</Text>
-          </TouchableOpacity>
-        </View>
-      ))
-    : null;
-
-  const dialogues = Array.isArray(lessonData)
-    ? lessonData.map((dialogue, i) => {
-        const alignment = i % 2 === 0 ? "flex-start" : "flex-end";
-        return (
-          <View key={i} style={[styles.dialogue, { alignSelf: alignment }]}>
-            <View style={styles.dialogueChild}>
-              <Text>Speaker {dialogue.speaker}</Text>
-              <Text>Japanese: {dialogue.japanese}</Text>
-              <Text>English: {dialogue.english}</Text>
-              <Text>Romanji: {dialogue.romanji}</Text>
-            </View>
+  const lessons =
+    allLessons &&
+    allLessons.map((lesson, i) => (
+      <View key={i}>
+        <Text>{lesson.theme}</Text>
+        <Text>Number: {lesson.number}</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleGoLesson(lesson._id)}
+        >
+          <Text>Go to</Text>
+        </TouchableOpacity>
+      </View>
+    ));
+  const dialogues =
+    lessonData &&
+    lessonData.map((dialogue, i) => {
+      const alignment = i % 2 === 0 ? "flex-start" : "flex-end";
+      return (
+        <View key={i} style={[styles.dialogue, { alignSelf: alignment }]}>
+          <View style={styles.dialogueChild}>
+            <Text>Speaker {dialogue.speaker}</Text>
+            <Text>Japanese: {dialogue.japanese}</Text>
+            <Text>English: {dialogue.english}</Text>
+            <Text>Romanji: {dialogue.romanji}</Text>
           </View>
-        );
-      })
-    : null;
+        </View>
+      );
+    });
+
+  const dynamicStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+      width: screenWidth,
+    },
+  });
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={dynamicStyles.container}>
       {currentLessonId === null ? (
         <View>
           <Text style={styles.title}>Lessons</Text>
@@ -111,13 +123,6 @@ export default function Lessons() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    width: screenWidth,
-  },
   inputStyles: {
     height: 40,
     width: customStyles.buttonWidth,
