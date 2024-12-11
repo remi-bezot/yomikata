@@ -7,9 +7,9 @@ const userSchema = mongoose.Schema({
   email : String,
   password: String,
   token: String,
-  level : String,
+  level : Number,
   avatar : String, 
-  progress : String,
+  progress : Number,
 
 });
 
