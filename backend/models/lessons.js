@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 
 const lessonSchema = mongoose.Schema({
-	theme: String,
-	level: Number,
-	total_number: Number,
+
+  user : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 
 	theme: String,
 	level: Number,
 	total_number: Number,
-
+ 
 	dialogue: {
 		speaker: String,
 		romanji: String,

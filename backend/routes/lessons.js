@@ -20,6 +20,16 @@ router.get("/showAllLessons/:token", (req, res) => {
   });
 });
 
+router.get("/showAllpractice", (req, res) => {
+  const {token} = req.params; 
+
+  User.findOne({token : token}).then((dataUser) => {
+    if(dataUser) {
+
+    }
+  })
+})
+
 
 
 
