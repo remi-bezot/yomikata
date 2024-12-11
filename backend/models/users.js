@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema({
   level : Number,
   avatar : String, 
   progress : Number,
+ 
 
 });
 

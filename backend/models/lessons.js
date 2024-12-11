@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
 
 const lessonSchema = mongoose.Schema({
-	theme: String,
 	level: Number,
-	total_number: Number,
-
-	theme: String,
-	level: Number,
-	total_number: Number,
 
 	dialogue: {
+		theme: String,
+		total_number: Number,
 		speaker: String,
 		romanji: String,
 		japanese: String,
@@ -17,6 +13,8 @@ const lessonSchema = mongoose.Schema({
 		isRead: Boolean,
 	},
 	practice: {
+		theme: String,
+		total_number: Number,
 		word_jp: String,
 		good_answer: String,
 		wrong_answer_a: String,

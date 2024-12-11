@@ -26,6 +26,7 @@ router.post('/signup', (req, res) => {
         email : req.body.email,
         password: hash,
         token: uid2(32),
+        lesson : req.body.lesson
         // level : String,
         // avatar : String, 
         // progress : String,
