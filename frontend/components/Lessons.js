@@ -53,7 +53,7 @@ export default function Lessons() {
   }, []);
 
   const handleGoLesson = (id) => {
-    fetch(`http://${uri}:3000/lessons/showLessons/${id}/${token}`, {})
+    fetch(`http://${uri}:3000/lessons/showLesson/${id}/${token}`, {})
       .then((response) => response.json())
       .then((data) => {
         if (data) {

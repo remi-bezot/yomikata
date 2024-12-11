@@ -20,7 +20,7 @@ router.get("/showAllLessons/:token", (req, res) => {
   });
 });
 
-router.get("/showLessons/:lessonId/:token", (req, res) => {
+router.get("/showLesson/:lessonId/:token", (req, res) => {
   const { lessonId, token } = req.params;
 
   Lesson.findById(lessonId).then((data) => {
