@@ -4,10 +4,11 @@ var router = express.Router();
 require("../models/connection");
 const User = require("../models/users");
 const Lesson = require("../models/lessons");
+const Working = require("../models/working")
+
 
 router.get("/showAllLessons/:token", (req, res) => {
   const { token } = req.params;
-
   User.findOne({ token: token }).then((dataUser) => {
     if (dataUser) {
       let userLevel = 1;
@@ -20,23 +21,76 @@ router.get("/showAllLessons/:token", (req, res) => {
   });
 });
 
-router.get("/showAllpractice", (req, res) => {
-  const {token} = req.params; 
-
-  User.findOne({token : token}).then((dataUser) => {
-    if(dataUser) {
-
-    }
-  })
-})
-
 
 
 router.get("/showLesson/:lessonId/:token", (req, res) => {
-  const { lessonId, token } = req.params;
+  const { lessonId } = req.params;
   Lesson.findById(lessonId).then((data) => {
     console.log(data);
   });
 });
+
+router.get('/working', (req, res) => {
+
+  Working.find()
+ .populate('lesson','user')
+ .then(data => {res.json({data : data})})
+
+    // if(!lesson.dialogue.isDone){
+    // Lesson.findById(lessonId).then((data) => {
+    //   res.json(data.lesson.practice);
+    // });
+    // }
+    // else {
+    //   return res.json({practice : 'do lesson !'})
+    // }
+});
+
+// route déclanché a la création d'un user une seule utilisation
+      router.get('/all', (req,res)=> {
+        let Array = []
+        Lesson.find().then((data) => {
+             for(let element of data){
+               Array.push(element._id.toString()) // Convertir chaque ObjectId en chaîne 
+               console.log( element.practice.word_jp,element.practice.word_jp )
+               }
+              
+
+               const newWorking = new Working ({
+                user: '67586705c3529d4d899ff34b', // Exemple d'ID utilisateur
+    lesson: 
+      Array, // ID d'une autre leçon
+    
+    dialogue_progress: {
+      '67586705c3529d4d899ff34b': false, // ID du dialogue
+      '675876557cb2559b8abfb0f7': false, // ID d'un autre dialogue
+      '6758765e7cb2559b8abfb0f8': false, // ID d'un autre dialogue
+    },
+    practice_progress: {
+      '67586705c3529d4d899ff34c': false, // ID d'un exercice
+      '675876557cb2559b8abfb0f9': true, // ID d'un autre exercice
+    },
+              })
+              newWorking.save().then(data => {
+                res.json({ result: true, data : data });
+              });
+        })
+
+      });
+
+
+
+
+
+
+
+      router.get('/all2', (req,res)=> {
+        console.log(Array);
+        res.json({ alllesson : data});
+      
+      })
+
+      
+
 
 module.exports = router;

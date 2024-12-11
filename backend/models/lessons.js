@@ -2,26 +2,26 @@ const mongoose = require("mongoose");
 
 const lessonSchema = mongoose.Schema({
 
-  user : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-
-	theme: String,
 	level: Number,
-	total_number: Number,
- 
+	
 	dialogue: {
+    theme: String,
+    total_number: Number,
 		speaker: String,
 		romanji: String,
 		japanese: String,
 		english: String,
-		isRead: Boolean,
+		
 	},
 	practice: {
+    theme: String,
+    total_number: Number,
 		word_jp: String,
 		good_answer: String,
-		wrong_answer: String,
-		wrong_answer: String,
-		wrong_answer: String,
-		isDone: Boolean,
+		wrong_answer_a: String,
+		wrong_answer_b: String,
+		wrong_answer_c: String,
+		
 	},
 });
 
