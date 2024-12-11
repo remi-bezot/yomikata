@@ -6,7 +6,7 @@ const lessonSchema = mongoose.Schema({
 	
 	dialogue: {
     theme: String,
-    total_number: Number,
+        total_number: Number,
 		speaker: String,
 		romanji: String,
 		japanese: String,

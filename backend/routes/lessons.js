@@ -21,8 +21,6 @@ router.get("/showAllLessons/:token", (req, res) => {
   });
 });
 
-
-
 router.get("/showLesson/:lessonId/:token", (req, res) => {
   const { lessonId } = req.params;
   Lesson.findById(lessonId).then((data) => {
@@ -31,7 +29,6 @@ router.get("/showLesson/:lessonId/:token", (req, res) => {
 });
 
 router.get('/working', (req, res) => {
-
   Working.find()
  .populate('lesson','user')
  .then(data => {res.json({data : data})})
@@ -47,28 +44,24 @@ router.get('/working', (req, res) => {
 });
 
 // route déclanché a la création d'un user une seule utilisation
-      router.get('/all', (req,res)=> {
+ router.get('/all', (req,res)=> {
         let Array = []
         Lesson.find().then((data) => {
              for(let element of data){
                Array.push(element._id.toString()) // Convertir chaque ObjectId en chaîne 
-               console.log( element.practice.word_jp,element.practice.word_jp )
+               console.log(element.practice.isDone, element.dialogue.isRead, element.dialogue.japanese)
                }
-              
-
                const newWorking = new Working ({
                 user: '67586705c3529d4d899ff34b', // Exemple d'ID utilisateur
-    lesson: 
-      Array, // ID d'une autre leçon
-    
-    dialogue_progress: {
-      '67586705c3529d4d899ff34b': false, // ID du dialogue
-      '675876557cb2559b8abfb0f7': false, // ID d'un autre dialogue
-      '6758765e7cb2559b8abfb0f8': false, // ID d'un autre dialogue
+                lesson: Array,  
+                dialogue_progress: {
+                // '67586705c3529d4d899ff34b': false, // ID du dialogue
+                // '675876557cb2559b8abfb0f7': false, // ID d'un autre dialogue
+                // '6758765e7cb2559b8abfb0f8': false, // ID d'un autre dialogue
     },
-    practice_progress: {
-      '67586705c3529d4d899ff34c': false, // ID d'un exercice
-      '675876557cb2559b8abfb0f9': true, // ID d'un autre exercice
+                practice_progress: {
+                // '67586705c3529d4d899ff34c': false, // ID d'un exercice
+                // '675876557cb2559b8abfb0f9': true, // ID d'un autre exercice
     },
               })
               newWorking.save().then(data => {
@@ -77,20 +70,6 @@ router.get('/working', (req, res) => {
         })
 
       });
-
-
-
-
-
-
-
-      router.get('/all2', (req,res)=> {
-        console.log(Array);
-        res.json({ alllesson : data});
       
-      })
-
-      
-
 
 module.exports = router;
