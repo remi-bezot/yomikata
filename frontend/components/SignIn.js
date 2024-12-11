@@ -12,42 +12,54 @@ import { login } from "../reducers/users";
 import { Const } from "../utils/Const";
 const uri = Const.uri;
 export default function SignUp() {
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
+  const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	const uri = Const.uri;
+	const [signInEmail, setSignInEmail] = useState("");
+	const [signInPassword, setSignInPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
-  const handleConnect = () => {
-    fetch(`http://${uri}:3000/users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signInUsername,
-        password: signInPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log(data);
-          dispatch(login({ username: signInUsername, token: data.token }));
-          setSignInUsername("");
-          setSignInPassword("");
-        }
-      });
-  };
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
+
+	const handleConnect = () => {
+		fetch(`http://${uri}:3000/users/signin`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				email: signInEmail,
+				password: signInPassword,
+			}),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data) {
+					console.log(data);
+					dispatch(login({ username: signInEmail, token: data.token }));
+					setSignInUsername("");
+					setSignInPassword("");
+				}
+			});
+
+      if (EMAIL_REGEX.test(signInEmail)) {
+        navigation.navigate('TabNavigator', { screen: 'dashboard' });
+      } else {
+        setEmailError(true);
+      }
+	};
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.inputTitle}>Username</Text>
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignInUsername(value)}
-        value={signInUsername}
-        placeholder="username"
-      ></TextInput>
 
-      <Text style={styles.inputTitle}>Password</Text>
+			<TextInput
+				style={styles.inputStyles}
+				onChangeText={(value) => setSignInEmail(value)}
+				value={signInEmail}
+				placeholder="email"
+        autoCapitalize="none"
+			></TextInput>
+
+      {emailError && <Text style={styles.error}>Invalid email address</Text>}   
+
       <TextInput
         style={styles.inputStyles}
         onChangeText={(value) => setSignInPassword(value)}
@@ -55,8 +67,9 @@ export default function SignUp() {
         placeholder="password"
       ></TextInput>
       <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
-        <Text>SignIn</Text>
-      </TouchableOpacity>
+        <Text>Sign in</Text>
+      </TouchableOpacity> 
+
     </KeyboardAvoidingView>
   );
 }
@@ -98,5 +111,8 @@ const styles = StyleSheet.create({
     flexDirection: customStyles.buttonFlexDirection,
     alignItems: customStyles.buttonAlignItems,
     justifyContent: customStyles.buttonJustifyContent,
+  },
+  error: {
+    color: 'red',
   },
 });

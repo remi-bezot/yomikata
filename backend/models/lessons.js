@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const lessonSchema = mongoose.Schema({
 
@@ -13,18 +13,16 @@ const lessonSchema = mongoose.Schema({
     english : String,
     isRead : Boolean,
   },
-  practice : {
-    word_jp : String,
-    good_answer : String,
-    wrong_answer : String,
-    wrong_answer : String,
-    wrong_answer : String,
-    isDone : Boolean, 
+  practice: {
+    word_jp: String,
+    good_answer: String,
+    wrong_answer: String,
+    wrong_answer: String,
+    wrong_answer: String,
+    isDone: Boolean,
   },
- 
-
 });
 
-const Lesson = mongoose.model('lessons', lessonSchema);
+const Lesson = mongoose.model("lessons", lessonSchema);
 
 module.exports = Lesson;
