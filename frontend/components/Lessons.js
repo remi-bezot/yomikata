@@ -10,6 +10,7 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { Const } from "../utils/Const";
+
 const uri = Const.uri;
 
 export default function Lessons() {
