@@ -12,12 +12,10 @@ import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from "./screens/LessonsScreen";
+
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from '@reduxjs/toolkit'
 
-//configuration du store
-
-//configuration du store
 const store = configureStore({
 	reducer: { user },
 });
@@ -34,7 +32,7 @@ const TabNavigator = () => {
 
 					if (route.name === "dashboard") {
 						iconName = "torii-gate";
-					} else if (route.name === "book") {
+					} else if (route.name === "Lessons") {
 						iconName = "book";
 					} else if (route.name === "favorite") {
 						iconName = "heart";
@@ -50,7 +48,7 @@ const TabNavigator = () => {
 			})}
 		>
 			<Tab.Screen name="dashboard" component={DashboardScreen} />
-			<Tab.Screen name="book" component={BookScreen} />
+			<Tab.Screen name="Lessons" component={LessonsScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="user" component={UserScreen} />
 		</Tab.Navigator>
@@ -62,7 +60,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="dashboard" component={LessonsScreen} />
+					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={Authentification} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 				</Stack.Navigator>

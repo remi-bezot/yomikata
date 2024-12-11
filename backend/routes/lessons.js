@@ -83,6 +83,10 @@ router.post("/Progress_Pract", (req, res) => {
 		.catch((err) => {
 			res.status(500).json({ result: false, error: err.message });
 		});
+	const { lessonId, token } = req.params;
+	Lesson.findById(lessonId).then((data) => {
+		res.json({ data: data });
+	});
 });
 
 module.exports = router;
