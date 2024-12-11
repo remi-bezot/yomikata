@@ -19,9 +19,9 @@ const lessonSchema = mongoose.Schema({
 	practice: {
 		word_jp: String,
 		good_answer: String,
-		wrong_answer: String,
-		wrong_answer: String,
-		wrong_answer: String,
+		wrong_answer_a: String,
+		wrong_answer_b: String,
+		wrong_answer_c: String,
 		isDone: Boolean,
 	},
 });

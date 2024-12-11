@@ -66,9 +66,4 @@ router.delete('/:token', (req, res) => {
 });
 
 
-
-
-
-
-
 module.exports = router;

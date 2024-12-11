@@ -45,6 +45,12 @@ export default function Authentification() {
 		setSignInModalVisible(!signInModalVisible);
 	};
 
+
+
+
+
+
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.title}>
