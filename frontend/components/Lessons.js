@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,63 +14,88 @@ import { Const } from "../utils/Const";
 const uri = Const.uri;
 
 export default function Lessons() {
-  const [lessonData, setLessonData] = useState({});
+  const [lessonData, setLessonData] = useState([]);
   const [allLessons, setallLessons] = useState([]);
+  const [currentLessonId, setCurrentLessonId] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
 
   useEffect(() => {
-    fetch(`http://${uri}:3000/lessons/showAllLessons`, {})
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          if (data && data.message) {
-            setallLessons(data.message);
-          }
+    const handleResize = () => {
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    const subscription = Dimensions.addEventListener("change", handleResize);
+
+    return () => subscription?.remove();
+  }, []);
+  useEffect(() => {
+    fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`, {})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP : ${response.status}`);
         }
+        return response.json();
+      })
+      .then((data) => {
+        if (data && Array.isArray(data.data)) {
+          setallLessons(data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur with lessons :", error);
       });
   }, []);
 
   const handleGoLesson = (id) => {
-    let token = "jkfhd154fd6";
     fetch(`http://${uri}:3000/lessons/showLessons/${id}/${token}`, {})
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data.dialogues);
-
-          setLessonData(data);
+          setLessonData(data.dialogues);
+          setCurrentLessonId(id);
         }
       });
   };
 
-  const lessons = allLessons.map((lesson, i) => (
-    <View key={i}>
-      <Text>{lesson.theme}</Text>
-      <Text>Number: {lesson.number}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => handleGoLesson(lesson.id)}
-      >
-        <Text>Go to</Text>
-      </TouchableOpacity>
-    </View>
-  ));
-
-  const dialogues = lessonData.dialogues
-    ? lessonData.dialogues.map((dialogue, i) => (
+  const lessons = Array.isArray(allLessons)
+    ? allLessons.map((lesson, i) => (
         <View key={i}>
-          <Text>Speaker {dialogue.speaker}</Text>
-          <Text>Japanese: {dialogue.japanese}</Text>
-          <Text>English: {dialogue.english}</Text>
-          <Text>Romanji: {dialogue.romanji}</Text>
+          <Text>{lesson.theme}</Text>
+          <Text>Number: {lesson.number}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleGoLesson(lesson.id)}
+          >
+            <Text>Go to</Text>
+          </TouchableOpacity>
         </View>
       ))
     : null;
 
+  const dialogues = Array.isArray(lessonData)
+    ? lessonData.map((dialogue, i) => {
+        const alignment = i % 2 === 0 ? "flex-start" : "flex-end";
+        return (
+          <View key={i} style={[styles.dialogue, { alignSelf: alignment }]}>
+            <View style={styles.dialogueChild}>
+              <Text>Speaker {dialogue.speaker}</Text>
+              <Text>Japanese: {dialogue.japanese}</Text>
+              <Text>English: {dialogue.english}</Text>
+              <Text>Romanji: {dialogue.romanji}</Text>
+            </View>
+          </View>
+        );
+      })
+    : null;
+
   return (
     <KeyboardAvoidingView style={styles.container}>
-      {allLessons.length !== 0 ? (
+      {currentLessonId === null ? (
         <View>
           <Text style={styles.title}>Lessons</Text>
           {lessons}
@@ -90,8 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
-    height: "100%",
+    width: screenWidth,
   },
   inputStyles: {
     height: 40,
@@ -121,5 +146,15 @@ const styles = StyleSheet.create({
     flexDirection: customStyles.buttonFlexDirection,
     alignItems: customStyles.buttonAlignItems,
     justifyContent: customStyles.buttonJustifyContent,
+  },
+  dialogue: {
+    width: 350,
+  },
+  dialogueChild: {
+    borderWidth: 1,
+    borderColor: "black",
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
   },
 });

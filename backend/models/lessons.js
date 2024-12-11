@@ -5,7 +5,12 @@ const lessonSchema = mongoose.Schema({
 	level: Number,
 	total_number: Number,
 
+	theme: String,
+	level: Number,
+	total_number: Number,
+
 	dialogue: {
+		speaker: String,
 		romanji: String,
 		japanese: String,
 		english: String,
@@ -14,9 +19,9 @@ const lessonSchema = mongoose.Schema({
 	practice: {
 		word_jp: String,
 		good_answer: String,
-		wrong_answer_a: String,
-		wrong_answer_b: String,
-		wrong_answer_c: String,
+		wrong_answer: String,
+		wrong_answer: String,
+		wrong_answer: String,
 		isDone: Boolean,
 	},
 });
