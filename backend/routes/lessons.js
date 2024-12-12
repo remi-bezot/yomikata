@@ -24,6 +24,7 @@ router.get("/showLesson/:lessonId/:token", (req, res) => {
 	const { lessonId } = req.params;
 	Lesson.findById(lessonId).then((data) => {
 		console.log(data);
+		res.json({ result: true, data: data });
 	});
 });
 
