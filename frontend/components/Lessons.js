@@ -11,14 +11,19 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { Const } from "../utils/Const";
+import { BackendAdress } from "../utils/BackendAdress";
 import Icon from "react-native-vector-icons/FontAwesome";
+<<<<<<< HEAD
 import * as Speech from "expo-speech";
 import { SpeakerWave } from "./ui/SpeakerWave";
+=======
+import { capitalizeFirstLetter } from "../utils/TextUtils";
+>>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
-const uri = Const.uri;
+const uri = BackendAdress.uri;
 
 export default function Lessons() {
+<<<<<<< HEAD
 	const [lessonData, setLessonData] = useState([]);
 	const [allLessons, setallLessons] = useState([]);
 	const [currentLessonId, setCurrentLessonId] = useState(null);
@@ -36,6 +41,26 @@ export default function Lessons() {
 			})
 			.catch((error) => console.error("Erreur with lessons :", error));
 	}, []);
+=======
+  const [lessonData, setLessonData] = useState([]);
+  const [allLessons, setallLessons] = useState([]);
+  const [currentLessonId, setCurrentLessonId] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
+  const uri = BackendAdress.uri;
+  
+  useEffect(() => {
+    fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.data) {
+          setallLessons(data.data);
+        }
+      })
+      .catch((error) => console.error("Erreur with lessons :", error));
+  }, []);
+>>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
 	const handleGoLesson = (id) => {
 		fetch(`http://${uri}:3000/lessons/showLesson/${id}/${token}`)
@@ -45,6 +70,7 @@ export default function Lessons() {
 				if (data) {
 					console.log("yesss");
 
+<<<<<<< HEAD
 					setLessonData(data.data.dialogue);
 					setCurrentLessonId(id);
 				}
@@ -58,6 +84,41 @@ export default function Lessons() {
 			rate: 1,
 		});
 	};
+=======
+  return (
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.content}>
+          {currentLessonId === null ? (
+            <FlatList
+              data={allLessons}
+              keyExtractor={(item) => item._id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.lessonContainer}>
+                  <Text style={styles.lessonTitle}>
+                    {capitalizeFirstLetter(item.theme)}
+                  </Text>
+                  <Text>Number: {item.number}</Text>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handleGoLesson(item._id)}
+                  >
+                    <Text>Go to</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              ListHeaderComponent={
+                <Text style={[styles.title, styles.lessonHeader]}>Lessons</Text>
+              }
+            />
+          ) : (
+            <FlatList
+              data={lessonData}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item, index }) => {
+                const alignment = index % 2 === 0 ? "row" : "row-reverse";
+                const iconColor = index % 2 === 0 ? "#4CAF50" : "#2196F3";
+>>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
 	const phrases = [
 		{

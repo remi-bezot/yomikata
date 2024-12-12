@@ -4,7 +4,7 @@ import {  useSelector } from "react-redux";
 import {login} from '../reducers/users';
 import { useEffect, useState } from 'react';
 import { customStyles } from "../utils/CustomStyle";
-import { Const } from "../utils/Const";
+import { Const } from "../utils/BackendAdress";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";

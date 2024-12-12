@@ -12,7 +12,7 @@ router.get("/showAllLessons/:token", (req, res) => {
 		if (dataUser) {
 			let userLevel = 1;
 			Lesson.find({ level: userLevel }).then((data) => {
-				res.json({ data: data });
+				res.json({ result: true, data: data });
 			});
 		} else {
 			res.json({ result: false });
@@ -23,8 +23,11 @@ router.get("/showAllLessons/:token", (req, res) => {
 router.get("/showLesson/:lessonId/:token", (req, res) => {
 	const { lessonId } = req.params;
 	Lesson.findById(lessonId).then((data) => {
-		console.log(data);
-		res.json({ result: true, data: data });
+		if (data) {
+			res.json({ result: true, data: data });
+		} else {
+			res.json({ result: false });
+		}
 	});
 });
 

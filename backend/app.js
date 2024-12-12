@@ -25,6 +25,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/lessons", lessonsRouter);
 app.use("/favorites", favoritesRouter);
-app.use("/word", dicoRouter);
+app.use("/dico", dicoRouter);
 
 module.exports = app;
