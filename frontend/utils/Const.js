@@ -1,3 +1,3 @@
 export const Const = {
-  uri: "10.10.200.42",
+	uri: "192.168.1.92",
 };
