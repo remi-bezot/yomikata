@@ -3,12 +3,14 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { login } from "../reducers/users";
 import { useEffect, useState } from "react";
+import { customStyles } from "../utils/CustomStyle";
+import { BackendAdress } from "../utils/BackendAdress";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
 const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
-import { BackendAdress } from "../utils/Const";
+import { BackendAdress } from "../utils/BackendAdress";
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 
@@ -43,7 +45,7 @@ export default function FavoriteScreen() {
 		});
 
 	// const [fontsLoaded] = useFonts({
-	// 	OverusedGrotesk: require("../assets/fonts/Satoshi-BlackK"),
+	// 	Satoshi: require("../assets/fonts/Satoshi-BlackK"),
 	// });
 
 	// if (!fontsLoaded) {

@@ -9,8 +9,11 @@ export default function HomeScreen({ navigation }) {
 		navigation.navigate("Auth");
 	};
 
+
+
 	return (
 		<KeyboardAvoidingView style={styles.container}>
+
 			<Text onPress={() => handlesubmit()}>HomeScreen</Text>
 		</KeyboardAvoidingView>
 	);
