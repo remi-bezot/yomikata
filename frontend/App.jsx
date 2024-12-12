@@ -12,6 +12,7 @@ import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from "./screens/LessonsScreen";
+import TestScreen from "./screens/TestScreen";
 
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
@@ -64,6 +65,7 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
+					<Stack.Screen name="TestScreen" component={TestScreen} />
 					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={Authentification} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />

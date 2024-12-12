@@ -83,7 +83,7 @@ export default function SignUp() {
 			></TextInput>
 
 			<TextInput
-				onChangeText={(value) => setSignUpemail(value)}
+				onChangeText={(value) => setsignUpEmail(value)}
 				value={signUpEmail}
 				style={styles.inputStyles}
 				placeholder="email"
