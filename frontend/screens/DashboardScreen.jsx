@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 
-export default function DashboardScreen() {
+export default function DashboardScreen({navigation}) {
 
   const [progress, setProgress] = useState(0.5); // Barre de progression
 
@@ -16,6 +16,11 @@ export default function DashboardScreen() {
     if (progress > 0) setProgress(progress - 0.1);
   };
 
+  const goBack = () => {
+		navigation.navigate("Auth");
+	};
+
+
     return (
       <View style={styles.container}>
       <View style={styles.header}>
@@ -25,7 +30,9 @@ export default function DashboardScreen() {
           }}
           style={styles.avatar}
         />
+        
         <Text style={styles.font}>Welcome User</Text>
+        <Text onPress={() => goBack()}>Go Back!</Text>
         <TouchableOpacity style={styles.settings}>
           <FontAwesome6 name="gear" size={24} color="#000" />
         </TouchableOpacity>

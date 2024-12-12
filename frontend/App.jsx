@@ -47,7 +47,7 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
-			<Tab.Screen name="dashboard" component={DashboardScreen} />
+			<Tab.Screen name="dashboard" component={DashboardScreen}  />
 			<Tab.Screen name="Lessons" component={LessonsScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="user" component={UserScreen} />
@@ -61,8 +61,8 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="home" component={HomeScreen} />
-					<Stack.Screen name="Auth" component={Authentification} />
-					<Stack.Screen name="TabNavigator" component={TabNavigator} />
+					<Stack.Screen name="Auth" component={Authentification}  />
+					<Stack.Screen name="TabNavigator" component={TabNavigator} options={{ gestureEnabled: false }} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</Provider>

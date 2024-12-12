@@ -11,9 +11,8 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { backendAdress } from "../utils/BackendAdress";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import { BackendAdress } from "../utils/BackendAdress";
 
 
 export default function Lessons() {
@@ -23,7 +22,7 @@ export default function Lessons() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
-  const uri = backendAdress.uri;
+  const uri = BackendAdress.uri;
   
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
