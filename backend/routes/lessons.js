@@ -8,9 +8,10 @@ const Working = require("../models/working");
 
 router.get("/showAllLessons/:token", (req, res) => {
   const { token } = req.params;
+
   User.findOne({ token: token }).then((dataUser) => {
     if (dataUser) {
-      let userLevel = 1;
+      let userLevel = dataUser.level;
       Lesson.find({ level: userLevel }).then((data) => {
         res.json({ result: true, data: data });
       });
@@ -22,8 +23,12 @@ router.get("/showAllLessons/:token", (req, res) => {
 
 router.get("/showLesson/:lessonId/:token", (req, res) => {
   const { lessonId } = req.params;
+  console.log(lessonId);
+
   Lesson.findById(lessonId).then((data) => {
     if (data) {
+      console.log(data);
+
       res.json({ result: true, data: data });
     } else {
       res.json({ result: false });
@@ -32,6 +37,7 @@ router.get("/showLesson/:lessonId/:token", (req, res) => {
 });
 
 //route déclanché a la création d'un user une seule utilisation
+
 router.get("/working/:user_id", (req, res) => {
   const newWorking = new Working({
     user: req.params.user_id,

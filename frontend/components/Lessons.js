@@ -11,11 +11,12 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { BackendAdress } from "../utils/BackendAdress";
+
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 
-const uri = BackendAdress.uri;
+import { BackendAdress } from "../utils/BackendAdress";
+const uri = BackendAdress;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
@@ -23,9 +24,9 @@ export default function Lessons() {
   const [currentLessonId, setCurrentLessonId] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
+  let token = "_w2_R3IVDGZIlgPxysRf7B4U8wBfkp7f";
   const uri = BackendAdress.uri;
-  
+
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
       .then((response) => response.json())
@@ -42,11 +43,12 @@ export default function Lessons() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          setLessonData(data.data.dialogue);
+          setLessonData(data.data);
           setCurrentLessonId(id);
         }
       });
   };
+  console.log(lessonData);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,9 +61,9 @@ export default function Lessons() {
               renderItem={({ item }) => (
                 <View style={styles.lessonContainer}>
                   <Text style={styles.lessonTitle}>
-                    {capitalizeFirstLetter(item.theme)}
+                    {capitalizeFirstLetter(item.dialogue.theme)}
                   </Text>
-                  <Text>Number: {item.number}</Text>
+                  <Text>Number: {item.dialogue.number}</Text>
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => handleGoLesson(item._id)}

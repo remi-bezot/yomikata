@@ -9,11 +9,11 @@ import {
   Image,
   View,
 } from "react-native";
-import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
+
 import { login } from "../reducers/users";
-import { BackendAdress } from "../utils/BackendAdress";
 import { useNavigation } from "@react-navigation/native";
+<<<<<<< HEAD
 const uri = BackendAdress.uri;
 
 // authentification
@@ -23,6 +23,11 @@ import { useFonts } from "expo-font";
 
 
 
+=======
+import { customStyles } from "../utils/CustomStyle";
+import { BackendAdress } from "../utils/BackendAdress";
+const uri = BackendAdress;
+>>>>>>> 5868b55b0883d08e08563c004caee0eebac54a09
 
 export default function SignUp() {
 

@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { customStyles } from "../utils/CustomStyle";
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, showModal } from "../reducers/users";
@@ -144,7 +144,7 @@ if (!fontsLoaded) {
       ></TextInput>
 
       <TextInput
-        onChangeText={(value) => setsignUpEmail(value)}
+        onChangeText={(value) => setSignUpemail(value)}
         value={signUpEmail}
         style={styles.inputStyles}
         placeholder="email"
@@ -178,7 +178,7 @@ if (!fontsLoaded) {
         keyboardType="default"
         autoCapitalize="none"
       ></TextInput>
-      <TouchableOpacity style={styles.button} onPress={() => checkForm()}>
+      <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
         <Text>Sign up</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
   },
   inputStyles: {
     height: 40,
-    width: customStyles.buttonWidth,
     margin: 12,
     borderWidth: 1,
     padding: 10,

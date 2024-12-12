@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
 import Authentification from "./screens/Authentification";
 import DashboardScreen from "./screens/DashboardScreen";
-import BookScreen from "./screens/BookScreen";
+import SignUp from "./components/SignUp";
 import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -14,7 +14,9 @@ import user from "./reducers/users";
 import LessonsScreen from "./screens/LessonsScreen";
 
 import { Provider } from "react-redux";
-import { configureStore, Tuple } from '@reduxjs/toolkit'
+import { configureStore, Tuple } from "@reduxjs/toolkit";
+import PracticeScreen from "./screens/PracticeScreen";
+// import firstPage from "./screens/firstPage";
 
 const store = configureStore({
 	reducer: { user },
@@ -49,6 +51,7 @@ const TabNavigator = () => {
 		>
 			<Tab.Screen name="dashboard" component={DashboardScreen}  />
 			<Tab.Screen name="Lessons" component={LessonsScreen} />
+			<Tab.Screen name="Practice" component={PracticeScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="user" component={UserScreen} />
 		</Tab.Navigator>
@@ -60,9 +63,17 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
+<<<<<<< HEAD
 					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={Authentification}  />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} options={{ gestureEnabled: false }} />
+=======
+					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
+					<Stack.Screen name="home" component={LessonsScreen} />
+					<Stack.Screen name="Auth" component={Authentification} />
+					<Stack.Screen name="TabNavigator" component={TabNavigator} />
+					<Stack.Screen name="SignUp" component={SignUp} />
+>>>>>>> 5868b55b0883d08e08563c004caee0eebac54a09
 				</Stack.Navigator>
 			</NavigationContainer>
 		</Provider>
