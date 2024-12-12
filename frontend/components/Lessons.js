@@ -11,10 +11,11 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { Const } from "../utils/Const";
+import { BackendAdress } from "../utils/BackendAdress";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { capitalizeFirstLetter } from "../utils/TextUtils";
 
-const uri = Const.uri;
+const uri = BackendAdress.uri;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
@@ -23,7 +24,8 @@ export default function Lessons() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = "lciXA-SA2SLUsydGqZ6VZFmN4rxGcQvo";
-
+  const uri = BackendAdress.uri;
+  
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
       .then((response) => response.json())
@@ -44,10 +46,6 @@ export default function Lessons() {
           setCurrentLessonId(id);
         }
       });
-  };
-
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (

@@ -9,15 +9,22 @@ import {
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
-import { Const } from "../utils/Const";
-const uri = Const.uri;
+import { BackendAdress } from "../utils/BackendAdress";
+import { useNavigation } from "@react-navigation/native";
+const uri = BackendAdress.uri;
+
+
+
+
 export default function SignUp() {
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const uri = Const.uri;
+
+  const navigation = useNavigation();
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
+  const [formError, setFormError] = useState(false)
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
@@ -33,22 +40,34 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data) {
+        if (data.result) {
           dispatch(login({ username: signInEmail, token: data.token }));
-          setSignInUsername("");
+          setSignInEmail("");
           setSignInPassword("");
-        }
-      });
 
-    if (EMAIL_REGEX.test(signInEmail)) {
-      navigation.navigate("TabNavigator", { screen: "dashboard" });
-    } else {
-      setEmailError(true);
-    }
-  };
+          dispatch(showModal(false))
+
+          navigation.navigate("TabNavigator", { screen: "dashboard" });
+        }
+        else {
+          setFormError(true)
+        }
+
+      });
+}
+
+    const checkForm = () => {
+      if (EMAIL_REGEX.test(signInEmail)) {
+        handleConnect()
+      } else {
+        setEmailError(true);
+      }
+    };
+        
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      {formError && <Text style={styles.error}>Invalid Form</Text>}
       <TextInput
         style={styles.inputStyles}
         onChangeText={(value) => setSignInEmail(value)}
@@ -70,7 +89,7 @@ export default function SignUp() {
         keyboardType="default"
         autoCapitalize="none"
       ></TextInput>
-      <TouchableOpacity style={styles.button} onPress={() => handleConnect()}>
+      <TouchableOpacity style={styles.button} onPress={() => checkForm()}>
         <Text>Sign in</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
