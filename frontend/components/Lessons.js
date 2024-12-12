@@ -13,6 +13,7 @@ import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { Const } from "../utils/Const";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { capitalizeFirstLetter } from "../utils/TextUtils";
 
 const uri = Const.uri;
 
@@ -44,10 +45,6 @@ export default function Lessons() {
           setCurrentLessonId(id);
         }
       });
-  };
-
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (

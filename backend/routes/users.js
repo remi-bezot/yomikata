@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
+const Working = require("../models/working");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 const { checkBody } = require("../modules/checkbody");
@@ -10,16 +11,18 @@ const { checkBody } = require("../modules/checkbody");
 router.post("/signup", async (req, res) => {
   try {
     if (!checkBody(req.body, ["name", "username", "email", "password"])) {
-      return res
-        .status(400)
-        .json({ result: false, error: "Missing or empty fields" });
+      return res.status(400).json({
+        result: false,
+        error: "Missing or empty fields",
+      });
     }
 
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      return res
-        .status(409)
-        .json({ result: false, error: "Email already exists" });
+      return res.status(409).json({
+        result: false,
+        error: "Email already exists",
+      });
     }
 
     const hash = bcrypt.hashSync(req.body.password, 10);
@@ -33,16 +36,37 @@ router.post("/signup", async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    if (savedUser) {
-      return res.status(201).json({ result: true, token: savedUser.token });
-    } else {
-      return res
-        .status(500)
-        .json({ result: false, error: "Failed to save user" });
+    if (!savedUser) {
+      return res.status(500).json({
+        result: false,
+        error: "Failed to save user",
+      });
     }
+
+    const newWorking = new Working({
+      user: savedUser._id,
+      dialogue_progress: {},
+      practice_progress: {},
+    });
+
+    const savedWorking = await newWorking.save();
+    if (!savedWorking) {
+      return res.status(500).json({
+        result: false,
+        error: "Failed to create working entry",
+      });
+    }
+
+    return res.status(201).json({
+      result: true,
+      token: savedUser.token,
+      working: savedWorking,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ result: false, error: "Internal server error" });
+    return res.status(500).json({
+      result: false,
+      error: "Internal server error",
+    });
   }
 });
 
