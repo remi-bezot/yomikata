@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { login, showModal } from "../reducers/users";
+import { login } from "../reducers/users";
 import { BackendAdress } from "../utils/BackendAdress";
 import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;

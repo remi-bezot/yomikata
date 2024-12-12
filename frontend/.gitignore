@@ -33,5 +33,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-
-backendAdress.js
+utils/BackendAdress.js
+utils/Const.js
