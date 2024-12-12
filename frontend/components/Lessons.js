@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { Const } from "../utils/Const";
+import { BackendAdress } from "../utils/BackendAdress";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 
-const uri = Const.uri;
+const uri = BackendAdress.uri;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
