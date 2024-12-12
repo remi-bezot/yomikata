@@ -16,6 +16,7 @@ import LessonsScreen from "./screens/LessonsScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
+// import firstPage from "./screens/firstPage";
 
 const store = configureStore({
 	reducer: { user },
@@ -62,7 +63,8 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="home" component={LessonsScreen} />
+					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
+					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={Authentification} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					<Stack.Screen name="SignUp" component={SignUp} />

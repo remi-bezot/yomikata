@@ -7,52 +7,29 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { customStyles } from "../utils/CustomStyle";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD
-import { login } from "../reducers/users";
-import { Const } from "../utils/Const";
-const uri = Const.uri;
-export default function SignUp({}) {
+import { login, showModal } from "../reducers/users";
+import { customStyles } from "../utils/CustomStyle";
+import { BackendAdress } from "../utils/Const";
+const uri = BackendAdress;
+
+export default function SignUp() {
 	const EMAIL_REGEX =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	const uri = Const.uri;
 	const navigation = useNavigation();
+
 	const [signUpUsername, setSignUpUsername] = useState("");
 	const [signUpPassword, setSignUpPassword] = useState("");
 	const [signUpConfirmPassword, setSignUpConfirmPassword] = useState("");
-	const [signUpname, setSignUpname] = useState("");
-	const [signUpemail, setSignUpemail] = useState("");
+	const [signUpName, setsignUpName] = useState("");
+	const [signUpEmail, setsignUpEmail] = useState("");
 	const [emailError, setEmailError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(false);
-=======
-import { login, showModal } from "../reducers/users";
-import { BackendAdress} from "../utils/BackendAdress";
-import { useNavigation } from "@react-navigation/native";
-
-const uri = BackendAdress.uri;
-
-
-
-export default function SignUp() {
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const navigation = useNavigation();
-
-  const [signUpUsername, setSignUpUsername] = useState("");
-  const [signUpPassword, setSignUpPassword] = useState("");
-  const [signUpConfirmPassword, setSignUpConfirmPassword] = useState("");
-  const [signUpName, setsignUpName] = useState("");
-  const [signUpEmail, setsignUpEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
->>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 
-<<<<<<< HEAD
 	const handleConnect = () => {
 		console.log("test");
 
@@ -60,9 +37,9 @@ export default function SignUp() {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
-				name: signUpname,
+				name: signUpName,
 				username: signUpUsername,
-				email: signUpemail,
+				email: signUpEmail,
 				password: signUpPassword,
 			}),
 		})
@@ -74,105 +51,40 @@ export default function SignUp() {
 					setSignUpUsername("");
 					setSignUpPassword("");
 					setSignUpConfirmPassword("");
-					setSignUpname("");
-					setSignUpemail("");
+					setsignUpName("");
+					setsignUpEmail("");
 				}
 				if (data.error) {
 					setErrorMessage(true);
 				}
 			});
 
-		if (EMAIL_REGEX.test(signUpemail)) {
+		if (EMAIL_REGEX.test(signUpEmail)) {
 			navigation.navigate("TabNavigator", { screen: "dashboard" });
 		} else {
 			setEmailError(true);
 		}
 	};
-=======
-
-  const handleConnect = () => {
-    fetch(`http://${uri}:3000/users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: signUpName,
-        username: signUpUsername,
-        email: signUpEmail,
-        password: signUpPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log(data);
-          dispatch(login({ username: signUpUsername, token: data.token }));
-          setSignUpUsername("");
-          setSignUpPassword("");
-          setSignUpConfirmPassword("");
-          setsignUpName("");
-          setsignUpEmail("");
-          dispatch(showModal(false))
-          navigation.navigate('TabNavigator', { screen: 'dashboard' });
-          
-
-        }
-        if (data.error) {
-          setErrorMessage(true);
-        }
-      });
-
-  };
-
-  const checkForm = () => {
-    if (EMAIL_REGEX.test(signUpEmail)) {
-      handleConnect()
-    } else {
-      setEmailError(true);
-    }
-  };
-
-
-  return (
-    <KeyboardAvoidingView style={styles.container}>
-      <TextInput
-        onChangeText={(value) => setsignUpName(value)}
-        value={signUpName}
-        style={styles.inputStyles}
-        placeholder="name"
-      ></TextInput>
->>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
 	return (
 		<KeyboardAvoidingView style={styles.container}>
 			<TextInput
-				onChangeText={(value) => setSignUpname(value)}
-				value={signUpname}
+				onChangeText={(value) => setsignUpName(value)}
+				value={signUpName}
 				style={styles.inputStyles}
 				placeholder="name"
 			></TextInput>
 
-<<<<<<< HEAD
 			<TextInput
 				style={styles.inputStyles}
 				onChangeText={(value) => setSignUpUsername(value)}
 				value={signUpUsername}
 				placeholder="username"
 			></TextInput>
-=======
-      <TextInput
-        onChangeText={(value) => setsignUpEmail(value)}
-        value={signUpEmail}
-        style={styles.inputStyles}
-        placeholder="email"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        autoCorrect={false}
-      ></TextInput>
->>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 
 			<TextInput
 				onChangeText={(value) => setSignUpemail(value)}
-				value={signUpemail}
+				value={signUpEmail}
 				style={styles.inputStyles}
 				placeholder="email"
 				autoCapitalize="none"
@@ -183,7 +95,6 @@ export default function SignUp() {
 			{emailError && <Text style={styles.error}>Invalid email address</Text>}
 			{errorMessage && <Text style={styles.error}>Email already exists</Text>}
 
-<<<<<<< HEAD
 			<TextInput
 				style={styles.inputStyles}
 				onChangeText={(value) => setSignUpPassword(value)}
@@ -208,22 +119,6 @@ export default function SignUp() {
 			</TouchableOpacity>
 		</KeyboardAvoidingView>
 	);
-=======
-      <TextInput
-        style={styles.inputStyles}
-        onChangeText={(value) => setSignUpConfirmPassword(value)}
-        value={signUpConfirmPassword}
-        placeholder="confirm password"
-        secureTextEntry={true}
-        keyboardType="default"
-        autoCapitalize="none"
-      ></TextInput>
-      <TouchableOpacity style={styles.button} onPress={() => checkForm()}>
-        <Text>Sign up</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
-  );
->>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 }
 
 const styles = StyleSheet.create({
@@ -237,7 +132,6 @@ const styles = StyleSheet.create({
 	},
 	inputStyles: {
 		height: 40,
-		width: customStyles.buttonWidth,
 		margin: 12,
 		borderWidth: 1,
 		padding: 10,

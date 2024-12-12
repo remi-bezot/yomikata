@@ -4,11 +4,6 @@ import { Link } from "@react-navigation/native";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> ebe5e40702eb4e7d5ea771b4fc40839a42d14fe8
 export default function HomeScreen({ navigation }) {
 	const handlesubmit = () => {
 		navigation.navigate("Auth");
