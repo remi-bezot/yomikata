@@ -13,21 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
-<<<<<<< HEAD
 const uri = BackendAdress.uri;
 
 // authentification
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-
-
-
-=======
 import { customStyles } from "../utils/CustomStyle";
 import { BackendAdress } from "../utils/BackendAdress";
-const uri = BackendAdress;
->>>>>>> 5868b55b0883d08e08563c004caee0eebac54a09
+
 
 export default function SignUp() {
 
