@@ -6,6 +6,8 @@ import { useState } from "react";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import { useFonts } from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { showModal } from "../reducers/users";
 
 import {
 	StyleSheet,
@@ -18,8 +20,16 @@ import {
 } from "react-native";
 
 export default function Authentification() {
-	const [signUpModalVisible, setSignUpModalVisible] = useState(false);
-	const [signInModalVisible, setSignInModalVisible] = useState(false);
+
+  const user = useSelector((state) => state.user.value);
+
+  console.log(user.formModal, 'yes');
+  
+
+  const dispatch = useDispatch();
+
+	const [signUpModalVisible, setSignUpModalVisible] = useState(user.formModal);
+	const [signInModalVisible, setSignInModalVisible] = useState(user.formModal);
 
 	const [fontsLoaded] = useFonts({
 		OverusedGrotesk: require("../assets/fonts/Satoshi-Black.otf"),
@@ -31,18 +41,20 @@ export default function Authentification() {
 
 	const showSignUpModal = () => {
 		setSignUpModalVisible(!signUpModalVisible);
+    dispatch(showModal(signUpModalVisible))
 	};
 
 	const showSignInModal = () => {
 		setSignInModalVisible(!signInModalVisible);
+    dispatch(showModal(signInModalVisible))
 	};
 
 	const handleCancelSignUp = () => {
-		setSignUpModalVisible(!signUpModalVisible);
+		setSignUpModalVisible(false);
 	};
 
 	const handleCancelSignIn = () => {
-		setSignInModalVisible(!signInModalVisible);
+		setSignInModalVisible(false);
 	};
 
 
@@ -67,7 +79,7 @@ export default function Authentification() {
 				animationType="fade"
 				transparent={true}
 				visible={signUpModalVisible}
-				onRequestClose={handleCancelSignUp}
+				onRequestClose={()=>{setSignUpModalVisible(false)  }}
 			>
 				<View style={styles.modalOverlay}>
 					<View style={styles.modalContentSignup}>
@@ -76,7 +88,7 @@ export default function Authentification() {
 								name="close"
 								size={20}
 								color="#000000"
-								onPress={handleCancelSignUp}
+								onPress={()=>{setSignUpModalVisible(false)  }}
 							/>
 						</View>
 						<SignUp />
@@ -88,24 +100,26 @@ export default function Authentification() {
         animationType="fade"
         transparent={true}
         visible={signInModalVisible}
-        onRequestClose={handleCancelSignIn} 
-      >
+        onRequestClose={() => {
+       setSignInModalVisible(false);
+        }}>
+    
         <View style={styles.modalOverlay}>
           <View style={styles.modalContentSignin}>
           <View style={styles.deleteIcon}>
-                <FontAwesome name="close" size={20} color="#000000" onPress={handleCancelSignIn}  />
+                <FontAwesome name="close" size={20} color="#000000" onPress={()=>setSignInModalVisible(false)}  />
           </View>
-          <SignIn/>
+          <SignIn />
           </View>
         </View>
       </Modal>
 
       
-      <TouchableOpacity onPress={showSignInModal} style={styles.login}>
+      <TouchableOpacity onPress={()=>showSignInModal(true)} style={styles.login}>
         <Text style={styles.buttonTitle}>Already have an account ?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={showSignUpModal} style={styles.login}>
+      <TouchableOpacity onPress={()=>showSignUpModal(true)} style={styles.login}>
         <Text style={styles.buttonTitle}>New here? Create an account!</Text>
       </TouchableOpacity>
     </View>

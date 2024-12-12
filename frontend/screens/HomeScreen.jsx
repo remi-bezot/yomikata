@@ -5,6 +5,7 @@ import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 
 
+
 export default function HomeScreen({ navigation }) {
 	const handlesubmit = () => {
 		navigation.navigate("Auth");

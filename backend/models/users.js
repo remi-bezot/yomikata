@@ -6,9 +6,18 @@ const userSchema = mongoose.Schema({
 	email: String,
 	password: String,
 	token: String,
-	level: Number,
-	avatar: String,
-	progress: Number,
+	level: {
+		type: Number, 
+		default : 1, 
+	},
+	avatar: {
+		type: String, 
+		default: 'avatar.jpg'
+	},
+	progress:{
+		type: Number,  
+		default: 0, 
+	},
 });
 
 const User = mongoose.model("users", userSchema);
