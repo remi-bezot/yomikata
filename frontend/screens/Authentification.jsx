@@ -46,11 +46,6 @@ export default function Authentification() {
 	};
 
 
-
-
-
-
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.title}>
