@@ -4,7 +4,7 @@ import {  useSelector } from "react-redux";
 import {login} from '../reducers/users';
 import { useEffect, useState } from 'react';
 import { customStyles } from "../utils/CustomStyle";
-import { Const } from "../utils/BackendAdress";
+import { BackendAdress} from "../utils/BackendAdress";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -15,7 +15,7 @@ export default function FavoriteScreen() {
 
   const user = useSelector((state) => state.user.value);
   const token = 'leTNmBK8F-FKRA1WrgIG2e364rxgWlTf'
-  const uri = Const.uri;
+  const uri = BackendAdress.uri;
   const [words, setWords] = useState([])
 
   // Récupération des favoris lors de la connexion
@@ -43,7 +43,7 @@ export default function FavoriteScreen() {
   });
 
   // const [fontsLoaded] = useFonts({
-	// 	OverusedGrotesk: require("../assets/fonts/Satoshi-BlackK"),
+	// 	Satoshi: require("../assets/fonts/Satoshi-BlackK"),
 	// });
 
 	// if (!fontsLoaded) {
