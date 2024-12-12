@@ -2,12 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import { customStyles } from "../utils/CustomStyle";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState } from "react";
+
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import { useFonts } from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "../reducers/users";
+
 
 import {
 	StyleSheet,
@@ -20,42 +19,13 @@ import {
 } from "react-native";
 
 export default function Authentification() {
-
-  const user = useSelector((state) => state.user.value);
-
-  console.log(user.formModal, 'yes');
-  
-
-  const dispatch = useDispatch();
-
-	const [signUpModalVisible, setSignUpModalVisible] = useState(user.formModal);
-	const [signInModalVisible, setSignInModalVisible] = useState(user.formModal);
-
 	const [fontsLoaded] = useFonts({
-		OverusedGrotesk: require("../assets/fonts/Satoshi-Black.otf"),
+		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
 	});
 
 	if (!fontsLoaded) {
 		return null;
 	}
-
-	const showSignUpModal = () => {
-		setSignUpModalVisible(!signUpModalVisible);
-    dispatch(showModal(signUpModalVisible))
-	};
-
-	const showSignInModal = () => {
-		setSignInModalVisible(!signInModalVisible);
-    dispatch(showModal(signInModalVisible))
-	};
-
-	const handleCancelSignUp = () => {
-		setSignUpModalVisible(false);
-	};
-
-	const handleCancelSignIn = () => {
-		setSignInModalVisible(false);
-	};
 
 
 	return (
@@ -69,54 +39,8 @@ export default function Authentification() {
 				source={require("../assets/FondJap.jpg")}
 				style={styles.photoItem}
 			/>
-
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={signUpModalVisible}
-				onRequestClose={()=>{setSignUpModalVisible(false)  }}
-			>
-				<View style={styles.modalOverlay}>
-					<View style={styles.modalContentSignup}>
-						<View style={styles.deleteIcon}>
-							<FontAwesome
-								name="close"
-								size={20}
-								color="#000000"
-								onPress={()=>{setSignUpModalVisible(false)  }}
-							/>
-						</View>
-						<SignUp />
-					</View>
-				</View>
-			</Modal>
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={signInModalVisible}
-        onRequestClose={() => {
-       setSignInModalVisible(false);
-        }}>
-    
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContentSignin}>
-          <View style={styles.deleteIcon}>
-                <FontAwesome name="close" size={20} color="#000000" onPress={()=>setSignInModalVisible(false)}  />
-          </View>
-          <SignIn />
-          </View>
-        </View>
-      </Modal>
-
-      
-      <TouchableOpacity onPress={()=>showSignInModal(true)} style={styles.login}>
-        <Text style={styles.buttonTitle}>Already have an account ?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={()=>showSignUpModal(true)} style={styles.login}>
-        <Text style={styles.buttonTitle}>New here? Create an account!</Text>
-      </TouchableOpacity>
+        <SignIn/>
+        <SignUp/>
     </View>
   );
 }
@@ -129,25 +53,6 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       width: "100%",
       height: "100%",
-  },
-  login: {
-      backgroundColor: '#ee2537',
-      borderRadius: customStyles.buttonRadius,
-      width: customStyles.buttonWidth,
-      height: customStyles.buttonHeight,
-      display: customStyles.buttonDisplay,
-      flexDirection: customStyles.buttonFlexDirection,
-      alignItems: customStyles.buttonAlignItems,
-      justifyContent: customStyles.buttonJustifyContent,
-      margin: 10,
-      top: 120,
-
-  },
-  modalOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.1)",
-      justifyContent: "center",
-      alignItems: "center",
   },
   title: {
       justifyContent: "center",
@@ -164,39 +69,6 @@ const styles = StyleSheet.create({
   photoItem: {
       width: "90%",
       height: "30%",
-  },
-  closeButton: {
-      marginTop: 20,
-      backgroundColor: "#2196F3",
-      padding: 10,
-      borderRadius: 5,
-  },
-  closeButtonText: {
-      color: "#fff",
-      fontWeight: "bold",
-      textAlign: "center",
-  },
-  deleteIcon: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      width: "100%",
-  },
-  modalContentSignin: {
-      backgroundColor: "#fff",
-      padding: 20,
-      borderRadius: 10,
-      alignItems: "center",
-      width: "80%",
-      height: "35%",
-  },
-  modalContentSignup: {
-      backgroundColor: "#fff",
-      padding: 20,
-      borderRadius: 10,
-      alignItems: "center",
-      width: "80%",
-      height: "55%",
   },
   buttonTitle: {
     fontWeight:'bold',

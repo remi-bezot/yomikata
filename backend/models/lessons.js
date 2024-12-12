@@ -4,8 +4,8 @@ const lessonSchema = mongoose.Schema({
 	level: Number,
 
 	dialogue: {
-    theme: String,
-        total_number: Number,
+		theme: String,
+		total_number: Number,
 		speaker: String,
 		romanji: String,
 		japanese: String,

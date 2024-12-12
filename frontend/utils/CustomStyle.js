@@ -25,7 +25,7 @@ export const customStyles = {
   h2Size: 24,
   buttonBackgroundColor: "#EEC1C0",
   buttonRadius: 12,
-  buttonWidth: "80%",
+  buttonWidth: "90%",
   buttonHeight: 50,
   buttonTextSize: 20,
   buttonDisplay: "flex",

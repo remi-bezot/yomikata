@@ -4,15 +4,16 @@ import { Link } from "@react-navigation/native";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 
-
-
 export default function HomeScreen({ navigation }) {
 	const handlesubmit = () => {
 		navigation.navigate("Auth");
 	};
 
+
+
 	return (
 		<KeyboardAvoidingView style={styles.container}>
+
 			<Text onPress={() => handlesubmit()}>HomeScreen</Text>
 		</KeyboardAvoidingView>
 	);
