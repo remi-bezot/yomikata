@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   title: {
       justifyContent: "center",
       alignItems: "center",
-      height: "80",
+      height: 80,
       flexDirection: "row",
       bottom: 80,
   },
