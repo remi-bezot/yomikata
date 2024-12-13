@@ -1,11 +1,11 @@
-import { Text, View, StyleSheet} from 'react-native'
-import React from 'react'
-import {  useSelector } from "react-redux";
-import {login} from '../reducers/users';
-import { useEffect, useState } from 'react';
+import { Text, View, StyleSheet } from "react-native";
+import React from "react";
+import { useSelector } from "react-redux";
+import { login } from "../reducers/users";
+import { useEffect, useState } from "react";
 import { customStyles } from "../utils/CustomStyle";
-import { BackendAdress} from "../utils/BackendAdress";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackendAdress } from "../utils/BackendAdress";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
@@ -44,19 +44,7 @@ export default function FavoriteScreen() {
 			);
 		});
 
-   const favoriteswords = words && words.map((data, i) => {
-     return <View style={styles.card} key={i}>
-      <View> 
-       <View style={styles.deleteIcon}><FontAwesome name="close" size={15} color="#000000" /></View>
-        <Text style={styles.word}>{data.Word_JP}</Text>
-      </View>
-      <Text style={styles.word}>{data.Word_EN}</Text>
-      <Text style={styles.word}>{data.Romanji}</Text>
-      <Text style={styles.word}>{data.Grammar}</Text>
-    </View>
-  });
-
-  // const [fontsLoaded] = useFonts({
+	// const [fontsLoaded] = useFonts({
 	// 	Satoshi: require("../assets/fonts/Satoshi-BlackK"),
 	// });
 
