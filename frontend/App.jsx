@@ -12,6 +12,7 @@ import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from "./screens/LessonsScreen";
+import TestScreen from "./screens/TestScreen";
 
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
@@ -49,7 +50,7 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
-			<Tab.Screen name="dashboard" component={DashboardScreen}  />
+			<Tab.Screen name="dashboard" component={DashboardScreen} />
 			<Tab.Screen name="Lessons" component={LessonsScreen} />
 			<Tab.Screen name="Practice" component={PracticeScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />
