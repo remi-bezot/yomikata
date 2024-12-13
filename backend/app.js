@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/lessons", lessonsRouter);
-app.use("/favorites", favoritesRouter);
+app.use("/", favoritesRouter);
 app.use("/dico", dicoRouter);
 
 module.exports = app;

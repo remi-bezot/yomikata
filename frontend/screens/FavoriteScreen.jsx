@@ -8,32 +8,54 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
-const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
 
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 
-	const uri = BackendAdress;
+	const token = user.token;
+	const uri = BackendAdress.uri;
 	const [words, setWords] = useState([]);
+	const [cardsIsVisible, setCardsIsVisible] = useState(true)
+
+	
+	const handleClick = () => {
+		
+		fetch(`http://${uri}:3000/favorites/deleteFavorite/${token}`)
+		.then((response) => response.json())
+		.then((data) => {
+
+
+		});
+	}
+
+	
 
 	// Récupération des favoris lors de la connexion
 	useEffect(() => {
-		fetch(`http://${uri}:3000/favorites/${token}`)
-			.then((response) => response.json())
-			.then((data) => {
-				setWords(data.result);
-			});
+
+		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
+		.then((response) => response.json())
+		.then((data) => {
+			setWords(data.result);
+			console.log(words, 'here')
+
+		});
 	}, []);
 
+	
+
+	
+
 	const favoriteswords =
-		words &&
-		words.map((data, i) => {
+	words.length>0 && words.map((data, i) => {
+
+		if(cardsIsVisible === true){
 			return (
 				<View style={styles.card} key={i}>
 					<View>
 						<View style={styles.deleteIcon}>
-							<FontAwesome name="close" size={15} color="#000000" />
+							<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick() }/>
 						</View>
 						<Text style={styles.word}>{data.Word_JP}</Text>
 					</View>
@@ -42,6 +64,10 @@ export default function FavoriteScreen() {
 					<Text style={styles.word}>{data.Grammar}</Text>
 				</View>
 			);
+		} else {
+			
+		}
+			
 		});
 
 	// const [fontsLoaded] = useFonts({
@@ -55,7 +81,7 @@ export default function FavoriteScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.titlecontainer}>
-				<Text style={styles.title}>Favorites</Text>
+				<Text style={styles.title}>Favoritesss {words.length}</Text>
 			</View>
 
 			<View style={styles.cardsList}>{favoriteswords}</View>
