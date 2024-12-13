@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, showModal } from "../reducers/users";
@@ -18,6 +17,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
+import { useNavigation } from "@react-navigation/native";
 
 const uri = BackendAdress.uri;
 

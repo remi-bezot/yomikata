@@ -16,7 +16,6 @@ router.get("/", (req, res) => {
 						const firstItem = jishoData.data[0];
 						grammar = firstItem.senses[0]?.parts_of_speech || ["N/A"];
 					}
-
 					// Combine les deux résultats et les envoie
 					res.json({
 						jlpt: jlptData.words,
