@@ -9,6 +9,8 @@ import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
 const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
+
+
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 
