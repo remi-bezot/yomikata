@@ -8,15 +8,17 @@ const User = require("../models/users");
 router.get("/:token", (req, res) => {
 	const token = req.params.token;
 
-	User.findOne({ token }).then((data) => {
-		if (data) {
-			Favorite.find()
-				.populate("id_user")
-				.then((data) => {
-					res.json({ result: data });
-				});
-		}
-	});
+    User.findOne({ token : token }).then((data) => {
+        if (data) {
+            console.log(data);
+            
+            Favorite.find({id_user: data._id})
+                .populate("id_user")
+                .then((data) => {
+                    res.json({ result: data });
+                });
+        }
+    });
 });
 
 router.post("/:token", (req, res) => {

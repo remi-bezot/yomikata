@@ -64,7 +64,7 @@ router.post("/Progress_Dial", (req, res) => {
       if (updatedWorking) {
         res.json({ result: true, updatedWorking });
       } else {
-        res.status(404).json({ result: false, message: "Élément non trouvé" });
+        res.json({ result: false, message: "Élément non trouvé" });
       }
     })
     .catch((err) => {
@@ -91,7 +91,7 @@ router.post("/Progress_Pract", (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).json({ result: false, error: err.message });
+      res.json({ result: false, error: err.message });
     });
   const { lessonId, token } = req.params;
   Lesson.findById(lessonId).then((data) => {

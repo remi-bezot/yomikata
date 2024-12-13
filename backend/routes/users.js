@@ -16,11 +16,10 @@ router.post("/signup", (req, res) => {
 
   User.findOne({ email: req.body.email }).then((data) => {
     if (data !== null) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.json({ error: "Email already exists" });
     }
 
     const hash = bcrypt.hashSync(req.body.password, 10);
-
     const newUser = new User({
       name: req.body.name,
       username: req.body.username,
@@ -32,42 +31,30 @@ router.post("/signup", (req, res) => {
       .save()
       .then(() => res.json({ result: true }))
       .catch((err) =>
-        res.status(500).json({ result: false, error: err.message })
+        res.json({ result: false, error: err.message })
       );
   });
 });
 
 router.post("/signin", async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
+  
+    const user = User.findOne({ email: req.body.email });
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
-      return res.status(200).json({ result: true, token: user.token });
+      return res.json({ result: true, token: user.token });
     } else {
-      return res
-        .status(401)
-        .json({ result: false, error: "Invalid email or password" });
+      return res.json({ result: false, error: "Invalid email or password" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ result: false, error: "Internal server error" });
-  }
 });
 
-router.delete("/:token", async (req, res) => {
-  try {
+router.delete("/:token",(req, res) => {
+  
     const { token } = req.params;
-    const result = await User.deleteOne({ token });
+    const result =  User.deleteOne({ token });
     if (result.deletedCount > 0) {
-      return res
-        .status(200)
-        .json({ result: true, message: "User account successfully deleted" });
+      return res.json({ result: true, message: "User account successfully deleted" });
     } else {
-      return res.status(404).json({ result: false, message: "User not found" });
+      return res.json({ result: false, message: "User not found" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ result: false, error: "Internal server error" });
-  }
-});
+  });
 
 module.exports = router;
