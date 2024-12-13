@@ -49,7 +49,8 @@ export default function SignUp() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-
+	console.log(uri)
+	
 	const checkForm = () => {
 		if (EMAIL_REGEX.test(signUpEmail)) {
 			fetch(`http://${uri}:3000/users/signup`, {
@@ -129,7 +130,7 @@ export default function SignUp() {
 							></TextInput>
 
 							<TextInput
-								onChangeText={(value) => setSignUpemail(value)}
+								onChangeText={(value) => setsignUpEmail(value)}
 								value={signUpEmail}
 								style={styles.inputStyles}
 								placeholder="email"
@@ -169,7 +170,7 @@ export default function SignUp() {
 							></TextInput>
 							<TouchableOpacity
 								style={styles.button}
-								onPress={() => handleConnect()}
+								onPress={() => checkForm()}
 							>
 								<Text>Sign up</Text>
 							</TouchableOpacity>
