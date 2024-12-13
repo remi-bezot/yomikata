@@ -36,6 +36,21 @@ router.get("/showLesson/:lessonId/:token", (req, res) => {
   });
 });
 
+router.get("/showLesson/:lessonId/:token", (req, res) => {
+  const { lessonId } = req.params;
+  console.log(lessonId);
+
+  Lesson.findById(lessonId).then((data) => {
+    if (data) {
+      console.log(data);
+
+      res.json({ result: true, data: data });
+    } else {
+      res.json({ result: false });
+    }
+  });
+});
+
 //route déclanché a la création d'un user une seule utilisation
 
 router.get("/working/:user_id", (req, res) => {
