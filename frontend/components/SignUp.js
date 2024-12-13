@@ -9,7 +9,6 @@ import {
 	Image,
 } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, showModal } from "../reducers/users";
