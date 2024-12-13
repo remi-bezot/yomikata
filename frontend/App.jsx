@@ -50,10 +50,10 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
+			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="dashboard" component={DashboardScreen} />
 			<Tab.Screen name="Lessons" component={LessonsScreen} />
 			<Tab.Screen name="Practice" component={PracticeScreen} />
-			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="user" component={UserScreen} />
 		</Tab.Navigator>
 	);

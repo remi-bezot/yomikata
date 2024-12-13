@@ -40,6 +40,11 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.3.12",
+<<<<<<< HEAD
+    "jest": "^29.7.0",
+=======
+    "supertest": "^7.0.0",
+>>>>>>> e4cceae7e0465ce999542b250744f6397ac93069
     "typescript": "^5.3.3"
   },
   "private": true
