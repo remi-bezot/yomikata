@@ -17,6 +17,7 @@ import { BackendAdress } from "../utils/BackendAdress";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
+import { customStyles } from "../utils/CustomStyle";
 
 const uri = BackendAdress.uri;
 
