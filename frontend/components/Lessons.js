@@ -24,7 +24,7 @@ export default function Lessons() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = "_w2_R3IVDGZIlgPxysRf7B4U8wBfkp7f";
-  const uri = BackendAdress.uri;
+  const uri = '10.20.3.81';
 
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
