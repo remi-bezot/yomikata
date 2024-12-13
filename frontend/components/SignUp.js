@@ -13,13 +13,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, showModal } from "../reducers/users";
-import { BackendAdress } from "../utils/BackendAdress";
-import { useNavigation } from "@react-navigation/native";
+
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
+import { customStyles } from "../utils/CustomStyle";
 
-const uri = BackendAdress.uri;
+const uri = '10.20.3.81';
 
 export default function SignUp() {
 	const EMAIL_REGEX =

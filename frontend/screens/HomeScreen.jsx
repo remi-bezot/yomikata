@@ -13,7 +13,6 @@ export default function HomeScreen({ navigation }) {
 
 	return (
 		<KeyboardAvoidingView style={styles.container}>
-
 			<Text onPress={() => handlesubmit()}>HomeScreen</Text>
 		</KeyboardAvoidingView>
 	);

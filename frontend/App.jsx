@@ -12,12 +12,11 @@ import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from "./screens/LessonsScreen";
-import TestScreen from "./screens/TestScreen";
-
+import BookScreen from './screens/BookScreen'
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
-// import firstPage from "./screens/firstPage";
+
 
 const store = configureStore({
 	reducer: { user },
@@ -65,7 +64,7 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
-					<Stack.Screen name="home" component={LessonsScreen} />
+					<Stack.Screen name="home" component={BookScreen} />
 					<Stack.Screen name="Auth" component={Authentification} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					<Stack.Screen name="SignUp" component={SignUp} />

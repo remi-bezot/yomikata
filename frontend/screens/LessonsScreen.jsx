@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Text, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import React from "react";
 import Lessons from "../components/Lessons";
 

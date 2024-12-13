@@ -14,10 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
 import { customStyles } from "../utils/CustomStyle";
-import { BackendAdress } from "../utils/BackendAdress";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-const uri = BackendAdress;
+
+const uri = '10.20.3.81';
 
 export default function SignUp() {
   const dispatch = useDispatch();

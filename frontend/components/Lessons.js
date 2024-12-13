@@ -15,8 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 
-import { BackendAdress } from "../utils/BackendAdress";
-const uri = BackendAdress;
+const uri = '10.20.3.81';
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
