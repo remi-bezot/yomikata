@@ -129,7 +129,7 @@ export default function SignUp() {
 							></TextInput>
 
 							<TextInput
-								onChangeText={(value) => setSignUpemail(value)}
+								onChangeText={(value) => setsignUpEmail(value)}
 								value={signUpEmail}
 								style={styles.inputStyles}
 								placeholder="email"
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
 		margin: 12,
 		borderWidth: 1,
 		padding: 10,
+		width: 130,
 	},
 	inputTitle: {
 		fontFamily: "noto sans jp",
