@@ -51,13 +51,13 @@ router.get("/working/:user_id", (req, res) => {
 //UPDATE DIALOGUE PROGRESS NEXT BUTTON
 router.post("/Progress_Dial", (req, res) => {
   const workingId = "6759b72c446c00d0eca97c57";
-  const keyToUpdate = "iddunelesson4";
-  const booleanValue = true;
+  const newDialogueValue = 'iddunelesson';
 
   Working.findByIdAndUpdate(
     workingId,
-    { [`dialogue_progress.${keyToUpdate}`]: booleanValue }, // Syntaxe pour définir une clé dynamique
-    { new: true } // Retourne le document après mise à jour
+    {
+      $push: { "dialogue_progress.dialogues_done": newDialogueValue },  // Ajoute un nouvel élément au tableau
+    } // Retourne le document après mise à jour
   )
     .then((updatedWorking) => {
       if (updatedWorking) {
@@ -74,19 +74,19 @@ router.post("/Progress_Dial", (req, res) => {
 //UPDATE EXERCICE PROGRESS NEXT BUTTON
 router.post("/Progress_Pract", (req, res) => {
   const workingId = "6759b72c446c00d0eca97c57";
-  const keyToUpdate = "iddunexercice4";
-  const booleanValue = true;
+  const newPracticeValue = 'iddunelesson';
 
   Working.findByIdAndUpdate(
     workingId,
-    { [`practice_progress.${keyToUpdate}`]: booleanValue }, // Syntaxe pour définir une clé dynamique
-    { new: true } // Retourne le document après mise à jour
+    {
+      $push: { "practice_progress.practices_done": newPracticeValue },  // Ajoute un nouvel élément au tableau
+    } // Retourne le document après mise à jour
   )
     .then((updatedWorking) => {
       if (updatedWorking) {
         res.json({ result: true, updatedWorking });
       } else {
-        res.status(404).json({ result: false, message: "Élément non trouvé" });
+        res.json({ result: false, message: "Élément non trouvé" });
       }
     })
     .catch((err) => {
