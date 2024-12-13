@@ -13,15 +13,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
+const uri = BackendAdress.uri;
+
+// authentification
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
 import { BackendAdress } from "../utils/BackendAdress";
-const uri = BackendAdress;
 
 export default function SignUp() {
 	const dispatch = useDispatch();
-
-	const EMAIL_REGEX =
-		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 	// const PASSWORD_REGEX= /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
 	const navigation = useNavigation();
