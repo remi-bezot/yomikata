@@ -8,20 +8,25 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Modal,
+  Button,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
-
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
-
 import { BackendAdress } from "../utils/BackendAdress";
+
 const uri = BackendAdress;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
   const [allLessons, setallLessons] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedWord, setSelectedWord] = useState("");
+  const [wordApi, setWordApi] = useState([]);
+
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = "_w2_R3IVDGZIlgPxysRf7B4U8wBfkp7f";
@@ -43,12 +48,23 @@ export default function Lessons() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          setLessonData(data.data);
+          setLessonData([
+            { speaker: "A", japanese: "example text example word" },
+          ]);
           setCurrentLessonId(id);
         }
       });
   };
-  console.log(lessonData);
+
+  const handleLongPressWord = (word) => {
+    setSelectedWord(word);
+    setModalVisible(true);
+    let isPresent = wordApi.includes(word);
+    if (!isPresent) {
+      wordApi.push(word);
+    }
+  };
+  console.log(wordApi);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,27 +116,16 @@ export default function Lessons() {
                           <Text>Speaker : {item.speaker}</Text>
                         </View>
                         <View>
-                          <View>
-                            <Text>Japanese :</Text>
-                          </View>
-                          <View>
-                            <Text>{item.japanese}</Text>
-                          </View>
-                        </View>
-                        <View>
-                          <View>
-                            <Text>English :</Text>
-                          </View>
-                          <View>
-                            <Text>{item.english}</Text>
-                          </View>
-                        </View>
-                        <View>
-                          <View>
-                            <Text>Romanji :</Text>
-                          </View>
-                          <View>
-                            <Text>{item.romanji}</Text>
+                          <Text>Japanese :</Text>
+                          <View style={styles.wordsContainer}>
+                            {item.japanese.split(" ").map((word, idx) => (
+                              <TouchableOpacity
+                                key={idx}
+                                onLongPress={() => handleLongPressWord(word)}
+                              >
+                                <Text style={styles.word}>{word} </Text>
+                              </TouchableOpacity>
+                            ))}
                           </View>
                         </View>
                       </View>
@@ -129,20 +134,36 @@ export default function Lessons() {
                 );
               }}
               ListHeaderComponent={
-                <View>
-                  <Text style={[styles.title, styles.dialogueHeader]}>
-                    Dialogues
-                  </Text>
-                </View>
+                <Text style={[styles.title, styles.dialogueHeader]}>
+                  Dialogues
+                </Text>
               }
             />
           )}
         </View>
+
         {currentLessonId && (
           <TouchableOpacity style={styles.nextButton}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
         )}
+
+        {/* Modale */}
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>
+                Selected Word: {selectedWord}
+              </Text>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -227,5 +248,29 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  wordsContainer: {
+    flexDirection: "row",
+  },
+  word: {
+    fontSize: 16,
+    marginHorizontal: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 });

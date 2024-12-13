@@ -169,7 +169,7 @@ export default function SignUp() {
               ></TextInput>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleConnect()}
+                onPress={() => checkForm()}
               >
                 <Text>Sign up</Text>
               </TouchableOpacity>

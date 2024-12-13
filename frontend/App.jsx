@@ -64,7 +64,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="home" component={HomeScreen} />
+					<Stack.Screen name="home" component={LessonsScreen} />
 					<Stack.Screen name="Auth" component={Authentification}  />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} options={{ gestureEnabled: false }} />
 				</Stack.Navigator>
