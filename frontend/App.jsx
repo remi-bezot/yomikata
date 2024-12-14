@@ -64,7 +64,7 @@ export default function App() {
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
 					<Stack.Screen name="home" component={BookScreen} />
-					<Stack.Screen name="Auth" component={Authentification} />
+					<Stack.Screen name="Auth" component={AuthScreen} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					<Stack.Screen name="SignUp" component={SignUp} />
 				</Stack.Navigator>
