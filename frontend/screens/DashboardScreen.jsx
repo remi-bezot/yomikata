@@ -8,22 +8,12 @@ export default function DashboardScreen() {
 	const [progress, setProgress] = useState(0.5); // Barre de progression
 	const navigation = useNavigation();
 
-	const handleIncrease = () => {
-		if (progress < 1) setProgress(progress + 0.1);
-	};
-
 	const goLesson = () => {
-		console.log("ok");
 		navigation.navigate("TabNavigator", { screen: "Lessons" });
 	};
 
 	const goPratice = () => {
-		console.log("ok");
 		navigation.navigate("TabNavigator", { screen: "Practice" });
-	};
-
-	const handleDecrease = () => {
-		if (progress > 0) setProgress(progress - 0.1);
 	};
 
 	return (

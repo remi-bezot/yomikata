@@ -4,15 +4,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./screens/HomeScreen";
-import Authentification from "./screens/Authentification";
+import AuthScreen from "./screens/AuthScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import SignUp from "./components/SignUp";
 import FavoriteScreen from "./screens/FavoriteScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
-import LessonsScreen from "./screens/LessonsScreen";
-import TestScreen from "./screens/TestScreen";
+import LessonsScreen from "./screens/DialogueScreen";
 
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
@@ -65,8 +64,13 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="home" component={HomeScreen} />
-					<Stack.Screen name="Auth" component={Authentification}  />
-					<Stack.Screen name="TabNavigator" component={TabNavigator} options={{ gestureEnabled: false }} />
+					<Stack.Screen name="Lessons" component={LessonsScreen} />
+					<Stack.Screen name="Auth" component={AuthScreen} />
+					<Stack.Screen
+						name="TabNavigator"
+						component={TabNavigator}
+						options={{ gestureEnabled: false }}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</Provider>

@@ -9,18 +9,15 @@ const { checkBody } = require("../modules/checkbody");
 
 router.post("/signup", (req, res) => {
 	const { name, username, email, password } = req.body;
-
 	if (!checkBody(req.body, ["name", "username", "email", "password"])) {
 		return res.json({ result: false, error: "Missing or empty fields" });
 	}
-
 	User.findOne({ email }).then((existingUser) => {
 		if (existingUser) {
 			return res
 				.status(400)
 				.json({ result: false, error: "Email already exists" });
 		}
-
 		const hash = bcrypt.hashSync(password, 10);
 		const newUser = new User({
 			name,
@@ -29,7 +26,6 @@ router.post("/signup", (req, res) => {
 			password: hash,
 			token: uid2(32),
 		});
-
 		newUser
 			.save()
 			.then(() =>

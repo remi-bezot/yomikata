@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 
 const lineSchema = mongoose.Schema({
 	speaker: String,
-	romanji: String,
 	japanese: String,
+	romanji: String,
 	english: String,
 });
 

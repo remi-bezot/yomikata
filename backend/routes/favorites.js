@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 require("../models/connection");
-const Favorite = require("../models/favoriteSchema");
+const Favorite = require("../models/favorites");
 const User = require("../models/users");
 
 router.get("/:token", (req, res) => {

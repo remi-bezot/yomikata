@@ -8,7 +8,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var lessonsRouter = require("./routes/lessons");
 var favoritesRouter = require("./routes/favorites");
-var dicoRouter = require("./routes/dico");
+var dicoRouter = require("./routes/dictionnary");
 
 var app = express();
 
@@ -25,6 +25,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/lessons", lessonsRouter);
 app.use("/favorites", favoritesRouter);
-app.use("/dico", dicoRouter);
+app.use("/dictionnary", dicoRouter);
 
 module.exports = app;

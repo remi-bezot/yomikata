@@ -28,17 +28,23 @@ export default function SignUp() {
 	const EMAIL_REGEX =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-	// const PASSWORD_REGEX= /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
 	const navigation = useNavigation();
 	const [signInEmail, setSignInEmail] = useState("");
 	const [signInPassword, setSignInPassword] = useState("");
 	const [emailError, setEmailError] = useState(false);
 	const [formError, setFormError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
+	const [isValid, setIsValid] = useState(true);
+
 	const [signInModalVisible, setSignInModalVisible] = useState(false);
 
 	const checkForm = () => {
-		if (EMAIL_REGEX.test(signInEmail)) {
+		console.log("step 1:checkform");
+
+		if (!signInEmail || !EMAIL_REGEX.test(signInEmail)) {
+			setEmailError(true);
+			console.log(emailError, "step 2:ERROR");
+		} else {
 			fetch(`http://${uri}:3000/users/signin`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -49,9 +55,14 @@ export default function SignUp() {
 			})
 				.then((response) => response.json())
 				.then((data) => {
-					console.log(data, "hhhh");
+					console.log("step 3:fetch done");
 
-					if (data.result === true) {
+					if (data.result === false) {
+						console.log("step 4:check result account");
+
+						setIsValid(false);
+						console.log("wrong password");
+					} else {
 						dispatch(login({ username: signInEmail, token: data.token }));
 						setSignInEmail("");
 						setSignInPassword("");
@@ -95,24 +106,28 @@ export default function SignUp() {
 						</View>
 
 						<KeyboardAvoidingView style={styles.container}>
+							<Text style={styles.headerText}>Access your account</Text>
 							{formError && <Text style={styles.error}>Invalid Form</Text>}
 							<TextInput
 								style={styles.inputStyles}
-								onChangeText={(value) => setSignInEmail(value)}
+								onChangeText={(value) => {
+									setSignInEmail(value);
+									if (EMAIL_REGEX.test(value)) {
+										setEmailError(false);
+									}
+								}}
 								value={signInEmail}
 								placeholder="email"
 								placeholderTextColor="grey"
 								autoCapitalize="none"
 								keyboardType="email-address"
 								autoCorrect={false}
-							></TextInput>
-
+							/>
 							{emailError && (
 								<Text style={styles.error}>Invalid email address</Text>
 							)}
-
 							<TextInput
-								style={styles.inputStyles}
+								style={[styles.inputStyles, !isValid && { borderColor: "red" }]}
 								onChangeText={(value) => setSignInPassword(value)}
 								value={signInPassword}
 								placeholder="password"
@@ -120,11 +135,9 @@ export default function SignUp() {
 								secureTextEntry={true}
 								keyboardType="default"
 								autoCapitalize="none"
-							></TextInput>
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() => checkForm()}
-							>
+							/>
+							{!isValid && <Text style={{ color: "red" }}>Wrong password</Text>}
+							<TouchableOpacity style={styles.button} onPress={checkForm}>
 								<Text>Sign in</Text>
 							</TouchableOpacity>
 						</KeyboardAvoidingView>
@@ -179,6 +192,7 @@ const styles = StyleSheet.create({
 		flexDirection: customStyles.buttonFlexDirection,
 		alignItems: customStyles.buttonAlignItems,
 		justifyContent: customStyles.buttonJustifyContent,
+		bottom: -20,
 	},
 	error: {
 		color: "red",
@@ -254,5 +268,10 @@ const styles = StyleSheet.create({
 	buttonTitle: {
 		fontWeight: "bold",
 		color: "white",
+	},
+	headerText: {
+		top: -20,
+		fontSize: 20,
+		fontFamily: "noto sans jp",
 	},
 });

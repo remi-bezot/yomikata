@@ -25,8 +25,6 @@ export default function SignUp() {
 	const EMAIL_REGEX =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-	// const PASSWORD_REGEX= /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
-
 	const navigation = useNavigation();
 
 	const [signUpUsername, setSignUpUsername] = useState("");
@@ -36,53 +34,64 @@ export default function SignUp() {
 	const [signUpEmail, setsignUpEmail] = useState("");
 	const [emailError, setEmailError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(false);
+	const [errorPassword, setErrorPassword] = useState(false);
+	const [userId, setUserId] = useState("");
+
 	const [signUpModalVisible, setSignUpModalVisible] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
 	});
-
 	if (!fontsLoaded) {
 		return null;
 	}
-
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 
 	const checkForm = () => {
+		setErrorPassword(false);
 		if (EMAIL_REGEX.test(signUpEmail)) {
-			fetch(`http://${uri}:3000/users/signup`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					name: signUpName,
-					username: signUpUsername,
-					email: signUpEmail,
-					password: signUpPassword,
-				}),
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					if (data.result === true) {
-						console.log(data, "yyyyy");
-
-						dispatch(login({ username: signUpUsername, token: data.token }));
-						setSignUpUsername("");
-						setSignUpPassword("");
-						setSignUpConfirmPassword("");
-						setsignUpName("");
-						setsignUpEmail("");
-						setSignUpModalVisible(false);
-						setIsSucceed(true);
-						navigation.navigate("TabNavigator", { screen: "dashboard" });
-					}
-					if (data.error) {
-						setErrorMessage(true);
-					}
-				});
+			setEmailError(false);
+			if (
+				signUpPassword !== signUpConfirmPassword ||
+				!signUpPassword ||
+				!signUpConfirmPassword
+			) {
+				setErrorPassword(true);
+			} else {
+				setErrorPassword(false);
+				fetch(`http://${uri}:3000/users/signup`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						name: signUpName,
+						username: signUpUsername,
+						email: signUpEmail,
+						password: signUpPassword,
+					}),
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.result === true) {
+							dispatch(login({ username: signUpUsername, token: data.token }));
+							setSignUpUsername("");
+							setSignUpPassword("");
+							setSignUpConfirmPassword("");
+							setsignUpName("");
+							setsignUpEmail("");
+							setSignUpModalVisible(false);
+							setIsSucceed(true);
+							navigation.navigate("TabNavigator", { screen: "dashboard" });
+						}
+						if (data.error) {
+							setEmailError(false);
+							setErrorMessage(true);
+						}
+					});
+			}
 		} else {
-			setEmailError(true);
+			setEmailError(true); // Si l'email est invalide, mettre errorEmail à true
 		}
 	};
 
@@ -112,6 +121,8 @@ export default function SignUp() {
 							/>
 						</View>
 						<KeyboardAvoidingView style={styles.container}>
+							<Text style={styles.headerText}>Create your account</Text>
+
 							<TextInput
 								onChangeText={(value) => setsignUpName(value)}
 								value={signUpName}
@@ -167,10 +178,10 @@ export default function SignUp() {
 								keyboardType="default"
 								autoCapitalize="none"
 							></TextInput>
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() => handleConnect()}
-							>
+							{errorPassword && (
+								<Text style={styles.error}>confirm your password</Text>
+							)}
+							<TouchableOpacity style={styles.button} onPress={checkForm}>
 								<Text>Sign up</Text>
 							</TouchableOpacity>
 						</KeyboardAvoidingView>
@@ -192,7 +203,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 		flex: 1,
-		backgroundColor: "#fff",
+		backgroundColor: "white",
 		alignItems: "center",
 		justifyContent: "center",
 	},
@@ -201,7 +212,12 @@ const styles = StyleSheet.create({
 		margin: 12,
 		borderWidth: 1,
 		padding: 10,
-		width: 130,
+		width: 200,
+	},
+	headerText: {
+		top: -20,
+		fontSize: 20,
+		fontFamily: "noto sans jp",
 	},
 	inputTitle: {
 		fontFamily: "noto sans jp",
@@ -210,7 +226,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 20,
 		fontWeight: "700",
-		fontFamily: customStyles.defaultFontFamily,
+		fontFamily: "noto sans jp",
 	},
 	button: {
 		backgroundColor: customStyles.buttonBackgroundColor,
@@ -221,6 +237,7 @@ const styles = StyleSheet.create({
 		flexDirection: customStyles.buttonFlexDirection,
 		alignItems: customStyles.buttonAlignItems,
 		justifyContent: customStyles.buttonJustifyContent,
+		top: 20,
 	},
 	error: {
 		color: "red",
@@ -286,6 +303,6 @@ const styles = StyleSheet.create({
 	},
 	buttonTitle: {
 		fontWeight: "bold",
-		color: "white",
+		color: "#fff",
 	},
 });
