@@ -1,8 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import { customStyles } from "../utils/CustomStyle";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import { useFonts } from "expo-font";
@@ -11,14 +8,11 @@ import { useFonts } from "expo-font";
 import {
 	StyleSheet,
 	Text,
-	TouchableOpacity,
 	View,
-	Modal,
-	Pressable,
 	Image,
 } from "react-native";
 
-export default function Authentification() {
+export default function AuthScreen() {
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
 	});

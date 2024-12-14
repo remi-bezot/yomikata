@@ -3,7 +3,6 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
-const Working = require("../models/working");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 const { checkBody } = require("../modules/checkbody");

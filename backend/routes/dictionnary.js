@@ -14,11 +14,11 @@ router.get("/:word", (req, res) => {
 				.then((response) => response.json())
 				.then((jishoData) => {
 					
-					let grammar = ["N/A"];
+					let grammar = ["mot introuvable"];
 					// Traitement spécifique pour l'API 2 (Jisho)
 					if (jishoData && jishoData.data && jishoData.data.length > 0) {
 						const firstItem = jishoData.data[0];
-						grammar = firstItem.senses[0]?.parts_of_speech || ["N/A"];
+						grammar = firstItem.senses[0]?.parts_of_speech || ["mot introuvable"];
 					}
 
 					// Combine les deux résultats et les envoie

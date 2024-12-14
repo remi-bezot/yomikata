@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 require("../models/connection");
-const Favorite = require("../models/favoriteSchema");
+const Favorite = require("../models/favorites");
 const User = require("../models/users");
 
 router.get("/:token", (req, res) => {
@@ -40,8 +40,8 @@ router.post("/:token", (req, res) => {
 	});
 });
 
-router.delete("/", (req, res) => {
-	Favorite.deleteOne({ Word_JP: req.body.wordjp }).then(() => {
+router.delete("/:wordjp", (req, res) => {
+	Favorite.deleteOne({ Word_JP: req.params.wordjp }).then(() => {
 		Favorite.find().then((data) => {
 			console.log(data);
 			res.json({ result: "word deleted", data: data });

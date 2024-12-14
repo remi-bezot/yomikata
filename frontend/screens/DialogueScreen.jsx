@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import React from "react";
 import Lessons from "../components/Lessons";
 
-export default function LessonsScreen({ navigation }) {
+export default function DialogueScreen({ navigation }) {
 	return (
 		<KeyboardAvoidingView style={styles.container}>
 			<Lessons />

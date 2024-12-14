@@ -14,10 +14,8 @@ const userSchema = mongoose.Schema({
 		type: String, 
 		default: 'avatar.jpg'
 	},
-	progress:{
-		type: Number,  
-		default: 0, 
-	},
+	dialogue_progress: { dialogues_done : [String] },
+	practice_progress: { practices_done : [String] },
 });
 
 const User = mongoose.model("users", userSchema);
