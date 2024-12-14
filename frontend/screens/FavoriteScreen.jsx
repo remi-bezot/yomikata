@@ -2,7 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { customStyles } from "../utils/CustomStyle";
+import { BackendAdress } from "../utils/BackendAdress";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 

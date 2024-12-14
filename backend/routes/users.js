@@ -8,52 +8,74 @@ const bcrypt = require("bcrypt");
 const { checkBody } = require("../modules/checkbody");
 
 router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["name", "username", "email", "password"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
-
-  User.findOne({ email: req.body.email }).then((data) => {
-    if (data !== null) {
-      return res.json({ error: "Email already exists" });
-    }
-
-    const hash = bcrypt.hashSync(req.body.password, 10);
-    const newUser = new User({
-      name: req.body.name,
-      username: req.body.username,
-      email: req.body.email,
-      password: hash,
-      token: uid2(32),
-    });
-    newUser
-      .save()
-      .then(() => res.json({ result: true }))
-      .catch((err) =>
-        res.json({ result: false, error: err.message })
-      );
-  });
+	const { name, username, email, password } = req.body;
+	if (!checkBody(req.body, ["name", "username", "email", "password"])) {
+		return res.json({ result: false, error: "Missing or empty fields" });
+	}
+	User.findOne({ email }).then((existingUser) => {
+		if (existingUser) {
+			return res
+				.status(400)
+				.json({ result: false, error: "Email already exists" });
+		}
+		const hash = bcrypt.hashSync(password, 10);
+		const newUser = new User({
+			name,
+			username,
+			email,
+			password: hash,
+			token: uid2(32),
+		});
+		newUser
+			.save()
+			.then(() =>
+				res.json({ result: true, message: "User registered successfully" })
+			)
+			.catch((err) =>
+				res.status(500).json({ result: false, error: err.message })
+			);
+	});
 });
 
-router.post("/signin", async (req, res) => {
-  
-    const user = User.findOne({ email: req.body.email });
-    if (user && bcrypt.compareSync(req.body.password, user.password)) {
-      return res.json({ result: true, token: user.token });
-    } else {
-      return res.json({ result: false, error: "Invalid email or password" });
-    }
+router.post("/signin", (req, res) => {
+	const { email, password } = req.body;
+
+	if (!checkBody(req.body, ["email", "password"])) {
+		return res.json({ result: false, error: "Missing or empty fields" });
+	}
+
+	User.findOne({ email })
+		.then((user) => {
+			if (user && bcrypt.compareSync(password, user.password)) {
+				res.json({ result: true, token: user.token });
+			} else {
+				res
+					.status(401)
+					.json({ result: false, error: "Invalid email or password" });
+			}
+		})
+		.catch((err) =>
+			res.status(500).json({ result: false, error: err.message })
+		);
 });
 
-router.delete("/:token",(req, res) => {
-  
-    const { token } = req.params;
-    const result =  User.deleteOne({ token });
-    if (result.deletedCount > 0) {
-      return res.json({ result: true, message: "User account successfully deleted" });
-    } else {
-      return res.json({ result: false, message: "User not found" });
-    }
-  });
+router.delete("/:token", (req, res) => {
+	const { token } = req.params;
+
+	User.deleteOne({ token })
+		.then((result) => {
+			if (result.deletedCount > 0) {
+				res.json({
+					result: true,
+					message: "User account successfully deleted",
+				});
+			} else {
+				res.status(404).json({ result: false, message: "User not found" });
+			}
+		})
+		.catch((err) =>
+			res.status(500).json({ result: false, error: err.message })
+		);
+});
 
 module.exports = router;
