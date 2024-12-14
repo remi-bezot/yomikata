@@ -6,6 +6,7 @@ var router = express.Router();
 
 router.get("/:word", (req, res) => {
 	let word = req.params.word;
+
 	// Appel à la première API
 	fetch(`https://jlpt-vocab-api.vercel.app/api/words?word=${word}`)
 		.then((response) => response.json())

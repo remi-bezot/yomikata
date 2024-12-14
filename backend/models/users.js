@@ -14,11 +14,19 @@ const userSchema = mongoose.Schema({
 		default: 1,
 	},
 	avatar: {
+<<<<<<< HEAD
 		type: String,
 		default: "avatar.jpg",
 	},
 	dialogue_progress: { dialogues_done: String },
 	practice_progress: { practices_done: String },
+=======
+		type: String, 
+		default: 'avatar.jpg'
+	},
+	dialogue_progress: { dialogues_done : [String] },
+	practice_progress: { practices_done : [String] },
+>>>>>>> devp
 });
 
 const User = mongoose.model("users", userSchema);

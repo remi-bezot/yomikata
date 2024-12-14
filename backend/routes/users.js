@@ -3,8 +3,8 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
-const bcrypt = require("bcrypt");
 const uid2 = require("uid2");
+const bcrypt = require("bcrypt");
 const { checkBody } = require("../modules/checkbody");
 
 router.post("/signup", (req, res) => {

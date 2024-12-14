@@ -8,15 +8,17 @@ const User = require("../models/users");
 router.get("/:token", (req, res) => {
 	const token = req.params.token;
 
-	User.findOne({ token }).then((data) => {
-		if (data) {
-			Favorite.find()
-				.populate("id_user")
-				.then((data) => {
-					res.json({ result: data });
-				});
-		}
-	});
+    User.findOne({ token : token }).then((data) => {
+        if (data) {
+            console.log(data);
+            
+            Favorite.find({id_user: data._id})
+                .populate("id_user")
+                .then((data) => {
+                    res.json({ result: data });
+                });
+        }
+    });
 });
 
 router.post("/:token", (req, res) => {
@@ -38,8 +40,8 @@ router.post("/:token", (req, res) => {
 	});
 });
 
-router.delete("/", (req, res) => {
-	Favorite.deleteOne({ Word_JP: req.body.wordjp }).then(() => {
+router.delete("/:wordjp", (req, res) => {
+	Favorite.deleteOne({ Word_JP: req.params.wordjp }).then(() => {
 		Favorite.find().then((data) => {
 			console.log(data);
 			res.json({ result: "word deleted", data: data });

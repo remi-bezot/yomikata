@@ -1,5 +1,7 @@
+
 import React, { useState } from "react";
 import {
+<<<<<<< HEAD
 	KeyboardAvoidingView,
 	Text,
 	TextInput,
@@ -8,14 +10,27 @@ import {
 	Modal,
 	Image,
 	View,
+=======
+    KeyboardAvoidingView,
+    Text,
+    TextInput,
+    StyleSheet,
+    TouchableOpacity,
+    Modal,
+    Image,
+    View,
+>>>>>>> devp
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
+<<<<<<< HEAD
 const uri = BackendAdress.uri;
 
 // authentification
+=======
+>>>>>>> devp
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
@@ -275,3 +290,4 @@ const styles = StyleSheet.create({
 		fontFamily: "noto sans jp",
 	},
 });
+
