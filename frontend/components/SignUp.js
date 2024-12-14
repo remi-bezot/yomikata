@@ -1,13 +1,12 @@
-
 import {
-    KeyboardAvoidingView,
-    Text,
-    TextInput,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    Modal,
-    Image,
+	KeyboardAvoidingView,
+	Text,
+	TextInput,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	Modal,
+	Image,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -23,8 +22,8 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 export default function SignUp() {
-    const EMAIL_REGEX =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	const EMAIL_REGEX =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 	const navigation = useNavigation();
 
@@ -36,8 +35,6 @@ export default function SignUp() {
 	const [emailError, setEmailError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(false);
 	const [errorPassword, setErrorPassword] = useState(false);
-	const [userId, setUserId] = useState("");
-
 	const [signUpModalVisible, setSignUpModalVisible] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
 
@@ -94,21 +91,12 @@ export default function SignUp() {
 		} else {
 			setEmailError(true); // Si l'email est invalide, mettre errorEmail à true
 		}
-
 	};
 
-                            <TextInput
-                                style={styles.inputStyles}
-                                onChangeText={(value) => setSignUpUsername(value)}
-                                value={signUpUsername}
-                                placeholderTextColor="grey"
-                                placeholder="username"
-                            ></TextInput>
-
-
-							const showSignUpModal = () => {
-								setSignUpModalVisible(!signUpModalVisible);
-							};
+	const showSignUpModal = () => {
+		setSignUpModalVisible(!signUpModalVisible);
+		dispatch(showModal(!signUpModalVisible));
+	};
 
 	return (
 		<View>
@@ -141,12 +129,13 @@ export default function SignUp() {
 								placeholder="name"
 							></TextInput>
 
-                            {emailError && (
-                                <Text style={styles.error}>Invalid email address</Text>
-                            )}
-                            {errorMessage && (
-                                <Text style={styles.error}>Email already exists</Text>
-                            )}
+							<TextInput
+								style={styles.inputStyles}
+								onChangeText={(value) => setSignUpUsername(value)}
+								value={signUpUsername}
+								placeholderTextColor="grey"
+								placeholder="username"
+							></TextInput>
 
 							<TextInput
 								onChangeText={(value) => setsignUpEmail(value)}

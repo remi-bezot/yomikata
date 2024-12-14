@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 //------------------------------------------------
 //NE PAS MODIFIER ! NE PAS OPTIMISER VIA CHATGPT !
 //------------------------------------------------

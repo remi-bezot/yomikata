@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
 	KeyboardAvoidingView,
@@ -276,4 +275,3 @@ const styles = StyleSheet.create({
 		fontFamily: "noto sans jp",
 	},
 });
-

@@ -35,10 +35,10 @@ export default function DashboardScreen() {
 			</View>
 			<View style={styles.buttonContainer}>
 				<View style={styles.horizontalSeparator}></View>
-				<TouchableOpacity style={styles.button} onPress={handleIncrease}>
+				<TouchableOpacity style={styles.button}>
 					<Text style={styles.buttonText}>PROGRESS</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.button} onPress={handleDecrease}>
+				<TouchableOpacity style={styles.button}>
 					<Text style={styles.buttonText}>CONTINUE ?</Text>
 				</TouchableOpacity>
 				<View style={styles.horizontalSeparator}></View>
