@@ -4,10 +4,11 @@ import { useState } from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useNavigation } from "@react-navigation/native";
 import { BarChart, PieChart } from "react-native-gifted-charts";
-import { View, Text } from "react-native";
+
 
 export default function DashboardScreen() {
-	const [progress, setProgress] = useState(0.5); // Barre de progression
+
+	
 	const navigation = useNavigation();
 
 	const goLesson = () => {

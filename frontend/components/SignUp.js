@@ -94,6 +94,7 @@ export default function SignUp() {
 		} else {
 			setEmailError(true); // Si l'email est invalide, mettre errorEmail à true
 		}
+
 	};
 
                             <TextInput
@@ -103,6 +104,11 @@ export default function SignUp() {
                                 placeholderTextColor="grey"
                                 placeholder="username"
                             ></TextInput>
+
+
+							const showSignUpModal = () => {
+								setSignUpModalVisible(!signUpModalVisible);
+							};
 
 	return (
 		<View>

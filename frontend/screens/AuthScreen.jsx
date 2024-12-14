@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import { useFonts } from "expo-font";
