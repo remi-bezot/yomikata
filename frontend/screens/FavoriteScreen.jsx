@@ -30,6 +30,17 @@ export default function FavoriteScreen() {
 		return null;
 	}
 
+		// Récupération des favoris lors de la connexion
+	useEffect(() => {
+		fetch(`http://${uri}:3000/showFavorites/${token}`)
+		.then((response) => response.json())
+		.then((data) => {
+			setWords(data.result);
+
+		});
+	}, []);
+
+
 	const handleClick = (wordId) => {
 		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
 			method: "DELETE",
@@ -46,16 +57,10 @@ export default function FavoriteScreen() {
 			})
 	}
 	
+const handleCard = (wordId) => {
+	setSelectedCardId((e) => (e === wordId ? null : wordId)); 
+};
 
-	// Récupération des favoris lors de la connexion
-	useEffect(() => {
-		fetch(`http://${uri}:3000/showFavorites/${token}`)
-		.then((response) => response.json())
-		.then((data) => {
-			setWords(data.result);
-
-		});
-	}, []);
 
 	
 const speak = (text) => {
@@ -66,9 +71,7 @@ const speak = (text) => {
 	})
 }
 
-const handleCard = (wordId) => {
-    setSelectedCardId((e) => (e === wordId ? null : wordId)); 
-};
+
 
 	
 
@@ -203,36 +206,14 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+		margin : 5, 
 	}, 
-	// traduction: {
-	// 	backgroundColor: 'white',
-	// 	width: 80, 
-	// 	margin: 5,
-	// 	display: "flex",
-	// 	flexDirection: "column",
-	// 	justifyContent: "center",
-	// 	alignItems: "center",
-	// }
+	traduction: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	}
 });
 
 
-// if(cardsIsVisible === true){
-// 	return (
-// 		<View style={styles.card} key={i}>
-// 			<View>
-// 				<View style={styles.deleteIcon}>
-// 					<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id) }/>
-// 				</View>
-// 			</View>
-// 			<Text style={styles.wordjp}>{data.Word_JP}</Text>
-// 			<Text style={styles.word}>{data.Word_EN}</Text>
-// 			<Text style={styles.word}>{data.Romanji}</Text>
-// 			<Text style={styles.word}>{data.Grammar}</Text>
-// 			<TouchableOpacity
-// 					style={styles.button}
-// 					onPress={() => speak(data.Word_JP)}
-// 				>
-// 					<Text>🔊</Text>
-// 				</TouchableOpacity>
-
-// 		</View>
