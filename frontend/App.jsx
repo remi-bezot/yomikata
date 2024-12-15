@@ -62,9 +62,7 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="dashboard" component={DashboardScreen} />
 					<Stack.Screen name="home" component={HomeScreen} />
-					<Stack.Screen name="dialogue" component={DialogueScreen} />
 					<Stack.Screen name="Auth" component={AuthScreen} />
 					<Stack.Screen
 						name="TabNavigator"
