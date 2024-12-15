@@ -47,25 +47,26 @@ export default function SignUp() {
     return null;
   }
 
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-
-  const checkForm = () => {
-    if (EMAIL_REGEX.test(signUpEmail)) {
-      fetch(`http://${uri}:3000/users/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: signUpName,
-          username: signUpUsername,
-          email: signUpEmail,
-          password: signUpPassword,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result === true) {
-            console.log(data, "yyyyy");
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
+	console.log(uri)
+	
+	const checkForm = () => {
+		if (EMAIL_REGEX.test(signUpEmail)) {
+			fetch(`http://${uri}:3000/users/signup`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					name: signUpName,
+					username: signUpUsername,
+					email: signUpEmail,
+					password: signUpPassword,
+				}),
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.result === true) {
+						console.log(data, "yyyyy");
 
             dispatch(login({ username: signUpUsername, token: data.token }));
             setSignUpUsername("");
@@ -128,16 +129,16 @@ export default function SignUp() {
                 placeholder="username"
               ></TextInput>
 
-              <TextInput
-                onChangeText={(value) => setSignUpemail(value)}
-                value={signUpEmail}
-                style={styles.inputStyles}
-                placeholder="email"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                placeholderTextColor="grey"
-                autoCorrect={false}
-              ></TextInput>
+							<TextInput
+								onChangeText={(value) => setsignUpEmail(value)}
+								value={signUpEmail}
+								style={styles.inputStyles}
+								placeholder="email"
+								autoCapitalize="none"
+								keyboardType="email-address"
+								placeholderTextColor="grey"
+								autoCorrect={false}
+							></TextInput>
 
               {emailError && (
                 <Text style={styles.error}>Invalid email address</Text>
@@ -157,34 +158,34 @@ export default function SignUp() {
                 autoCapitalize="none"
               ></TextInput>
 
-              <TextInput
-                style={styles.inputStyles}
-                onChangeText={(value) => setSignUpConfirmPassword(value)}
-                value={signUpConfirmPassword}
-                placeholder="confirm password"
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                keyboardType="default"
-                autoCapitalize="none"
-              ></TextInput>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => checkForm()}
-              >
-                <Text>Sign up</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-          </View>
-        </View>
-      </Modal>
-      <TouchableOpacity
-        onPress={() => showSignUpModal(true)}
-        style={styles.login}
-      >
-        <Text style={styles.buttonTitle}>New here? Create an account!</Text>
-      </TouchableOpacity>
-    </View>
-  );
+							<TextInput
+								style={styles.inputStyles}
+								onChangeText={(value) => setSignUpConfirmPassword(value)}
+								value={signUpConfirmPassword}
+								placeholder="confirm password"
+								placeholderTextColor="grey"
+								secureTextEntry={true}
+								keyboardType="default"
+								autoCapitalize="none"
+							></TextInput>
+							<TouchableOpacity
+								style={styles.button}
+								onPress={() => checkForm()}
+							>
+								<Text>Sign up</Text>
+							</TouchableOpacity>
+						</KeyboardAvoidingView>
+					</View>
+				</View>
+			</Modal>
+			<TouchableOpacity
+				onPress={() => showSignUpModal(true)}
+				style={styles.login}
+			>
+				<Text style={styles.buttonTitle}>New here? Create an account!</Text>
+			</TouchableOpacity>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
