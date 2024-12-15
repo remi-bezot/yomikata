@@ -163,17 +163,30 @@ export default function Lessons() {
                         <Text>Japanese text:</Text>
                         <View style={styles.wordsContainer}>
                           {item.japanese
-                            .match(
-                              /[\p{Script=Han}\u3040-\u309F\u30A0-\u30FF]+|\w+/gu
+                            .split(
+                              /([\p{Script=Han}]+|[\u3041-\u309F]+|[\u30A1-\u30FF]+)/gu
                             )
-                            ?.map((word, idx) => (
-                              <TouchableOpacity
-                                key={idx}
-                                onLongPress={() => handleLongPressWord(word)}
-                              >
-                                <Text style={styles.word}>{word}</Text>
-                              </TouchableOpacity>
-                            ))}
+                            .map((segment, idx) => {
+                              const isJapaneseWord =
+                                /[\p{Script=Han}]+|[\u3041-\u309F]+|[\u30A1-\u30FF]+/u.test(
+                                  segment
+                                );
+
+                              return isJapaneseWord ? (
+                                <TouchableOpacity
+                                  key={idx}
+                                  onLongPress={() =>
+                                    handleLongPressWord(segment)
+                                  }
+                                >
+                                  <Text style={styles.word}>{segment}</Text>
+                                </TouchableOpacity>
+                              ) : (
+                                <Text key={idx} style={styles.nonClickableText}>
+                                  {segment}
+                                </Text>
+                              );
+                            })}
                         </View>
                       </View>
                     </View>
