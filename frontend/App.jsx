@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
+import DialogueScreen from "./screens/DialogueScreen"
 
 const store = configureStore({
 	reducer: { user },
@@ -34,7 +35,7 @@ const TabNavigator = () => {
 					if (route.name === "dashboard") {
 						iconName = "torii-gate";
 					} else if (route.name === "Search") {
-						iconName = "glass";
+						iconName = "magnifying-glass";
 					} else if (route.name === "favorite") {
 						iconName = "heart";
 					} else if (route.name === "user") {
@@ -61,9 +62,9 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					{/* <Stack.Screen name="firstPage" component={firstPage} /> */}
 					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={AuthScreen} />
+					<Stack.Screen name="Dialogue" component={DialogueScreen} />
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					<Stack.Screen name="SignUp" component={SignUp} />
 				</Stack.Navigator>

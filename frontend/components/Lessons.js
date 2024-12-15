@@ -10,11 +10,10 @@ export default function Lessons() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
 	const uri = BackendAdress.uri;
 
 	const handleGoLesson = (id) => {
-		fetch(`http://${uri}:3000/lessons/showLesson/${id}/${token}`)
+		fetch(`http://${uri}:3000/lessons/showLesson/${id}/${user.token}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data) {
@@ -25,7 +24,7 @@ export default function Lessons() {
 	};
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
@@ -36,7 +35,7 @@ export default function Lessons() {
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, [uri, token]);
+	}, [uri, user.token]);
 
 	if (loading) {
 		return <Text>Loading...</Text>;

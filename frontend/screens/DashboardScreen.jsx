@@ -1,23 +1,48 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { useState } from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useNavigation } from "@react-navigation/native";
 import { BarChart, PieChart } from "react-native-gifted-charts";
+import { BackendAdress } from "../utils/BackendAdress";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
+
 
 
 export default function DashboardScreen() {
 
-	
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
+	const uri = BackendAdress.uri;	
+
+	const [lessons, setLessons] = useState([]);
+	const [currentLessonId, setCurrentLessonId] = useState(null);
+	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
 
 	const goLesson = () => {
-		navigation.navigate("TabNavigator", { screen: "Lessons" });
+		navigation.navigate( "Dialogue" );
 	};
 
 	const goPratice = () => {
-		navigation.navigate("TabNavigator", { screen: "Practice" });
+		navigation.navigate("Practice");
 	};
+
+	useEffect(() => {
+		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					setLessons(data.data);
+					console.warn(data.data[0])
+				} else {
+					console.error("No data found.");
+				}
+			})
+			.catch((error) => console.error("Erreur with lessons :", error))
+			.finally(() => setLoading(false));
+	}, [uri, user.token]);
 
 	return (
 		<View style={styles.container}>
@@ -28,31 +53,17 @@ export default function DashboardScreen() {
 					}}
 					style={styles.avatar}
 				/>
-				<Text style={styles.font}>Welcome User</Text>
+				<Text style={styles.font}>Welcome {user.username}</Text>
 				<TouchableOpacity style={styles.settings}>
 					<FontAwesome6 name="gear" size={24} color="#000" />
 				</TouchableOpacity>
 			</View>
-			<View style={styles.buttonContainer}>
-				<View style={styles.horizontalSeparator}></View>
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.buttonText}>PROGRESS</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.buttonText}>CONTINUE ?</Text>
-				</TouchableOpacity>
-				<View style={styles.horizontalSeparator}></View>
-				<TouchableOpacity style={styles.button} onPress={goLesson}>
-					<Text style={styles.buttonText}>LESSON</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.button} onPress={goPratice}>
-					<Text style={styles.buttonText}>PRACTICE</Text>
-				</TouchableOpacity>
-				<View style={styles.horizontalSeparator}></View>
+			
 			</View>
-		</View>
-	);
+	)
 }
+
+
 
 
 // const data = [

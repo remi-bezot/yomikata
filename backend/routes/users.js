@@ -47,7 +47,7 @@ router.post("/signin", (req, res) => {
 	User.findOne({ email })
 		.then((user) => {
 			if (user && bcrypt.compareSync(password, user.password)) {
-				res.json({ result: true, token: user.token });
+				res.json({ result: true, token: user.token , username : user.username});
 			} else {
 				res
 					.status(401)

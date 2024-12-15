@@ -35,7 +35,6 @@ export default function SignUp() {
 	const [formError, setFormError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
 	const [isValid, setIsValid] = useState(true);
-
 	const [signInModalVisible, setSignInModalVisible] = useState(false);
 
 	const checkForm = () => {
@@ -63,7 +62,8 @@ export default function SignUp() {
 						setIsValid(false);
 						console.log("wrong password");
 					} else {
-						dispatch(login({ username: signInEmail, token: data.token }));
+						dispatch(login({ username: data.username, token: data.token }));
+						console.log(data.username)
 						setSignInEmail("");
 						setSignInPassword("");
 						setSignInModalVisible(false);

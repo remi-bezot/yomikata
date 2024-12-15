@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
+import { BackendAdress } from "../utils/BackendAdress";
 
-const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
+
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 
-	const uri = BackendAdress.uri;
+	const uri = BackendAdress.uri
+	const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
 	const [words, setWords] = useState([]);
 
 	// Récupération des favoris lors de la connexion
