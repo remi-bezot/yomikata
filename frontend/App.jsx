@@ -8,14 +8,16 @@ import AuthScreen from "./screens/AuthScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import SignUp from "./components/SignUp";
 import FavoriteScreen from "./screens/FavoriteScreen";
+import DialogueScreen from "./screens/DialogueScreen";
 import UserScreen from "./screens/UserScreen";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome6";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
 import LessonsScreen from "./screens/DialogueScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
+import Dialogue from "./screens/DialogueScreen";
 
 const store = configureStore({
 	reducer: { user },
@@ -34,14 +36,13 @@ const TabNavigator = () => {
 					if (route.name === "dashboard") {
 						iconName = "torii-gate";
 					} else if (route.name === "Search") {
-						iconName = "search";
+						iconName = "magnifying-glass";
 					} else if (route.name === "favorite") {
 						iconName = "heart";
 					} else if (route.name === "user") {
 						iconName = "user";
 					}
-
-					return <FontAwesome5 name={iconName} size={size} color={color} />;
+					return <FontAwesome6 name={iconName} size={size} color={color} />;
 				},
 				tabBarActiveTintColor: "#e8be4b",
 				tabBarInactiveTintColor: "#b2b2b2",
@@ -61,8 +62,9 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
+					<Stack.Screen name="dashboard" component={DashboardScreen} />
 					<Stack.Screen name="home" component={HomeScreen} />
-					<Stack.Screen name="Lessons" component={LessonsScreen} />
+					<Stack.Screen name="dialogue" component={DialogueScreen} />
 					<Stack.Screen name="Auth" component={AuthScreen} />
 					<Stack.Screen
 						name="TabNavigator"
