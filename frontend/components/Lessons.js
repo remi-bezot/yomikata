@@ -21,15 +21,17 @@ const uri = BackendAdress;
 
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
-  const [allLessons, setallLessons] = useState([]);
+  const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWord, setSelectedWord] = useState("");
   const [wordApi, setWordApi] = useState([]);
+  const [speakerColors, setSpeakerColors] = useState({});
+  const [exercises, setExercises] = useState([]);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  let token = "_w2_R3IVDGZIlgPxysRf7B4U8wBfkp7f";
+  let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
   const uri = BackendAdress.uri;
 
   useEffect(() => {
@@ -37,34 +39,76 @@ export default function Lessons() {
       .then((response) => response.json())
       .then((data) => {
         if (data && data.data) {
-          setallLessons(data.data);
+          console.log("Lessons data:", data.data);
+
+          const themesList = [];
+          for (let lesson of data.data) {
+            const themes = lesson.themes.map((theme) => ({
+              ...theme,
+              level: lesson.level,
+              lessonId: lesson._id,
+            }));
+            themesList.push(...themes);
+          }
+          setAllThemes(themesList);
+
+          const allSpeakers = [];
+          for (let lesson of data.data) {
+            for (let theme of lesson.themes) {
+              for (let line of theme.lines) {
+                if (!allSpeakers.includes(line.speaker)) {
+                  allSpeakers.push(line.speaker);
+                }
+              }
+            }
+          }
+          const colors = {};
+          for (let speaker of allSpeakers) {
+            colors[speaker] =
+              "hsl(" + Math.floor(Math.random() * 360) + ", 70%, 60%)";
+          }
+          setSpeakerColors(colors);
         }
       })
-      .catch((error) => console.error("Erreur with lessons :", error));
+      .catch((error) => console.error("Error fetching lessons:", error));
   }, []);
 
-  const handleGoLesson = (id) => {
-    fetch(`http://${uri}:3000/lessons/showLesson/${id}/${token}`)
+  const handleGoLesson = (lessonId) => {
+    fetch(`http://${uri}:3000/lessons/showLesson/${lessonId}/${token}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data) {
-          setLessonData([
-            { speaker: "A", japanese: "example text example word" },
-          ]);
-          setCurrentLessonId(id);
+        if (data && data.data) {
+          console.log("Lesson data:", data.data);
+
+          const dialogues = [];
+          const exercisesList = [];
+          for (let theme of data.data.themes) {
+            dialogues.push(...theme.lines);
+            exercisesList.push(...theme.exo);
+          }
+          setLessonData(dialogues);
+          setExercises(exercisesList);
+          setCurrentLessonId(lessonId);
         }
-      });
+      })
+      .catch((error) => console.error("Error fetching lesson:", error));
   };
 
   const handleLongPressWord = (word) => {
     setSelectedWord(word);
     setModalVisible(true);
-    let isPresent = wordApi.includes(word);
-    if (!isPresent) {
-      wordApi.push(word);
+    if (!wordApi.includes(word)) {
+      fetch(`http://${uri}:3000/dico/${word}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            console.log("Dictionary:", data);
+          }
+        })
+        .catch((error) => console.error("Error fetching dictionary:", error));
+      setWordApi([...wordApi, word]);
     }
   };
-  console.log(wordApi);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,24 +116,27 @@ export default function Lessons() {
         <View style={styles.content}>
           {currentLessonId === null ? (
             <FlatList
-              data={allLessons}
-              keyExtractor={(item) => item._id.toString()}
+              data={allThemes}
+              keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={styles.lessonContainer}>
                   <Text style={styles.lessonTitle}>
-                    {capitalizeFirstLetter(item.dialogue.theme)}
+                    Theme: {capitalizeFirstLetter(item.theme || "No theme")}
                   </Text>
-                  <Text>Number: {item.dialogue.number}</Text>
+                  <Text>Level: {item.level}</Text>
+                  <Text>Speaker count: {item.speaker_number || 0}</Text>
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={() => handleGoLesson(item._id)}
+                    onPress={() => handleGoLesson(item.lessonId)}
                   >
-                    <Text>Go to</Text>
+                    <Text style={styles.buttonText}>View Lesson</Text>
                   </TouchableOpacity>
                 </View>
               )}
               ListHeaderComponent={
-                <Text style={[styles.title, styles.lessonHeader]}>Lessons</Text>
+                <Text style={[styles.title, styles.lessonHeader]}>
+                  Available Lessons
+                </Text>
               }
             />
           ) : (
@@ -98,7 +145,7 @@ export default function Lessons() {
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item, index }) => {
                 const alignment = index % 2 === 0 ? "row" : "row-reverse";
-                const iconColor = index % 2 === 0 ? "#4CAF50" : "#2196F3";
+                const iconColor = speakerColors[item.speaker];
 
                 return (
                   <View key={index} style={[styles.dialogue]}>
@@ -112,21 +159,21 @@ export default function Lessons() {
                         style={styles.icon}
                       />
                       <View style={styles.dialogueChild}>
-                        <View>
-                          <Text>Speaker : {item.speaker}</Text>
-                        </View>
-                        <View>
-                          <Text>Japanese :</Text>
-                          <View style={styles.wordsContainer}>
-                            {item.japanese.split(" ").map((word, idx) => (
+                        <Text>Speaker: {item.speaker}</Text>
+                        <Text>Japanese text:</Text>
+                        <View style={styles.wordsContainer}>
+                          {item.japanese
+                            .match(
+                              /[\p{Script=Han}\u3040-\u309F\u30A0-\u30FF]+|\w+/gu
+                            )
+                            ?.map((word, idx) => (
                               <TouchableOpacity
                                 key={idx}
                                 onLongPress={() => handleLongPressWord(word)}
                               >
-                                <Text style={styles.word}>{word} </Text>
+                                <Text style={styles.word}>{word}</Text>
                               </TouchableOpacity>
                             ))}
-                          </View>
                         </View>
                       </View>
                     </View>
@@ -143,12 +190,22 @@ export default function Lessons() {
         </View>
 
         {currentLessonId && (
-          <TouchableOpacity style={styles.nextButton}>
-            <Text style={styles.nextButtonText}>Next</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => console.log("Redirect to Exercises:", exercises)}
+            >
+              <Text style={styles.buttonText}>Go to Exercises</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setCurrentLessonId(null)}
+            >
+              <Text style={styles.buttonText}>Back to Lessons</Text>
+            </TouchableOpacity>
+          </View>
         )}
 
-        {/* Modale */}
         <Modal
           visible={modalVisible}
           transparent={true}
@@ -158,7 +215,7 @@ export default function Lessons() {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalText}>
-                Selected Word: {selectedWord}
+                Selected word: {selectedWord}
               </Text>
               <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
@@ -176,22 +233,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    fontFamily: customStyles.defaultFontFamily,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  lessonHeader: {
-    marginTop: 20,
-  },
-  dialogueHeader: {
-    marginTop: 20,
-  },
+  content: { flex: 1 },
+  title: { fontSize: 20, fontWeight: "700", textAlign: "center" },
+  lessonHeader: { marginTop: 20 },
+  dialogueHeader: { marginTop: 20 },
   lessonContainer: {
     borderWidth: 2,
     borderColor: "black",
@@ -199,11 +244,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 5,
   },
-  lessonTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 5,
-  },
+  lessonTitle: { fontSize: 18, fontWeight: "600", marginBottom: 5 },
   button: {
     backgroundColor: customStyles.buttonBackgroundColor,
     borderRadius: customStyles.buttonRadius,
@@ -215,47 +256,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
   },
-  dialogue: {
-    flex: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+  buttonText: {
+    color: customStyles.buttonTextColor,
+    fontSize: customStyles.buttonTextFontSize,
+    fontWeight: customStyles.buttonTextFontWeight,
   },
+  dialogue: { marginBottom: 10, paddingHorizontal: 10 },
   dialogueChild: {
     borderWidth: 1,
-    borderColor: "black",
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
-    flexShrink: 1,
   },
   dialogue1: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
   },
-  icon: {
-    flexShrink: 0,
-    marginHorizontal: 10,
-  },
-  nextButton: {
-    backgroundColor: "#007BFF",
-    padding: 15,
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  nextButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  wordsContainer: {
-    flexDirection: "row",
-  },
-  word: {
-    fontSize: 16,
-    marginHorizontal: 5,
-  },
+  icon: { marginHorizontal: 10 },
+  wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
+  word: { fontSize: 16, marginHorizontal: 5 },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -269,8 +289,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
+  modalText: { fontSize: 18, marginBottom: 10 },
 });
