@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import { login } from "../reducers/users";
@@ -17,29 +17,34 @@ export default function FavoriteScreen() {
 	const token = user.token;
 	const uri = BackendAdress.uri;
 	const [words, setWords] = useState([]);
-	const [cardsIsVisible, setCardsIsVisible] = useState(true)
+	// const [displayCard, setDisplayCard]= useState(false)
+	const [selectedCardId, setSelectedCardId] = useState(null)
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		Playfair: require("../assets/fonts/PlayfairDisplay-Regular.ttf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf")
 	});
 
 	if (!fontsLoaded) {
 		return null;
 	}
 
-	const handleClick = () => {
+	const handleClick = (wordId) => {
 		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
-				Word_JP: words.Word_JP,
+				id: wordId,
 			})
 		})
 		.then((response) => response.json())
 		.then((data) => {
-				console.log(data)})
+				if(data.data){
+					setWords(words.filter((e) => e._id !== wordId))
+				}
+			})
 	}
-
 	
 
 	// Récupération des favoris lors de la connexion
@@ -48,7 +53,6 @@ export default function FavoriteScreen() {
 		.then((response) => response.json())
 		.then((data) => {
 			setWords(data.result);
-			console.log(words, 'here')
 
 		});
 	}, []);
@@ -61,47 +65,65 @@ const speak = (text) => {
 		rate: 1, 
 	})
 }
+
+const handleCard = (wordId) => {
+    setSelectedCardId((e) => (e === wordId ? null : wordId)); 
+};
+
 	
 
-	const favoriteswords =
-	words.length>0 && words.map((data, i) => {
 
-		if(cardsIsVisible === true){
-			return (
-				<View style={styles.card} key={i}>
-					<View>
-						<View style={styles.deleteIcon}>
-							<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick() }/>
-						</View>
+const favoriteswords = words.length > 0 && words.map((data, i) => {
+
+    
+	if(selectedCardId === data._id){
+		return (
+			<View style={styles.card} key={i}>
+				<View>
+					<View style={styles.deleteIcon}>
+						<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id)} />
 					</View>
-					<Text style={styles.word}>{data.Word_JP}</Text>
-					<Text style={styles.word}>{data.Word_EN}</Text>
-					<Text style={styles.word}>{data.Romanji}</Text>
-					<Text style={styles.word}>{data.Grammar}</Text>
-					<TouchableOpacity
-                            style={styles.button}
-                            onPress={() => speak(data.Word_JP)}
-                        >
-                            <Text>🔊</Text>
-                        </TouchableOpacity>
-
 				</View>
-			);
-		} else {
-			
-		}
-			
-		});
+				<Text style={styles.wordjp} onPress={() => handleCard(data._id)}>{data.Word_JP}</Text>
+						<View style={styles.traduction}>
+						<Text style={styles.word}>{data.Word_EN}</Text>
+						<Text style={styles.word}>{data.Romanji}</Text>
+						<Text style={styles.word}>{data.Grammar}</Text>
+						</View>
+						<TouchableOpacity
+							style={styles.speakerbutton}
+							onPress={() => speak(data.Word_JP)}
+						>
+							<Text style={styles.speaker}>🔊</Text>
+						</TouchableOpacity>
+	
+			</View>
+		)
+		
+	} else {
+		return (
+			<View style={styles.cardOpen} key={i}>
+				<View>
+					<View style={styles.deleteIcon}>
+						<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id)} />
+					</View>
+				</View>
+				<Text style={styles.wordjp} onPress={() => handleCard(data._id)}>{data.Word_JP}</Text>
+			</View>)
 
+	}
+    
+});
 	
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.titlecontainer}>
-				<Text style={styles.title}>Favorites ({words.length})</Text>
+				<Text style={styles.title}> Favorites ({words.length})</Text>
 			</View>
-
+			<ScrollView>
 			<View style={styles.cardsList}>{favoriteswords}</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 }
@@ -117,28 +139,54 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 25,
 		fontFamily: 'Satoshi-Black',
-		fontWeight: "bold",
+		color: '#CC4646',
 	},
-
+	titlecontainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems:'center',
+		width: '100%',
+		height: 100, 
+	},
 	card: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: "25%",
-		height: "40%",
+		width: 100,
+		height: 200,
 		margin: 10,
-		borderRadius: customStyles.buttonRadius,
+		borderRadius: 25,
+		backgroundColor: "#EEC1C0",
+	},
+	cardOpen:{
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		width: 100,
+		height: 100,
+		margin: 10,
+		borderRadius: 25,
 		backgroundColor: "#EEC1C0",
 	},
 	cardsList: {
 		display: "flex",
 		flexDirection: "row",
+		alignItems:'center',
 		justifyContent: "center",
 		flexWrap: "wrap",
 	},
 	word: {
 		margin: 5,
+		
+	},
+	wordjp: {
+		fontSize: 20,
+		fontWeight:'bold',
+		margin: 10,
+		backgroundColor: 'white',
 	},
 	deleteIcon: {
 		display: "flex",
@@ -146,4 +194,45 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 		width: "80%",
 	},
+	speakerbutton: {
+		backgroundColor:'#D56565',
+		width: 30, 
+		height: 30,
+		borderRadius: 30, 
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	}, 
+	// traduction: {
+	// 	backgroundColor: 'white',
+	// 	width: 80, 
+	// 	margin: 5,
+	// 	display: "flex",
+	// 	flexDirection: "column",
+	// 	justifyContent: "center",
+	// 	alignItems: "center",
+	// }
 });
+
+
+// if(cardsIsVisible === true){
+// 	return (
+// 		<View style={styles.card} key={i}>
+// 			<View>
+// 				<View style={styles.deleteIcon}>
+// 					<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id) }/>
+// 				</View>
+// 			</View>
+// 			<Text style={styles.wordjp}>{data.Word_JP}</Text>
+// 			<Text style={styles.word}>{data.Word_EN}</Text>
+// 			<Text style={styles.word}>{data.Romanji}</Text>
+// 			<Text style={styles.word}>{data.Grammar}</Text>
+// 			<TouchableOpacity
+// 					style={styles.button}
+// 					onPress={() => speak(data.Word_JP)}
+// 				>
+// 					<Text>🔊</Text>
+// 				</TouchableOpacity>
+
+// 		</View>
