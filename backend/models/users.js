@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+//------------------------------------------------
+//NE PAS MODIFIER ! NE PAS OPTIMISER VIA CHATGPT !
+//------------------------------------------------
+
 const userSchema = mongoose.Schema({
 	name: String,
 	username: String,
@@ -7,17 +11,15 @@ const userSchema = mongoose.Schema({
 	password: String,
 	token: String,
 	level: {
-		type: Number, 
-		default : 1, 
+		type: Number,
+		default: 1,
 	},
 	avatar: {
 		type: String, 
 		default: 'avatar.jpg'
 	},
-	progress:{
-		type: Number,  
-		default: 0, 
-	},
+	dialogue_progress: { dialogues_done : [String] },
+	practice_progress: { practices_done : [String] },
 });
 
 const User = mongoose.model("users", userSchema);

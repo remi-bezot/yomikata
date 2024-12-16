@@ -2,23 +2,23 @@ var express = require("express");
 var router = express.Router();
 
 require("../models/connection");
-const Favorite = require("../models/favoriteSchema");
+const Favorite = require("../models/favorites");
 const User = require("../models/users");
 
 router.get("/showFavorites/:token", (req, res) => {
 	const token = req.params.token;
 
-	User.findOne({ token : token }).then((data) => {
-		if (data) {
-			console.log(data);
-			
-			Favorite.find({id_user: data._id})
-				.populate("id_user")
-				.then((data) => {
-					res.json({ result: data });
-				});
-		}
-	});
+    User.findOne({ token : token }).then((data) => {
+        if (data) {
+            console.log(data);
+            
+            Favorite.find({id_user: data._id})
+                .populate("id_user")
+                .then((data) => {
+                    res.json({ result: data });
+                });
+        }
+    });
 });
 
 router.post("/createFavorite/:token", (req, res) => {
@@ -40,8 +40,13 @@ router.post("/createFavorite/:token", (req, res) => {
 	});
 });
 
+<<<<<<< HEAD
 router.delete("/deleteFavorite/:token", (req, res) => {
 	Favorite.deleteOne({ _id: req.body.id }).then(() => {
+=======
+router.delete("/:wordjp", (req, res) => {
+	Favorite.deleteOne({ Word_JP: req.params.wordjp }).then(() => {
+>>>>>>> 3c2b5a4c1b7f4d3dc5fec6850da59b593e4ce8a0
 		Favorite.find().then((data) => {
 			console.log(data);
 			res.json({ result: "word deleted", data: data });
