@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   KeyboardAvoidingView,
   Text,
   TextInput,
@@ -7,6 +8,16 @@ import {
   View,
   Modal,
   Image,
+=======
+	KeyboardAvoidingView,
+	Text,
+	TextInput,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	Modal,
+	Image,
+>>>>>>> ahmed
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -22,8 +33,13 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 export default function SignUp() {
+<<<<<<< HEAD
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+=======
+	const EMAIL_REGEX =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+>>>>>>> ahmed
 
 	const navigation = useNavigation();
 
@@ -94,10 +110,17 @@ export default function SignUp() {
 		}
 	};
 
+<<<<<<< HEAD
   const showSignUpModal = () => {
     setSignUpModalVisible(!signUpModalVisible);
     dispatch(showModal(!signUpModalVisible));
   };
+=======
+	const showSignUpModal = () => {
+		setSignUpModalVisible(!signUpModalVisible);
+		dispatch(showModal(!signUpModalVisible));
+	};
+>>>>>>> ahmed
 
 	return (
 		<View>

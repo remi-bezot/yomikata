@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { BackendAdress } from "../utils/BackendAdress";
@@ -10,6 +11,11 @@ export default function Lessons() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
+<<<<<<< HEAD
+=======
+	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
+
+>>>>>>> ahmed
 	const uri = BackendAdress.uri;
 
 	const handleGoLesson = (id) => {
@@ -24,13 +30,23 @@ export default function Lessons() {
 	};
 
 	useEffect(() => {
+<<<<<<< HEAD
 		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+=======
+		fetch(
+			`http://${uri}:3000/lessons/showAllLessons/QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x`
+		)
+>>>>>>> ahmed
 			.then((response) => response.json())
 			.then((data) => {
+				console.log("ok");
+
 				if (data.result) {
 					setLessons(data.data);
 				} else {
-					console.error("No data found.");
+					console.log("no");
+
+					console.error("No data.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
@@ -147,7 +163,6 @@ const styles = StyleSheet.create({
   modalText: { fontSize: 18, marginBottom: 10 },
 	container: {
 		flex: 1,
-		paddingTop: 80,
 		padding: 20,
 		backgroundColor: "#F8F9FA", // Fond général de la vue pour un contraste agréable
 	},

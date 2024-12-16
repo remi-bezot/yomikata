@@ -8,6 +8,7 @@ import AuthScreen from "./screens/AuthScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import SignUp from "./components/SignUp";
 import FavoriteScreen from "./screens/FavoriteScreen";
+import DialogueScreen from "./screens/DialogueScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
@@ -16,7 +17,7 @@ import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import DialogueScreen from "./screens/DialogueScreen"
+import DialogueScreen from "./screens/DialogueScreen";
 
 const store = configureStore({
 	reducer: { user },
@@ -41,7 +42,6 @@ const TabNavigator = () => {
 					} else if (route.name === "user") {
 						iconName = "user";
 					}
-
 					return <FontAwesome6 name={iconName} size={size} color={color} />;
 				},
 				tabBarActiveTintColor: "#e8be4b",
