@@ -14,7 +14,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { BackendAdress } from "../utils/BackendAdress";
 
-export default function Lessons(props) {
+export default function Practice(props) {
   const [lessonData, setLessonData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWord, setSelectedWord] = useState("");
@@ -26,7 +26,7 @@ export default function Lessons(props) {
 
   useEffect(() => {
     // Fetch the lesson data using the lessonId and lessonIndex
-    fetch(`http://${uri}:3000/lessons/showLesson/${token}/${props.lessonId}`)
+    fetch(`http://${uri}:3000/practicies/showPractice/${props.lessonId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.data.themes) {

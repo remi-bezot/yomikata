@@ -106,8 +106,14 @@ export default function DashboardScreen() {
 		);
 	};
 
-	const goToSelectedLesson = (lesson,lessonIndex) => {
-		navigation.navigate("Dialogue",{"lessonId":lesson._id,"lessonIndex":lessonIndex});
+	const goToSelectedLesson = (lesson,themeIndex) => {
+		navigation.navigate("Dialogue",{"lessonId":lesson._id,"lessonIndex":themeIndex});
+		// console.log(lesson._id,lessonId,'oui');
+		
+	  };
+
+	  const goToSelectedPratice = (lesson,themeIndex) => {
+		navigation.navigate("Practice",{"lessonId":lesson._id,"lessonIndex":themeIndex});
 		// console.log(lesson._id,lessonId,'oui');
 		
 	  };
@@ -188,7 +194,7 @@ export default function DashboardScreen() {
 			.then((data) => {
 				if (data.result) {
 					setLessons(data.data);
-					console.log(data.data);
+					// console.log(data.data);
 				} else {
 					console.error("No data found.");
 				}
@@ -204,9 +210,9 @@ export default function DashboardScreen() {
 				if (data) {
 					setWord(data.word);
 					setMeaning(data.word.meaning.slice(0, 10));
-					console.warn(data.word);
+					// console.log(data.word);
 				} else {
-					console.error("No new word found.");
+					// console.error("No new word found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
@@ -269,7 +275,7 @@ export default function DashboardScreen() {
 							<View key={lessonIndex} style={styles.lessonContainer}>
 								{lesson.themes.map((theme, themeIndex) => (
 									<TouchableOpacity  onLongPress={() =>
-										goToSelectedLesson(lesson,lessonIndex)
+										goToSelectedLesson(lesson,themeIndex)
 									  } key={themeIndex} style={styles.ThemeBubbleUp}>
 										<Text style={styles.text}>
 											Speaker Number: {theme.speaker_number}
@@ -287,7 +293,7 @@ export default function DashboardScreen() {
 						style={styles.scrollView}
 					>
 						{lessons.map((lesson, lessonIndex) => (
-							<View key={lessonIndex} style={styles.lessonContainer}>
+							<TouchableOpacity onLongPress={() =>goToSelectedPratice(lesson._id,lessonIndex)} key={lessonIndex} style={styles.lessonContainer}>
 								{lesson.themes.map((theme, themeIndex) => (
 									<View key={themeIndex} style={styles.themeBubbleDown}>
 										<Text style={styles.text}>Theme: {theme.theme}</Text>
@@ -296,7 +302,7 @@ export default function DashboardScreen() {
 										</Text>
 									</View>
 								))}
-							</View>
+							</TouchableOpacity>
 						))}
 					</ScrollView>
 				</View>

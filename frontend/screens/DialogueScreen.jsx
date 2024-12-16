@@ -5,7 +5,7 @@ import Lessons from "../components/Lessons";
 export default function Dialogue(route) {
 	// console.log(route.route.params.lessonId);
 	let lessonId = route.route.params.lessonId;
-	let lessonIndex = route.route.params.lessonId;
+	let lessonIndex = route.route.params.lessonIndex;
 	
 	return (
 		<KeyboardAvoidingView style={styles.container} behavior="padding">
