@@ -8,16 +8,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from 'expo-speech'
 import { useFonts } from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
+	const favorites = useSelector((state) => state.favorites.value);
+
 	const token = user.token;
 	
 	const [selectedCardId, setSelectedCardId] = useState(null)
 	const [words, setWords] = useState([]);
-	// const [displayCard, setDisplayCard]= useState(false)
+	
 	
 
 	const [fontsLoaded] = useFonts({
@@ -27,9 +31,11 @@ export default function FavoriteScreen() {
 	});
 
 
+
+
+
 		// Récupération des favoris lors de la connexion
 	useEffect(() => {
-
 		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
@@ -39,6 +45,7 @@ export default function FavoriteScreen() {
 
 		});
 	}, []);
+
 
 
 	const handleClick = (wordId) => {

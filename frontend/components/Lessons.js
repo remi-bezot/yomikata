@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 import { BackendAdress } from "../utils/BackendAdress";
+import * as Speech from 'expo-speech'
+import { addFavorite } from "../reducers/favoritesreducer";
 
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
@@ -27,8 +29,13 @@ export default function Lessons(props) {
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
 
+
+
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  //useSelector pour les favoris
+  const favorites = useSelector((state) => state.favorites.value);
+
   let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
   const uri = BackendAdress.uri;
   useEffect(() => {
@@ -59,12 +66,48 @@ export default function Lessons(props) {
         .then((data) => {
           if (data) {
             console.log("Dictionary:", data);
+			//pour stockage de la grammaire et jlpt du mot dans redux
+			dispatch(addFavorite({
+				word: selectedWord,
+				jlpt: data.jlpt,
+				grammar: data.jisho}));
           }
         })
         .catch((error) => console.error("Error fetching dictionary:", error));
       setWordApi([...wordApi, word]);
+	  
     }
   };
+
+  // ajout expo speech modal
+  const speak = (text) => {
+	Speech.speak(text, {
+		language: 'ja', 
+		pitch: 1, 
+		rate: 0.5, 
+	})
+}
+
+//fetch pour envoyer les favoris dans BDD
+const handleFavoriteButton = () => {
+
+	fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			Word_JP: favorites.word,
+			Word_EN: favorites.jlpt,
+			Romanji: favorites.jlpt,
+			Grammar: favorites.grammar,
+			isBook: true,
+		})
+	})
+	.then((response) => response.json())
+	.then((data) => {
+			console.log(data, 'ok')
+		})
+}
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -183,10 +226,22 @@ export default function Lessons(props) {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
+
               <Text style={styles.modalText}>
                 Selected word: {selectedWord}
               </Text>
-              <Button title="Close" onPress={() => setModalVisible(false)} />
+			  <Text>Jlpt : {favorites.jlpt}</Text>
+			  <Text>Grammar : {favorites.grammar}</Text>
+				<TouchableOpacity
+					style={styles.speakerbutton}
+					onPress={() => speak(selectedWord)}
+					>
+					<Text style={styles.speaker}>🔊</Text>
+				</TouchableOpacity>
+              	<Button title="Close" onPress={() => setModalVisible(false)} />
+			  	<TouchableOpacity style={styles.speakerbutton} onPress={() => handleFavoriteButton()}>
+					<Text>❤️</Text>
+				</TouchableOpacity>
             </View>
           </View>
         </Modal>
