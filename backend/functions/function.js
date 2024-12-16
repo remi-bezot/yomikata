@@ -7,5 +7,5 @@ export function getWords(words) {
 		}))
 		.sort((a, b) => a.level - b.level);
 
-	return filtered[0] || words[0] || null;
+	return filtered[0] || null || words[0];
 }
