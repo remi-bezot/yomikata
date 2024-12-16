@@ -16,10 +16,6 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 // authentification
-<<<<<<< HEAD
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-=======
->>>>>>> ahmed
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
