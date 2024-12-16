@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
-
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
-=======
 import {
   SafeAreaView,
   KeyboardAvoidingView,
@@ -16,7 +12,6 @@ import {
   Button,
 } from "react-native";
 import { customStyles } from "../utils/CustomStyle";
->>>>>>> 5b797ecc7dc1f2d3ae92e2bdab785533cadafeb6
 import { useDispatch, useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
