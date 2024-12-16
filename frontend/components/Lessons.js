@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { BackendAdress } from "../utils/BackendAdress";
 import * as Speech from "expo-speech";
 import { addFavorite } from "../reducers/favoritesreducer";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
@@ -24,8 +25,8 @@ export default function Lessons(props) {
   const [exercises, setExercises] = useState([]);
 
   const dispatch = useDispatch();
-//   const user = useSelector((state) => state.user.value);
-  
+  //   const user = useSelector((state) => state.user.value);
+
   //useSelector pour les favoris
   const favorites = useSelector((state) => state.favorites.value);
 
@@ -55,7 +56,6 @@ export default function Lessons(props) {
       .catch((error) => console.error("Error fetching lesson:", error));
   }, [props.lessonId, props.lessonIndex]);
 
-  
   const handleLongPressWord = (word) => {
     setSelectedWord(word);
     setModalVisible(true);
@@ -175,24 +175,26 @@ export default function Lessons(props) {
             <View style={styles.modalContent}>
               <Text style={styles.modalText}>
                 Selected word: {selectedWord}
-			
               </Text>
-			  <Text>Meaning : </Text>
-			  <Text>Romanji : </Text>
-			  <Text>Grammar : {favorites.value.grammar}</Text>
-				<TouchableOpacity
-					style={styles.speakerbutton}
-					onPress={() => speak(selectedWord)}
-					>
-					<Text style={styles.speaker}>🔊</Text>
-				</TouchableOpacity>
-              	<Button title="Close" onPress={() => setModalVisible(false)} />
-			  	<TouchableOpacity style={styles.speakerbutton} onPress={() => handleFavoriteButton()}>
-					<Text>❤️</Text>
-				</TouchableOpacity>
+              <Text>Meaning : </Text>
+              <Text>Romanji : </Text>
+              <Text>Grammar : {favorites.value.grammar}</Text>
+              <TouchableOpacity
+                style={styles.speakerbutton}
+                onPress={() => speak(selectedWord)}
+              >
+                <Text style={styles.speaker}>🔊</Text>
+              </TouchableOpacity>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
+              <TouchableOpacity
+                style={styles.speakerbutton}
+                onPress={() => handleFavoriteButton()}
+              >
+                <Text>❤️</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal> */}
+        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
