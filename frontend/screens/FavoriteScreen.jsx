@@ -8,7 +8,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from 'expo-speech'
 import { useFonts } from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
 import { addFavorite } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 

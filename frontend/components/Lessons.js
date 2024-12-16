@@ -24,7 +24,8 @@ export default function Lessons(props) {
   const [exercises, setExercises] = useState([]);
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
+//   const user = useSelector((state) => state.user.value);
+  
   //useSelector pour les favoris
   const favorites = useSelector((state) => state.favorites.value);
 
@@ -54,6 +55,7 @@ export default function Lessons(props) {
       .catch((error) => console.error("Error fetching lesson:", error));
   }, [props.lessonId, props.lessonIndex]);
 
+  
   const handleLongPressWord = (word) => {
     setSelectedWord(word);
     setModalVisible(true);
@@ -173,25 +175,24 @@ export default function Lessons(props) {
             <View style={styles.modalContent}>
               <Text style={styles.modalText}>
                 Selected word: {selectedWord}
+			
               </Text>
-              <Text>Jlpt : {favorites.jlpt}</Text>
-              <Text>Grammar : {favorites.grammar}</Text>
-              <TouchableOpacity
-                style={styles.speakerbutton}
-                onPress={() => speak(selectedWord)}
-              >
-                <Text style={styles.speaker}>🔊</Text>
-              </TouchableOpacity>
-              <Button title="Close" onPress={() => setModalVisible(false)} />
-              <TouchableOpacity
-                style={styles.speakerbutton}
-                onPress={() => handleFavoriteButton()}
-              >
-                <Text>❤️</Text>
-              </TouchableOpacity>
+			  <Text>Meaning : </Text>
+			  <Text>Romanji : </Text>
+			  <Text>Grammar : {favorites.value.grammar}</Text>
+				<TouchableOpacity
+					style={styles.speakerbutton}
+					onPress={() => speak(selectedWord)}
+					>
+					<Text style={styles.speaker}>🔊</Text>
+				</TouchableOpacity>
+              	<Button title="Close" onPress={() => setModalVisible(false)} />
+			  	<TouchableOpacity style={styles.speakerbutton} onPress={() => handleFavoriteButton()}>
+					<Text>❤️</Text>
+				</TouchableOpacity>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
