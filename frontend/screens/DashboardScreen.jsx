@@ -216,9 +216,10 @@ export default function DashboardScreen() {
 				</TouchableOpacity>
 			</View>
 			<View style={styles.BubbleContainer}>
-				<Text style={styles.text}>Dialogues</Text>
 				<View style={styles.BubbleTopContainer}>
-					<View style={styles.ThemeBubbleTop}>
+					<View
+						style={[styles.ThemeBubbleTop, { minHeight: 149, maxHeight: 150 }]}
+					>
 						<Text style={styles.BubbleHeaderOne}>Today Word </Text>
 						<Text style={styles.text}>{word.word}</Text>
 						<Text style={styles.text}>{word.furigana}</Text>
@@ -233,12 +234,21 @@ export default function DashboardScreen() {
 						/>
 					</View>
 
-					<View style={styles.ThemeBubbleTop}>
+					<View
+						style={[styles.ThemeBubbleTop, { minHeight: 149, maxHeight: 150 }]}
+					>
 						<Text style={styles.BubbleHeaderTwo}>Continue ?</Text>
 						<View>
 							<Text>blablabla</Text>
 							<Text>blablabla</Text>
 							<Text>blablabla</Text>
+
+							<MaterialCommunityIcons
+								style={styles.Arrow}
+								name="arrow-bottom-right-thin-circle-outline"
+								size={24}
+								color="black"
+							/>
 						</View>
 					</View>
 				</View>
@@ -420,7 +430,7 @@ const styles = StyleSheet.create({
 		marginRight: -25,
 	},
 	ThemeBubbleTop: {
-		width: 170,
+		width: 172,
 		height: 150,
 		alignItems: "center",
 		justifyContent: "center",
@@ -428,10 +438,6 @@ const styles = StyleSheet.create({
 		marginTop: 30,
 		backgroundColor: "#CC4646", // headingColor pour harmoniser avec les titres
 		borderRadius: 15,
-		shadowColor: "#090909", // Ombre selon la headingBorderColor
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.4,
-		shadowRadius: 8,
 		elevation: 10,
 		borderWidth: 0.5, // headingBorderSize
 		borderColor: "#090909", // headingBorderColor
@@ -447,7 +453,7 @@ const styles = StyleSheet.create({
 		color: "black",
 		fontWeight: "bold",
 		top: -14,
-		width: "169",
+		width: "172",
 		borderColor: "#090909",
 		borderWidth: 1,
 		borderTopLeftRadius: 15, // Arrondir le coin supérieur gauche
@@ -463,13 +469,14 @@ const styles = StyleSheet.create({
 		color: "black",
 		fontWeight: "bold",
 		top: -33,
-		width: "169",
+		width: "172",
 		borderColor: "#090909",
 		borderWidth: 1,
 		borderTopLeftRadius: 15, // Arrondir le coin supérieur gauche
 		borderTopRightRadius: 15, // Arrondir le coin supérieur droit
 	},
 	Arrow: {
+		position: "relative",
 		bottom: 5,
 		left: 65,
 	},
@@ -483,10 +490,6 @@ const styles = StyleSheet.create({
 		marginVertical: 30,
 		backgroundColor: "#D56565", // headingColor pour harmoniser avec les titres
 		borderRadius: 15,
-		shadowColor: "#090909", // Ombre selon la headingBorderColor
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.4,
-		shadowRadius: 8,
 		elevation: 10,
 		borderWidth: 0.5, // headingBorderSize
 		borderColor: "#090909", // headingBorderColor
@@ -500,10 +503,6 @@ const styles = StyleSheet.create({
 		marginVertical: 30,
 		backgroundColor: "#D56565", // navBarIconSelectedColor
 		borderRadius: 20,
-		shadowColor: "#090909",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.4,
-		shadowRadius: 8,
 		elevation: 10,
 		borderWidth: 0.5, // headingBorderSize
 		borderColor: "#090909", // headingBorderColor

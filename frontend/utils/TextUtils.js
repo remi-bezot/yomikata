@@ -20,3 +20,14 @@ export const capitalizeEachWord = (string) => {
 		.map((word) => capitalizeFirstLetter(word))
 		.join(" ");
 };
+
+export function processWords(words) {
+	const filtered = words
+		.filter((word) => word.WaniKani.length > 0)
+		.map((word) => ({
+			...word,
+			level: parseInt(word.WaniKani[0].replace("wanikani", "")),
+		}))
+		.sort((a, b) => a.level - b.level);
+	return filtered.length ? filtered[0] : null;
+}
