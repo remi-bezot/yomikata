@@ -1,90 +1,241 @@
 import React, { useState, useEffect } from "react";
-
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  KeyboardAvoidingView,
+  FlatList,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Dimensions,
+  Modal,
+  Button,
+} from "react-native";
+import { customStyles } from "../utils/CustomStyle";
 import { useDispatch, useSelector } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { capitalizeFirstLetter } from "../utils/TextUtils";
 import { BackendAdress } from "../utils/BackendAdress";
 
+const uri = BackendAdress;
+
 export default function Lessons() {
-  const [lessons, setLessons] = useState([]);
+  const [lessonData, setLessonData] = useState([]);
+  const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedWord, setSelectedWord] = useState("");
+  const [wordApi, setWordApi] = useState([]);
+  const [speakerColors, setSpeakerColors] = useState({});
+  const [exercises, setExercises] = useState([]);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
-
+  let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
   const uri = BackendAdress.uri;
 
-  const handleGoLesson = (id) => {
-    fetch(`http://${uri}:3000/lessons/showLesson/${id}/${user.token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          setLessons(data.data);
-          setCurrentLessonId(id);
-        }
-      });
-  };
-
   useEffect(() => {
-    fetch(
-      `http://${uri}:3000/lessons/showAllLessons/QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x`
-    )
+    fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("ok");
+        if (data && data.data) {
+          console.log("Lessons data:", data.data);
 
-        if (data.result) {
-          setLessons(data.data);
-        } else {
-          console.log("no");
+          const themesList = [];
+          for (let lesson of data.data) {
+            const themes = lesson.themes.map((theme) => ({
+              ...theme,
+              level: lesson.level,
+              lessonId: lesson._id,
+            }));
+            themesList.push(...themes);
+          }
+          setAllThemes(themesList);
 
-          console.error("No data.");
+          const allSpeakers = [];
+          for (let lesson of data.data) {
+            for (let theme of lesson.themes) {
+              for (let line of theme.lines) {
+                if (!allSpeakers.includes(line.speaker)) {
+                  allSpeakers.push(line.speaker);
+                }
+              }
+            }
+          }
+          const colors = {};
+          for (let speaker of allSpeakers) {
+            colors[speaker] =
+              "hsl(" + Math.floor(Math.random() * 360) + ", 70%, 60%)";
+          }
+          setSpeakerColors(colors);
         }
       })
-      .catch((error) => console.error("Erreur with lessons :", error))
-      .finally(() => setLoading(false));
-  }, [uri, user.token]);
+      .catch((error) => console.error("Error fetching lessons:", error));
+  }, []);
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+  const handleGoLesson = (lessonId) => {
+    fetch(`http://${uri}:3000/lessons/showLesson/${lessonId}/${token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.data) {
+          console.log("Lesson data:", data.data);
+
+          const dialogues = [];
+          const exercisesList = [];
+          for (let theme of data.data.themes) {
+            dialogues.push(...theme.lines);
+            exercisesList.push(...theme.exo);
+          }
+          setLessonData(dialogues);
+          setExercises(exercisesList);
+          setCurrentLessonId(lessonId);
+        }
+      })
+      .catch((error) => console.error("Error fetching lesson:", error));
+  };
+
+  const handleLongPressWord = (word) => {
+    setSelectedWord(word);
+    setModalVisible(true);
+    if (!wordApi.includes(word)) {
+      fetch(`http://${uri}:3000/dico/${word}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            console.log("Dictionary:", data);
+          }
+        })
+        .catch((error) => console.error("Error fetching dictionary:", error));
+      setWordApi([...wordApi, word]);
+    }
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        {lessons.map((lesson, lessonIndex) => (
-          <View key={lessonIndex}>
-            {lesson.themes.map((theme, themeIndex) => (
-              <View key={themeIndex}>
-                {theme.lines.map((line, lineIndex) => (
-                  <View
-                    style={[
-                      styles.dialogue,
-                      {
-                        alignSelf:
-                          line.speaker === "Person A"
-                            ? "flex-end"
-                            : "flex-start", // Condition d'alignement
-                        backgroundColor:
-                          line.speaker === "Person A" ? "#FFE4E1" : "#FDEDED", // Couleur personnalisée pour chaque personne
-                      },
-                    ]}
-                    key={lineIndex}
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.content}>
+          {currentLessonId === null ? (
+            <FlatList
+              data={allThemes}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.lessonContainer}>
+                  <Text style={styles.lessonTitle}>
+                    Theme: {capitalizeFirstLetter(item.theme || "No theme")}
+                  </Text>
+                  <Text>Level: {item.level}</Text>
+                  <Text>Speaker count: {item.speaker_number || 0}</Text>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handleGoLesson(item.lessonId)}
                   >
-                    <Text style={styles.speakerText}>{line.speaker}</Text>
-                    <View style={styles.separator} />
-                    <Text style={styles.japaneseText}>{line.japanese}</Text>
-                    <Text style={styles.romanjiText}>{line.romanji}</Text>
-                    <Text style={styles.englishText}>{line.english}</Text>
+                    <Text style={styles.buttonText}>View Lesson</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              ListHeaderComponent={
+                <Text style={[styles.title, styles.lessonHeader]}>
+                  Available Lessons
+                </Text>
+              }
+            />
+          ) : (
+            <FlatList
+              data={lessonData}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item, index }) => {
+                const alignment = index % 2 === 0 ? "row" : "row-reverse";
+                const iconColor = speakerColors[item.speaker];
+
+                return (
+                  <View key={index} style={[styles.dialogue]}>
+                    <View
+                      style={[styles.dialogue1, { flexDirection: alignment }]}
+                    >
+                      <Icon
+                        name="user"
+                        size={24}
+                        color={iconColor}
+                        style={styles.icon}
+                      />
+                      <View style={styles.dialogueChild}>
+                        <Text>Speaker: {item.speaker}</Text>
+                        <Text>Japanese text:</Text>
+                        <View style={styles.wordsContainer}>
+                          {item.japanese
+                            .split(
+                              /([\p{Script=Han}]+|[\u3041-\u309F]+|[\u30A1-\u30FF]+)/gu
+                            )
+                            .map((segment, idx) => {
+                              const isJapaneseWord =
+                                /[\p{Script=Han}]+|[\u3041-\u309F]+|[\u30A1-\u30FF]+/u.test(
+                                  segment
+                                );
+
+                              return isJapaneseWord ? (
+                                <TouchableOpacity
+                                  key={idx}
+                                  onLongPress={() =>
+                                    handleLongPressWord(segment)
+                                  }
+                                >
+                                  <Text style={styles.word}>{segment}</Text>
+                                </TouchableOpacity>
+                              ) : (
+                                <Text key={idx} style={styles.nonClickableText}>
+                                  {segment}
+                                </Text>
+                              );
+                            })}
+                        </View>
+                      </View>
+                    </View>
                   </View>
-                ))}
-              </View>
-            ))}
+                );
+              }}
+              ListHeaderComponent={
+                <Text style={[styles.title, styles.dialogueHeader]}>
+                  Dialogues
+                </Text>
+              }
+            />
+          )}
+        </View>
+
+        {currentLessonId && (
+          <View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => console.log("Redirect to Exercises:", exercises)}
+            >
+              <Text style={styles.buttonText}>Go to Exercises</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setCurrentLessonId(null)}
+            >
+              <Text style={styles.buttonText}>Back to Lessons</Text>
+            </TouchableOpacity>
           </View>
-        ))}
-      </View>
-    </ScrollView>
+        )}
+
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>
+                Selected word: {selectedWord}
+              </Text>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </Modal>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -97,8 +248,8 @@ const styles = StyleSheet.create({
   },
   content: { flex: 1 },
   title: { fontSize: 20, fontWeight: "700", textAlign: "center" },
-  lessonHeader: { marginTop: 20, paddingLeft: 20 },
-  dialogueHeader: { marginTop: 20, paddingLeft: 20 },
+  lessonHeader: { marginTop: 20 },
+  dialogueHeader: { marginTop: 20 },
   lessonContainer: {
     borderWidth: 2,
     borderColor: "black",
@@ -129,7 +280,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
-    width: "80%",
   },
   dialogue1: {
     flexDirection: "row",
@@ -137,8 +287,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   icon: { marginHorizontal: 10 },
-  // wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
-  wordsContainer: { flexWrap: "wrap" },
+  wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
   word: { fontSize: 16, marginHorizontal: 5 },
   modalContainer: {
     flex: 1,
@@ -154,47 +303,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: { fontSize: 18, marginBottom: 10 },
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F8F9FA", // Fond général de la vue pour un contraste agréable
-  },
-  dialogue: {
-    borderWidth: 0, // Retrait de la bordure pour un rendu moderne
-    borderRadius: 20, // Coins très arrondis pour un effet "bulle"
-    padding: 20, // Espacement interne généreux
-    marginBottom: 15, // Espacement entre les bulles
-    width: "auto", // S'adapte au contenu
-    maxWidth: "75%", // Limite la largeur des bulles pour éviter qu'elles ne soient trop grandes
-    shadowColor: "#000", // Ombre douce
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 5, // Pour un effet d'ombre sur Android
-  },
-  speakerText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#555", // Couleur douce pour le texte des speakers
-    marginBottom: 5,
-  },
-  japaneseText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333", // Texte principal en noir pour une bonne lisibilité
-    marginBottom: 5,
-  },
-  romanjiText: {
-    fontSize: 14,
-    fontStyle: "italic",
-    color: "#666", // Romanji avec une couleur légèrement plus claire
-    marginBottom: 5,
-  },
-  englishText: {
-    fontSize: 14,
-    color: "#444", // Texte en anglais légèrement plus foncé que le romanji
-  },
-  separator: {
-    height: 10, // Espace visuel entre les éléments
-  },
 });
