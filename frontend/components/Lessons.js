@@ -16,9 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 import { BackendAdress } from "../utils/BackendAdress";
-import { customStyles } from "../utils/CustomStyle";
 
-export default function Lessons() {
+export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
   const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
@@ -32,53 +31,11 @@ export default function Lessons() {
   const user = useSelector((state) => state.user.value);
   let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
   const uri = BackendAdress.uri;
-
   useEffect(() => {
-    fetch(`http://${uri}:3000/lessons/showAllLessons/${token}`)
+    fetch(`http://${uri}:3000/lessons/showLesson/${token}/${props.lessonId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.data) {
-          console.log("Lessons data:", data.data);
-
-          const themesList = [];
-          for (let lesson of data.data) {
-            const themes = lesson.themes.map((theme) => ({
-              ...theme,
-              level: lesson.level,
-              lessonId: lesson._id,
-            }));
-            themesList.push(...themes);
-          }
-          setAllThemes(themesList);
-
-          const allSpeakers = [];
-          for (let lesson of data.data) {
-            for (let theme of lesson.themes) {
-              for (let line of theme.lines) {
-                if (!allSpeakers.includes(line.speaker)) {
-                  allSpeakers.push(line.speaker);
-                }
-              }
-            }
-          }
-          const colors = {};
-          for (let speaker of allSpeakers) {
-            colors[speaker] =
-              "hsl(" + Math.floor(Math.random() * 360) + ", 70%, 60%)";
-          }
-          setSpeakerColors(colors);
-        }
-      })
-      .catch((error) => console.error("Error fetching lessons:", error));
-  }, []);
-
-  const handleGoLesson = (lessonId) => {
-    fetch(`http://${uri}:3000/lessons/showLesson/${lessonId}/${token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data) {
-          console.log("Lesson data:", data.data);
-
           const dialogues = [];
           const exercisesList = [];
           for (let theme of data.data.themes) {
@@ -87,11 +44,11 @@ export default function Lessons() {
           }
           setLessonData(dialogues);
           setExercises(exercisesList);
-          setCurrentLessonId(lessonId);
+          setCurrentLessonId(props.lessonId);
         }
       })
       .catch((error) => console.error("Error fetching lesson:", error));
-  };
+  }, [props.lessonId, currentLessonId]);
 
   const handleLongPressWord = (word) => {
     setSelectedWord(word);

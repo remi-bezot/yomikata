@@ -2,14 +2,18 @@ import React from "react";
 import { KeyboardAvoidingView, View, Text, StyleSheet } from "react-native";
 import Lessons from "../components/Lessons";
 
-export default function Dialogue() {
+export default function Dialogue(route) {
+	// console.log(route.route.params.lessonId);
+	let lessonId = route.route.params.lessonId;
+	let lessonIndex = route.route.params.lessonId;
+	
 	return (
 		<KeyboardAvoidingView style={styles.container} behavior="padding">
 			<View style={styles.header}>
 				<Text style={styles.title}>Dialogue Screen</Text>
 			</View>
 			<View style={styles.content}>
-				<Lessons />
+				<Lessons lessonId={lessonId} lessonIndex={lessonIndex}/>
 			</View>
 		</KeyboardAvoidingView>
 	);

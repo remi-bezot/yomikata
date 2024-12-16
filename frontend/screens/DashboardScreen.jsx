@@ -106,6 +106,12 @@ export default function DashboardScreen() {
 		);
 	};
 
+	const goToSelectedLesson = (lesson,lessonIndex) => {
+		navigation.navigate("Dialogue",{"lessonId":lesson._id,"lessonIndex":lessonIndex});
+		// console.log(lesson._id,lessonId,'oui');
+		
+	  };
+
 	const renderLegendComponent = () => {
 		return (
 			<>
@@ -182,14 +188,14 @@ export default function DashboardScreen() {
 			.then((data) => {
 				if (data.result) {
 					setLessons(data.data);
-					console.warn(data.data[0]);
+					console.log(data.data);
 				} else {
 					console.error("No data found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, [uri, user.token]);
+	}, []);
 
 	useEffect(() => {
 		fetch(`http://${uri}:3000/word/random/`)
@@ -201,21 +207,6 @@ export default function DashboardScreen() {
 					console.warn(data.word);
 				} else {
 					console.error("No new word found.");
-				}
-			})
-			.catch((error) => console.error("Erreur with lessons :", error))
-			.finally(() => setLoading(false));
-	}, [uri, user.token]);
-
-	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.result) {
-					setLessons(data.data);
-					console.warn(data.data[0])
-				} else {
-					console.error("No data found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
@@ -277,12 +268,14 @@ export default function DashboardScreen() {
 						{lessons.map((lesson, lessonIndex) => (
 							<View key={lessonIndex} style={styles.lessonContainer}>
 								{lesson.themes.map((theme, themeIndex) => (
-									<View key={themeIndex} style={styles.ThemeBubbleUp}>
+									<TouchableOpacity  onLongPress={() =>
+										goToSelectedLesson(lesson,lessonIndex)
+									  } key={themeIndex} style={styles.ThemeBubbleUp}>
 										<Text style={styles.text}>
 											Speaker Number: {theme.speaker_number}
 										</Text>
 										<Text style={styles.text}>Theme: {theme.theme}</Text>
-									</View>
+									</TouchableOpacity >
 								))}
 							</View>
 						))}
