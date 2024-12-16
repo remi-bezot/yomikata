@@ -22,14 +22,16 @@ router.get("/showAllLessons/:token", (req, res) => {
 });
 
 // Affiche une leçon grace a son Id
-router.get("/showLesson/:token/:lessonId", (req, res) => {
-	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
-	const { lessonId } = req.params;
+router.get("/showDialogue/:token/:lessonId", (req, res) => {
+	
+	let { lessonId , token } = req.params;
 
 	User.findOne({ token: token }).then((dataUser) => {
 		console.log("token ok");
+		console.log(dataUser)
 
 		if (dataUser) {
+			
 			Lesson.findById(lessonId).then((data) => {
 				if (data) {
 					res.json({ result: true, data: data });
@@ -51,8 +53,9 @@ router.post("/Progress_Dial/:user_id/:lesson_id", (req, res) => {
 	User.findByIdAndUpdate(
 		user_id,
 		{
-			$push: { "dialogue_progress.dialogues_done": lesson_id }, // Ajoute un nouvel élément au tableau
-		} // Retourne le document après mise à jour
+			$push: { "dialogue_progress.dialogues_done": lesson_id },
+			 // Ajoute un nouvel élément au tableau
+		}    // Retourne le document après mise à jour
 	)
 		.then((updatedProgress) => {
 			if (updatedProgress) {

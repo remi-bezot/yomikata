@@ -167,6 +167,7 @@ export default function DashboardScreen() {
 			</View>
 		);
 	};
+	
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [lessons, setLessons] = useState([]);

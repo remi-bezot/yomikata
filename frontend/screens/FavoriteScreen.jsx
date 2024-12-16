@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
 import * as Speech from 'expo-speech'
+import { useFonts } from "expo-font";
 const uri = BackendAdress.uri;
 
 
