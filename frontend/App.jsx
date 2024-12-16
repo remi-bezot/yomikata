@@ -17,7 +17,7 @@ import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import DialogueScreen from "./screens/DialogueScreen";
+
 
 const store = configureStore({
 	reducer: { user },
@@ -49,7 +49,6 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
-			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="dashboard" component={DashboardScreen} />
 			<Tab.Screen name="Search" component={SearchScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />

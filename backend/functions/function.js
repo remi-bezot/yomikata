@@ -1,4 +1,4 @@
-export function getWords(words) {
+function getWords(words) {
 	const filtered = words
 		.filter((word) => word.WaniKani.length)
 		.map((word) => ({
@@ -9,3 +9,5 @@ export function getWords(words) {
 
 	return filtered[0] || null || words[0];
 }
+
+module.exports = {getWords};

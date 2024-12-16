@@ -7,6 +7,7 @@ import { customStyles } from "../utils/CustomStyle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from 'expo-speech'
+import { useFonts } from "expo-font";
 const uri = BackendAdress.uri;
 
 
@@ -29,7 +30,7 @@ export default function FavoriteScreen() {
 		// Récupération des favoris lors de la connexion
 	useEffect(() => {
 
-		fetch(`http://${uri}:3000/showFavorites/${token}`)
+		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
 			if(data.result){
@@ -41,7 +42,7 @@ export default function FavoriteScreen() {
 
 
 	const handleClick = (wordId) => {
-		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
+		fetch(`http://${uri}:3000/favorites/deleteFavorite/${token}`, {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
