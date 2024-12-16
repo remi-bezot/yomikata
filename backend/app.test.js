@@ -1,21 +1,19 @@
 const request = require("supertest");
 const app = require("./app");
-const User = required("../models/users");
 
-it("POST /signin", async () => {
-	const res = await request(app).post("/signin");
 
-	expect(res.statusCode).toBe(200);
-});
 
-describe("POST /users/signin", () => {
-	it("should authenticate a user", async () => {
-		const data = { username: "okok", password: "ok" };
+
+describe("DELETE /users/:token", () => {
+	it("should delete a user", async () => {
+		const token = 'QSAc-ea3EGgOYy-nryBbXzLCVaBjes7B'
 		const response = await request(app)
-			.post("/users/signin")
-			.send(data)
+			.delete(`/users/${token}`)
 			.expect(200);
 		console.log(response.status, response.body);
 		expect(response.body.result).toBe(true);
 	});
 });
+
+
+

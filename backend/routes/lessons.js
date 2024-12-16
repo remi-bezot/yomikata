@@ -4,114 +4,87 @@ var router = express.Router();
 require("../models/connection");
 const User = require("../models/users");
 const Lesson = require("../models/lessons");
-const Working = require("../models/working");
 
+//Affiche toutes les lecons
 router.get("/showAllLessons/:token", (req, res) => {
-  const { token } = req.params;
+	const { token } = req.params;
 
-  User.findOne({ token: token }).then((dataUser) => {
-    if (dataUser) {
-      let userLevel = dataUser.level;
-      Lesson.find({ level: userLevel }).then((data) => {
-        res.json({ result: true, data: data });
-      });
-    } else {
-      res.json({ result: false });
-    }
-  });
+	User.findOne({ token: token }).then((dataUser) => {
+		if (dataUser) {
+			let userLevel = dataUser.level;
+			Lesson.find({ level: userLevel }).then((data) => {
+				res.json({ result: true, data: data });
+			});
+		} else {
+			res.json({ result: false });
+		}
+	});
 });
 
-router.get("/showLesson/:lessonId/:token", (req, res) => {
-  const { lessonId } = req.params;
-  console.log(lessonId);
+// Affiche une leçon grace a son Id
+router.get("/showLesson/:token/:lessonId", (req, res) => {
+	const { token } = req.params;
+	const { lessonId } = req.params;
 
-  Lesson.findById(lessonId).then((data) => {
-    if (data) {
-      console.log(data);
-
-      res.json({ result: true, data: data });
-    } else {
-      res.json({ result: false });
-    }
-  });
-});
-
-router.get("/showLesson/:lessonId/:token", (req, res) => {
-  const { lessonId } = req.params;
-  console.log(lessonId);
-
-  Lesson.findById(lessonId).then((data) => {
-    if (data) {
-      console.log(data);
-
-      res.json({ result: true, data: data });
-    } else {
-      res.json({ result: false });
-    }
-  });
-});
-
-//route déclanché a la création d'un user une seule utilisation
-
-router.get("/working/:user_id", (req, res) => {
-  const newWorking = new Working({
-    user: req.params.user_id,
-    dialogue_progress: {},
-    practice_progress: {},
-  });
-  newWorking.save().then((data) => {
-    res.json({ result: true, data: data });
-  });
+	User.findOne({ token: token }).then((dataUser) => {
+		if (dataUser) {
+			Lesson.findById(lessonId).then((data) => {
+				if (data) {
+					res.json({ result: true, data: data });
+				} else {
+					res.json({ result: "No lesson found" });
+				}
+			});
+		} else {
+			res.json({ result: "No user connected" });
+		}
+	});
 });
 
 //UPDATE DIALOGUE PROGRESS NEXT BUTTON
-router.post("/Progress_Dial", (req, res) => {
-  const workingId = "6759b72c446c00d0eca97c57";
-  const keyToUpdate = "iddunelesson4";
-  const booleanValue = true;
+router.post("/Progress_Dial/:user_id/:lesson_id", (req, res) => {
+	let user_id = req.params.user_id;
+	let lesson_id = req.params.lesson_id;
 
-  Working.findByIdAndUpdate(
-    workingId,
-    { [`dialogue_progress.${keyToUpdate}`]: booleanValue }, // Syntaxe pour définir une clé dynamique
-    { new: true } // Retourne le document après mise à jour
-  )
-    .then((updatedWorking) => {
-      if (updatedWorking) {
-        res.json({ result: true, updatedWorking });
-      } else {
-        res.status(404).json({ result: false, message: "Élément non trouvé" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ result: false, error: err.message });
-    });
+	User.findByIdAndUpdate(
+		user_id,
+		{
+			$push: { "dialogue_progress.dialogues_done": lesson_id }, // Ajoute un nouvel élément au tableau
+		} // Retourne le document après mise à jour
+	)
+		.then((updatedProgress) => {
+			if (updatedProgress) {
+				res.json({ result: true, updatedProgress });
+			} else {
+				res.json({ result: false, message: "Élément non trouvé" });
+			}
+		})
+		.catch((err) => {
+			res.json({ result: false, error: err.message });
+		});
 });
 
 //UPDATE EXERCICE PROGRESS NEXT BUTTON
-router.post("/Progress_Pract", (req, res) => {
-  const workingId = "6759b72c446c00d0eca97c57";
-  const keyToUpdate = "iddunexercice4";
-  const booleanValue = true;
+router.post("/Progress_Pract/:user_id/:practice_id", (req, res) => {
+	let user_id = req.params.user_id;
+	let lesson_id = req.params.lesson_id;
 
-  Working.findByIdAndUpdate(
-    workingId,
-    { [`practice_progress.${keyToUpdate}`]: booleanValue }, // Syntaxe pour définir une clé dynamique
-    { new: true } // Retourne le document après mise à jour
-  )
-    .then((updatedWorking) => {
-      if (updatedWorking) {
-        res.json({ result: true, updatedWorking });
-      } else {
-        res.status(404).json({ result: false, message: "Élément non trouvé" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ result: false, error: err.message });
-    });
-  const { lessonId, token } = req.params;
-  Lesson.findById(lessonId).then((data) => {
-    res.json({ data: data });
-  });
+	User.findByIdAndUpdate(
+		user_id,
+		{
+			$push: { "practice_progress.practices_done": lesson_id }, // Ajoute un nouvel élément au tableau
+		} // Retourne le document après mise à jour
+	)
+		.then((updatedPractice) => {
+			if (updatedPractice) {
+				res.json({ result: true, updatedPractice });
+			} else {
+				res.json({ result: false, message: "Élément non trouvé" });
+			}
+		})
+		.catch((err) => {
+			res.json({ result: false, error: err.message });
+		});
 });
 
 module.exports = router;
