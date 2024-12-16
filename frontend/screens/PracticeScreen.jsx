@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Practice } from "../components/Practice";
 
 const PracticeScreen = () => {
 	return (
 		<View>
 			<Text style={styles.title}>Practice</Text>
+			<Text><Practice/></Text>
 		</View>
 	);
 };

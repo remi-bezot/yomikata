@@ -10,6 +10,7 @@ var lessonsRouter = require("./routes/lessons");
 var favoritesRouter = require("./routes/favorites");
 var dicoRouter = require("./routes/dictionnary");
 var wordRouter = require("./routes/word");
+var practiceRouter = require("./routes/practicies");
 
 var app = express();
 
@@ -28,4 +29,5 @@ app.use("/lessons", lessonsRouter);
 app.use("/favorites", favoritesRouter);
 app.use("/dictionnary", dicoRouter);
 app.use("/word", wordRouter);
+app.use("/practicies", practiceRouter);
 module.exports = app;
