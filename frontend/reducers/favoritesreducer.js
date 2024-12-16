@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: { word: [], jlpt: [], grammar: [] },
+  value: { word: []},
 };
 
 export const favoriteSlice = createSlice({
@@ -9,9 +9,8 @@ export const favoriteSlice = createSlice({
   initialState,
   reducers: {
     addFavorite: (state, action) => {
-      state.value.word.push(action.payload.word);
-      state.value.jlpt.push(action.payload.jlpt);
-      state.value.grammar.push(action.payload.grammar);
+	console.log(action.payload, 'hemmp')
+      state.value.word.push(action.payload)
     },
   },
 });
