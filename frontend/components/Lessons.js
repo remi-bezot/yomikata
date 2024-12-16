@@ -248,8 +248,8 @@ const styles = StyleSheet.create({
   },
   content: { flex: 1 },
   title: { fontSize: 20, fontWeight: "700", textAlign: "center" },
-  lessonHeader: { marginTop: 20 },
-  dialogueHeader: { marginTop: 20 },
+  lessonHeader: { marginTop: 20, paddingLeft: 20 },
+  dialogueHeader: { marginTop: 20, paddingLeft: 20 },
   lessonContainer: {
     borderWidth: 2,
     borderColor: "black",
@@ -280,6 +280,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
+    width: "80%",
   },
   dialogue1: {
     flexDirection: "row",
@@ -287,7 +288,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   icon: { marginHorizontal: 10 },
-  wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
+  // wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
+  wordsContainer: { flexWrap: "wrap" },
   word: { fontSize: 16, marginHorizontal: 5 },
   modalContainer: {
     flex: 1,
