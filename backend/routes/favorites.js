@@ -5,7 +5,7 @@ require("../models/connection");
 const Favorite = require("../models/favorites");
 const User = require("../models/users");
 
-router.get("/:token", (req, res) => {
+router.get("/showFavorites/:token", (req, res) => {
 	const token = req.params.token;
 
     User.findOne({ token : token }).then((data) => {
@@ -21,7 +21,7 @@ router.get("/:token", (req, res) => {
     });
 });
 
-router.post("/:token", (req, res) => {
+router.post("/createFavorite/:token", (req, res) => {
 	User.findOne({ token: req.params.token }).then((data) => {
 		const newFavorite = new Favorite({
 			Word_JP: req.body.wordjp,

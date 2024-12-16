@@ -49,6 +49,7 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
+			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="dashboard" component={DashboardScreen} />
 			<Tab.Screen name="Search" component={SearchScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />

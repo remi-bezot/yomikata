@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -15,46 +15,88 @@ export default function FavoriteScreen() {
 	const uri = BackendAdress.uri
 	const token = "leTNmBK8F-FKRA1WrgIG2e364rxgWlTf";
 	const [words, setWords] = useState([]);
+	const [cardsIsVisible, setCardsIsVisible] = useState(true)
+
+	const [fontsLoaded] = useFonts({
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+	});
+
+	if (!fontsLoaded) {
+		return null;
+	}
+
+	const handleClick = () => {
+		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				Word_JP: words.Word_JP,
+			})
+		})
+		.then((response) => response.json())
+		.then((data) => {
+				console.log(data)})
+	}
+
+	
 
 	// Récupération des favoris lors de la connexion
 	useEffect(() => {
-		fetch(`http://${uri}:3000/favorites/${token}`)
-			.then((response) => response.json())
-			.then((data) => {
-				setWords(data.result);
-			});
+		fetch(`http://${uri}:3000/showFavorites/${token}`)
+		.then((response) => response.json())
+		.then((data) => {
+			setWords(data.result);
+			console.log(words, 'here')
+
+		});
 	}, []);
 
+	
+const speak = (text) => {
+	Speech.speak(text, {
+		language: 'ja', 
+		pitch: 1, 
+		rate: 1, 
+	})
+}
+	
+
 	const favoriteswords =
-		words &&
-		words.map((data, i) => {
+	words.length>0 && words.map((data, i) => {
+
+		if(cardsIsVisible === true){
 			return (
 				<View style={styles.card} key={i}>
 					<View>
 						<View style={styles.deleteIcon}>
-							<FontAwesome name="close" size={15} color="#000000" />
+							<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick() }/>
 						</View>
-						<Text style={styles.word}>{data.Word_JP}</Text>
 					</View>
+					<Text style={styles.word}>{data.Word_JP}</Text>
 					<Text style={styles.word}>{data.Word_EN}</Text>
 					<Text style={styles.word}>{data.Romanji}</Text>
 					<Text style={styles.word}>{data.Grammar}</Text>
+					<TouchableOpacity
+                            style={styles.button}
+                            onPress={() => speak(data.Word_JP)}
+                        >
+                            <Text>🔊</Text>
+                        </TouchableOpacity>
+
 				</View>
 			);
+		} else {
+			
+		}
+			
 		});
 
-	// const [fontsLoaded] = useFonts({
-	// 	Satoshi: require("../assets/fonts/Satoshi-BlackK"),
-	// });
-
-	// if (!fontsLoaded) {
-	// 	return null;
-	// }
+	
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.titlecontainer}>
-				<Text style={styles.title}>Favorites</Text>
+				<Text style={styles.title}>Favorites ({words.length})</Text>
 			</View>
 
 			<View style={styles.cardsList}>{favoriteswords}</View>
@@ -70,12 +112,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
-	titlecontainer: {
-		backgroundColor: "red",
-	},
 	title: {
 		fontSize: 25,
-		fontFamily: "Satoshi-Black",
+		fontFamily: 'Satoshi-Black',
 		fontWeight: "bold",
 	},
 
@@ -85,7 +124,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		width: "25%",
-		height: "30%",
+		height: "40%",
 		margin: 10,
 		borderRadius: customStyles.buttonRadius,
 		backgroundColor: "#EEC1C0",

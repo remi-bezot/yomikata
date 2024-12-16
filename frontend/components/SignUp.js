@@ -1,12 +1,12 @@
 import {
-	KeyboardAvoidingView,
-	Text,
-	TextInput,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-	Modal,
-	Image,
+  KeyboardAvoidingView,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Modal,
+  Image,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -22,8 +22,8 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 export default function SignUp() {
-	const EMAIL_REGEX =
-		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 	const navigation = useNavigation();
 
@@ -46,7 +46,8 @@ export default function SignUp() {
 	}
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-
+	console.log(uri)
+	
 	const checkForm = () => {
 		setErrorPassword(false);
 		if (EMAIL_REGEX.test(signUpEmail)) {
@@ -93,10 +94,10 @@ export default function SignUp() {
 		}
 	};
 
-	const showSignUpModal = () => {
-		setSignUpModalVisible(!signUpModalVisible);
-		dispatch(showModal(!signUpModalVisible));
-	};
+  const showSignUpModal = () => {
+    setSignUpModalVisible(!signUpModalVisible);
+    dispatch(showModal(!signUpModalVisible));
+  };
 
 	return (
 		<View>
@@ -148,23 +149,23 @@ export default function SignUp() {
 								autoCorrect={false}
 							></TextInput>
 
-							{emailError && (
-								<Text style={styles.error}>Invalid email address</Text>
-							)}
-							{errorMessage && (
-								<Text style={styles.error}>Email already exists</Text>
-							)}
+              {emailError && (
+                <Text style={styles.error}>Invalid email address</Text>
+              )}
+              {errorMessage && (
+                <Text style={styles.error}>Email already exists</Text>
+              )}
 
-							<TextInput
-								style={styles.inputStyles}
-								onChangeText={(value) => setSignUpPassword(value)}
-								value={signUpPassword}
-								placeholder="password"
-								placeholderTextColor="grey"
-								secureTextEntry={true}
-								keyboardType="default"
-								autoCapitalize="none"
-							></TextInput>
+              <TextInput
+                style={styles.inputStyles}
+                onChangeText={(value) => setSignUpPassword(value)}
+                value={signUpPassword}
+                placeholder="password"
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                keyboardType="default"
+                autoCapitalize="none"
+              ></TextInput>
 
 							<TextInput
 								style={styles.inputStyles}

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-	value: { token: null, username: null, formModal:  false},
+	value: { token: null, username: null, formModal: false},
 };
 
 export const userSlice = createSlice({
@@ -19,7 +19,6 @@ export const userSlice = createSlice({
 		},
 		showModal: (state, action) => {
 			state.value.formModal = action.payload
-			
 		}
 	},
 });
