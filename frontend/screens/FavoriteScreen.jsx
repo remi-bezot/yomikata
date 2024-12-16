@@ -1,6 +1,5 @@
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BackendAdress } from "../utils/BackendAdress";
 import { customStyles } from "../utils/CustomStyle";
