@@ -17,8 +17,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { capitalizeFirstLetter } from "../utils/TextUtils";
 import { BackendAdress } from "../utils/BackendAdress";
 
-const uri = BackendAdress;
-
 export default function Lessons() {
   const [lessonData, setLessonData] = useState([]);
   const [allThemes, setAllThemes] = useState([]);
