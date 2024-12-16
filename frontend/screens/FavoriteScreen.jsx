@@ -9,16 +9,18 @@ import { useFonts } from "expo-font";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
 import * as Speech from 'expo-speech'
+const uri = BackendAdress.uri;
+
 
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
-
 	const token = user.token;
-	const uri = BackendAdress.uri;
+	
+	const [selectedCardId, setSelectedCardId] = useState(null)
 	const [words, setWords] = useState([]);
 	// const [displayCard, setDisplayCard]= useState(false)
-	const [selectedCardId, setSelectedCardId] = useState(null)
+	
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
@@ -26,16 +28,16 @@ export default function FavoriteScreen() {
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf")
 	});
 
-	if (!fontsLoaded) {
-		return null;
-	}
 
 		// Récupération des favoris lors de la connexion
 	useEffect(() => {
+
 		fetch(`http://${uri}:3000/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
-			setWords(data.result);
+			if(data.result){
+				setWords(data.result);
+			}
 
 		});
 	}, []);
@@ -67,7 +69,7 @@ const speak = (text) => {
 	Speech.speak(text, {
 		language: 'ja', 
 		pitch: 1, 
-		rate: 1, 
+		rate: 0.5, 
 	})
 }
 
@@ -77,7 +79,7 @@ const speak = (text) => {
 
 
 const favoriteswords = words.length > 0 && words.map((data, i) => {
-
+	console.log(data.Word_JP)
     
 	if(selectedCardId === data._id){
 		return (
