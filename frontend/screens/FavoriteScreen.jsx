@@ -2,11 +2,7 @@ import { Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-nativ
 import React from "react";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-=======
 import { BackendAdress } from "../utils/BackendAdress";
-import { customStyles } from "../utils/CustomStyle";
->>>>>>> ahmed
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { customStyles } from "../utils/CustomStyle";
@@ -14,10 +10,6 @@ import * as Speech from 'expo-speech'
 const uri = BackendAdress.uri;
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ahmed
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 	const token = user.token;

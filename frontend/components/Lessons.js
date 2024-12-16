@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { BackendAdress } from "../utils/BackendAdress";
+import { customStyles } from "../utils/CustomStyle";
 
 export default function Lessons() {
 	const [lessons, setLessons] = useState([]);
@@ -11,11 +11,7 @@ export default function Lessons() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-<<<<<<< HEAD
-=======
-	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
-
->>>>>>> ahmed
+	
 	const uri = BackendAdress.uri;
 
 	const handleGoLesson = (id) => {
@@ -30,13 +26,9 @@ export default function Lessons() {
 	};
 
 	useEffect(() => {
-<<<<<<< HEAD
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
-=======
 		fetch(
 			`http://${uri}:3000/lessons/showAllLessons/QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x`
 		)
->>>>>>> ahmed
 			.then((response) => response.json())
 			.then((data) => {
 				console.log("ok");

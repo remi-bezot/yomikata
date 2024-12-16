@@ -3,7 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
-const { getWords } = require("../functions/function");
+const  { getWords } = require("../functions/function.js");
 
 //ROUTE RESEARCH = Post un mot en anglais. Premier fetch dans API Jisho.
 //Traitement de la donnée et récupération : Kanji, Furigana, Gammaire.

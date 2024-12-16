@@ -12,12 +12,11 @@ import DialogueScreen from "./screens/DialogueScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
-import LessonsScreen from "./screens/DialogueScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import DialogueScreen from "./screens/DialogueScreen";
+
 
 const store = configureStore({
 	reducer: { user },
