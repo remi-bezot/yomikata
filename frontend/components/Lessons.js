@@ -19,25 +19,26 @@ import { BackendAdress } from "../utils/BackendAdress";
 import * as Speech from 'expo-speech'
 import { addFavorite } from "../reducers/favoritesreducer";
 
+
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
   const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
   const [selectedWord, setSelectedWord] = useState("");
   const [wordApi, setWordApi] = useState([]);
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
+  const [favorites, setFavorites ]= useState ([])
 
 
 
   const dispatch = useDispatch();
 //   const user = useSelector((state) => state.user.value);
   
-  //useSelector pour les favoris
-  const favorites = useSelector((state) => state.favorites.value);
+  
 
-  let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
+  let token = "rgLVN06z1Sv6EoWVlr_OcLUYtv7zrLZG";
   const uri = BackendAdress.uri;
   useEffect(() => {
     fetch(`http://${uri}:3000/lessons/showLesson/${token}/${props.lessonId}`)
@@ -59,23 +60,58 @@ export default function Lessons(props) {
   }, [props.lessonId, currentLessonId]);
 
   
+
+
+
   const handleLongPressWord = (word) => {
-    setSelectedWord(word);
-    setModalVisible(true);
-    if (!wordApi.includes(word)) {
-      fetch(`http://${uri}:3000/dico/${word}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data) {
-			console.log('fetch', data)
-			//pour stockage de la grammaire et jlpt du mot dans redux
-			dispatch(addFavorite(data))
-        }})
-        .catch((error) => console.error("Error fetching dictionary:", error))
-      setWordApi([...wordApi, word]);
+   
+    fetch(`http://10.10.200.42:3000/word/getWord`, 
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          word:word
+        })
+      })
+
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data, 'omom');
+        
+        setFavorites([data])
+      
+        setModalVisible(true)
+      }
+      
+      )
+        
+      // setWordApi([...wordApi, word]);
 	  
-    }
+      
+
+    
+    
   };
+
+  
+  const handleFavoriteButton = (data) => {
+
+    fetch(`http://10.10.200.42:3000/favorites/createFavorite/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        wordjp: data?.wanikaniLow.Kanji,
+        worden: data?.wanikaniLow?.English[0],
+        romanji: data?.romaji, 
+        grammar: data?.wanikaniLow.Grammar[0],
+        isbook: true,
+      })
+    })
+.then((response) => response.json())
+.then((data) => {
+  console.log(data, 'vers Favoris')
+  })
+}
 
   // ajout expo speech modal
   const speak = (text) => {
@@ -86,58 +122,9 @@ export default function Lessons(props) {
 	})
 }
 
-//fetch pour envoyer les favoris dans BDD
-const handleFavoriteButton = () => {
 
-	fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			Word_JP: favorites.word,
-			Word_EN: favorites.meaning,
-			Romanji: favorites.romanji,
-			Grammar: favorites.grammar,
-			isBook: true,
-		})
-	})
-	.then((response) => response.json())
-	.then((data) => {
-			console.log(data, 'ok')
-		})
-}
 
-const traductionWords = favorites.word.length > 0 && favorites.word.map((data, i) => {
-	return(
-		<Modal key={i}
-		visible={modalVisible}
-		transparent={true}
-		animationType="slide"
-		onRequestClose={() => setModalVisible(false)}
-	  >
-		<View style={styles.modalContainer}>
-		  <View style={styles.modalContent}>
 
-			<Text style={styles.modalText}>
-			  Selected word: {selectedWord}
-		  
-			</Text>
-			<Text>Meaning :{data.meaning}</Text>
-			<Text>Romanji : {data.romaji} </Text>
-			<Text>Grammar : {data.grammar}</Text>
-			  <TouchableOpacity
-				  style={styles.speakerbutton}
-				  onPress={() => speak(selectedWord)}
-				  >
-				  <Text style={styles.speaker}>🔊</Text>
-			  </TouchableOpacity>
-				<Button title="Close" onPress={() => setModalVisible(false)} />
-				<TouchableOpacity style={styles.speakerbutton} onPress={() => handleFavoriteButton()}>
-				  <Text>❤️</Text>
-			  </TouchableOpacity>
-		  </View>
-		</View>
-	  </Modal>
-)});
 
   return (
     <SafeAreaView style={styles.container}>
@@ -247,36 +234,46 @@ const traductionWords = favorites.word.length > 0 && favorites.word.map((data, i
             </TouchableOpacity>
           </View>
         )}
-		<View>{traductionWords}</View>
-        {/* <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
+		<View>
 
-              <Text style={styles.modalText}>
-                Selected word: {selectedWord}
-			
-              </Text>
-			  <Text>Meaning : </Text>
-			  <Text>Romanji : </Text>
-			  <Text>Grammar : {favorites.value.grammar}</Text>
-				<TouchableOpacity
-					style={styles.speakerbutton}
-					onPress={() => speak(selectedWord)}
-					>
-					<Text style={styles.speaker}>🔊</Text>
-				</TouchableOpacity>
-              	<Button title="Close" onPress={() => setModalVisible(false)} />
-			  	<TouchableOpacity style={styles.speakerbutton} onPress={() => handleFavoriteButton()}>
-					<Text>❤️</Text>
-				</TouchableOpacity>
-            </View>
+    {modalVisible && (
+  <Modal
+    visible={modalVisible}
+    transparent={true}
+    animationType="slide"
+    onRequestClose={() => setModalVisible(false)}
+  >
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+       
+
+        {favorites.map((favorite, index) => {
+          return(
+          <View key={index} style={{ marginBottom: 10 }}>
+            <Text style={styles.modalText}>Selected word: {favorite.wanikaniLow.Kanji}</Text>
+            <Text>Meaning: {favorite.wanikaniLow.English[0]}</Text>
+            <Text>Romanji: {favorite.romaji }</Text>
+            <Text>Grammar: {favorite.wanikaniLow.Grammar[0]}</Text>
+            <TouchableOpacity onPress={() => speak(favorite.romaji)}>
+              <Text style={styles.speaker}>🔊</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.speakerbutton}
+              onPress={() => handleFavoriteButton(favorite)}
+            >
+              <Text>❤️</Text>
+            </TouchableOpacity>
           </View>
-        </Modal> */}
+        )})}
+      
+        {/* <Button title="Close" onPress={() => setModalVisible(false)} /> */}
+      </View>
+    </View>
+  </Modal>
+)}
+
+    </View>
+        
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
