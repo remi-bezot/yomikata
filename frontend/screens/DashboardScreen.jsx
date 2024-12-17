@@ -170,12 +170,15 @@ export default function DashboardScreen() {
 	
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
+	// const Go = useSelector((state) => state.continue.value);
 	const [lessons, setLessons] = useState([]);
 	const [word, setWord] = useState([]);
 	const [meaning, setMeaning] = useState([]);
-
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
+
+
+	const handlecontinue = () => {}
 
 	useEffect(() => {
 		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
@@ -226,6 +229,12 @@ export default function DashboardScreen() {
 	return (
 		<ScrollView style={styles.container}>
 			<View style={styles.header}>
+			<Image
+          source={{
+            uri: 'https://via.placeholder.com/150', // Image d'avatar
+          }}
+          style={styles.avatar}
+        />
 				<Text style={styles.font}>Welcome User</Text>
 				<TouchableOpacity style={styles.settings}>
 					<FontAwesome6 name="gear" size={24} color="#000" />
@@ -429,8 +438,16 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent : 'space-between',
 		marginTop: 30,
 	},
+	avatar: {
+		width: 80,
+		height: 80,
+		borderRadius: 40,
+		borderWidth: 2,
+		borderColor: 'rgba(193, 46, 46, 1)',
+	  },
 	scrollView: {
 		flex: 1,
 		right: 13,

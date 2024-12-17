@@ -1,25 +1,56 @@
 import React, { useContext } from "react";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet } from "react-native"; // Pour utiliser les styles de layout
+
 import HomeScreen from "./screens/HomeScreen";
 import AuthScreen from "./screens/AuthScreen";
 import DashboardScreen from "./screens/DashboardScreen";
-import SignUp from "./components/SignUp";
+import UserScreen from "./screens/UserScreen";
 import FavoriteScreen from "./screens/FavoriteScreen";
 import DialogueScreen from "./screens/DialogueScreen";
-import UserScreen from "./screens/UserScreen";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
 import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import user from "./reducers/users";
 
-const store = configureStore({
-  reducer: { user },
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
+
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // Utilise localStorage pour le stockage
+import userReducer from "./reducers/users";
+import continuesReducer from "./reducers/continues";
+
+// Configuration de Persist
+const persistConfig = {
+  key: "Yomikata", // Clé de stockage
+  storage,         // Méthode de stockage
+  whitelist: ["continues"], // Réducteurs à persister
+};
+
+// Combinaison des réducteurs
+const rootReducer = combineReducers({
+  user: userReducer,         // non Persisté
+  continues: continuesReducer, // persisté
 });
+
+// Application du persistReducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Configuration du store
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
+});
+
+// Création du persistor
+export const persistor = persistStore(store);
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -114,6 +145,7 @@ const TabNavigator = () => {
 export default function App() {
 	return (
 		<Provider store={store}>
+			 <PersistGate loading={null} persistor={persistor}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
@@ -121,6 +153,7 @@ export default function App() {
 					<Stack.Screen name="Auth" component={AuthScreen} />
 				</Stack.Navigator>
 			</NavigationContainer>
+			</PersistGate>
 		</Provider>
 	);
 }
