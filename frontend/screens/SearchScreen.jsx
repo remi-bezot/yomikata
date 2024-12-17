@@ -18,7 +18,7 @@ const uri = BackendAdress.uri;
 export default function SearchScreen() {
 
 // const user = useSelector((state) => state.user.value);
-  const [query, setQuery] = useState("");
+  const [word, setWord] = useState("");
   const [results, setResults] = useState([]);
 
   const speak = (text) => {
@@ -31,9 +31,11 @@ export default function SearchScreen() {
 
   // Fonction pour lancer la recherche
   const handleSearch = () => {
-    if (query.trim() === "") return; // Empêcher une recherche vide
+    if (word.trim() === "") return; // Empêcher une recherche vide
 
-    fetch(`http://${uri}:3000/word/getWord/he8G56G5cU2ideOMyGG6DWcYXxaFvXxz/${query}`)
+	const wordMinuscule = word.trim().toLowerCase()
+
+    fetch(`http://${uri}:3000/word/getWord/he8G56G5cU2ideOMyGG6DWcYXxaFvXxz/${wordMinuscule}`)
       .then((response) => response.json())
       .then((data) => {
         setResults([data]);
@@ -53,17 +55,20 @@ export default function SearchScreen() {
         <FontAwesome6 name="magnifying-glass" size={20} color="#fff" />
         <TextInput
           style={styles.input}
-          placeholder="Rechercher un mot japonais..."
+          placeholder="Search for an English word......"
           placeholderTextColor="black"
-          value={query}
-          onChangeText={(text) => setQuery(text)} // Mettre à jour query uniquement
+		  placeholderSize='1'
+          value={word}
+          onChangeText={(text) => setWord(text)} // Mettre à jour query uniquement
         />
 
         {/* Bouton pour lancer la recherche */}
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+       
+      </View>
+	  <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Text style={styles.buttonText}>Rechercher</Text>
         </TouchableOpacity>
-      </View>
+	 
 	  {results.length > 0 &&
   results.map((favorite, index) => {
     return (
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 15,
     paddingHorizontal: 15,
+	height : 35,
     marginTop: 40,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -116,12 +122,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
   },
+
   searchButton: {
+	alignSelf: "center",
     backgroundColor: "#C12E2E",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
     marginLeft: 10,
+	width : 110, 
+	marginTop: 15,
   },
   buttonText: {
     color: "white",
@@ -143,8 +153,8 @@ const styles = StyleSheet.create({
 	shadowRadius: 3,
   },
   resultText: {
-	color: "black", // Texte blanc
-	fontSize: 16, // Taille de police
+	color: "#fff", // Texte blanc
+	fontSize: 30, // Taille de police
 	fontWeight: "500", // Police semi-gras
   },
   speakerButton: {
