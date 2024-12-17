@@ -103,25 +103,28 @@ router.post("/updatePractice", (req, res) => {
     );
 });
 
-router.get("/progress/:token", (req, res) => {
-  const { token } = req.params;
+router.post("/progress/checkExercise", (req, res) => {
+  const { token, lessonId, themeIndex } = req.body;
 
   User.findOne({ token })
     .then((user) => {
-      if (!user) {
-        return res.status(404).json({ result: false, error: "User not found" });
-      }
+      if (user) {
+        const isDialogueDone = user.dialogue_progress.dialogues_done.includes(
+          `${lessonId}-${themeIndex}`
+        );
+        const isPracticeDone = user.practice_progress.practices_done.includes(
+          `${lessonId}-${themeIndex}`
+        );
 
-      res.json({
-        result: true,
-        dialogue_progress: user.dialogue_progress,
-        practice_progress: user.practice_progress,
-      });
+        res.json({
+          result: true,
+          isDone: isDialogueDone || isPracticeDone, // Si déjà fait dans dialogues ou pratiques
+        });
+      } else {
+        res.status(404).json({ result: false, error: "User not found" });
+      }
     })
-    .catch((error) => {
-      console.error("Error fetching progress:", error);
-      res.status(500).json({ result: false, error: "Internal server error" });
-    });
+    .catch((error) => res.status(500).json({ result: false, error }));
 });
 
 module.exports = router;

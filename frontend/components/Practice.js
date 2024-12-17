@@ -11,34 +11,43 @@ import {
 import * as Speech from "expo-speech";
 import { BackendAdress } from "../utils/BackendAdress";
 import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-export default function Practice(props) {
+export default function Practice() {
   const [exercises, setExercises] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [answeredCount, setAnsweredCount] = useState(0); // Compteur des réponses
+  const [answeredCount, setAnsweredCount] = useState(0);
   const uri = BackendAdress.uri;
+
   const navigation = useNavigation();
+  const route = useRoute();
+  const { lessonId, lessonIndex } = route.params || {};
+
   const user = useSelector((state) => state.user.value);
 
+  // Fonction pour faire parler le mot japonais
   const speak = (text) => {
     Speech.speak(text, { language: "ja", pitch: 1, rate: 0.5 });
   };
 
+  // Récupération des exercices depuis l'API
   useEffect(() => {
-    fetch(`http://${uri}:3000/practicies/showPractice/${props.lessonId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data.themes) {
-          const selectedTheme = data.data.themes[props.lessonIndex];
-          if (selectedTheme && selectedTheme.exo) {
-            setExercises(selectedTheme.exo);
+    if (lessonId !== undefined && lessonIndex !== undefined) {
+      fetch(`http://${uri}:3000/practicies/showPractice/${lessonId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.data.themes) {
+            const selectedTheme = data.data.themes[lessonIndex];
+            if (selectedTheme && selectedTheme.exo) {
+              setExercises(selectedTheme.exo);
+            }
           }
-        }
-      })
-      .catch((error) => console.log("Error fetching exercises:", error));
-  }, [props.lessonId, props.lessonIndex]);
+        })
+        .catch((error) => console.log("Error fetching exercises:", error));
+    }
+  }, [lessonId, lessonIndex]);
 
+  // Mélange des options pour chaque exercice
   const shuffleOptions = (exercise) => {
     const options = [
       { text: exercise.good_answer, isCorrect: true },
@@ -49,14 +58,16 @@ export default function Practice(props) {
     return options.sort(() => Math.random() - 0.5);
   };
 
+  // Fonction pour marquer l'exercice comme terminé
   const handleCompletion = async () => {
     try {
       await fetch(`http://${uri}:3000/users/updatePractice`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token, practiceId: props.lessonId }),
+        body: JSON.stringify({ token: user.token, practiceId: lessonId }),
       });
 
+      // Délai avant la redirection
       const delay = exercises.length * 3000;
       setTimeout(() => {
         navigation.navigate("TabNavigator", { screen: "dashboard" });
@@ -66,18 +77,18 @@ export default function Practice(props) {
     }
   };
 
+  // Gestion de la sélection d'une option
   const handleOptionSelect = (exerciseIndex, isCorrect) => {
     if (selectedAnswers[exerciseIndex] === undefined) {
       setSelectedAnswers((prevAnswers) => ({
         ...prevAnswers,
         [exerciseIndex]: isCorrect,
       }));
-
       setAnsweredCount((prevCount) => prevCount + 1);
     }
   };
 
-  // Ici, le useEffect surveille answeredCount
+  // Vérification si tous les exercices ont été complétés
   useEffect(() => {
     if (answeredCount === exercises.length && exercises.length > 0) {
       handleCompletion();
@@ -169,5 +180,12 @@ const styles = StyleSheet.create({
   },
   option: {
     fontSize: 14,
+  },
+  speakerbutton: {
+    marginLeft: 10,
+  },
+  speaker: {
+    fontSize: 18,
+    color: "#007bff",
   },
 });

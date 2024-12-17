@@ -16,6 +16,7 @@ import { BackendAdress } from "../utils/BackendAdress";
 import * as Speech from "expo-speech";
 import { addFavorite } from "../reducers/favoritesreducer";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
@@ -26,6 +27,7 @@ export default function Lessons(props) {
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const navigation = useNavigation();
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
@@ -66,6 +68,35 @@ export default function Lessons(props) {
       });
 
     // setWordApi([...wordApi, word]);
+  };
+
+  const handleGoToExercise = () => {
+    const body = {
+      token: user.token,
+      lessonId: props.lessonId,
+      themeIndex: props.lessonIndex,
+    };
+
+    fetch(`http://${uri}:3000/users/progress/checkExercise`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result && data.isDone) {
+          // Afficher une alerte si l'exercice est déjà fait
+          alert(
+            "Vous avez déjà effectué cet exercice ! Redirection vers le tableau de bord."
+          );
+          navigation.navigate("TabNavigator", { screen: "dashboard" });
+        } else {
+          navigation.navigate("Practice", {
+            lessonId: props.lessonId,
+            lessonIndex: props.lessonIndex,
+          });
+        }
+      });
   };
 
   const handleFavoriteButton = (data) => {
@@ -138,6 +169,9 @@ export default function Lessons(props) {
                               </Text>
                             );
                           })}
+                        <TouchableOpacity onPress={() => speak(item.japanese)}>
+                          <Text style={styles.speaker}>🔊</Text>
+                        </TouchableOpacity>
                         <View style={styles.romaji}>
                           <Text>Romaji:{item.romanji}</Text>
                           <Text>English:{item.english}</Text>
@@ -154,6 +188,14 @@ export default function Lessons(props) {
               </Text>
             }
           />
+          <View style={{ alignItems: "center", marginVertical: 20 }}>
+            <TouchableOpacity
+              style={styles.button} // Réutilisation du style
+              onPress={handleGoToExercise} // Fonction déjà définie
+            >
+              <Text style={styles.buttonText}>Go to Exercises</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {currentLessonId && (
