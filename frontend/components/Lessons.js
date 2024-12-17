@@ -25,32 +25,23 @@ export default function Lessons(props) {
   const [exercises, setExercises] = useState([]);
 
   const dispatch = useDispatch();
-  //   const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.value);
 
-  //useSelector pour les favoris
   const favorites = useSelector((state) => state.favorites.value);
 
-  let token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
+  let token = user.token;
   const uri = BackendAdress.uri;
 
   useEffect(() => {
-    // Fetch the lesson data using the lessonId and lessonIndex
     fetch(`http://${uri}:3000/lessons/showLesson/${token}/${props.lessonId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.data.themes) {
           const selectedTheme = data.data.themes[props.lessonIndex];
           if (selectedTheme) {
-            console.log("Selected theme:", selectedTheme);
-
-            // Update the state with the lines and exercises
             setLessonData(selectedTheme.lines || []);
             setExercises(selectedTheme.exo || []);
-          } else {
-            console.warn("No theme found at the specified index.");
           }
-        } else {
-          console.error("Invalid data format or no themes available.");
         }
       })
       .catch((error) => console.error("Error fetching lesson:", error));
@@ -65,7 +56,6 @@ export default function Lessons(props) {
         .then((data) => {
           if (data) {
             console.log("Dictionary:", data);
-            //pour stockage de la grammaire et jlpt du mot dans redux
             dispatch(
               addFavorite({
                 word: selectedWord,
@@ -80,7 +70,6 @@ export default function Lessons(props) {
     }
   };
 
-  // ajout expo speech modal
   const speak = (text) => {
     Speech.speak(text, {
       language: "ja",

@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, View, Text, StyleSheet } from "react-native";
 import Lessons from "../components/Lessons";
 
 export default function Dialogue(route) {
-	// console.log(route.route.params.lessonId);
 	let lessonId = route.route.params.lessonId;
 	let lessonIndex = route.route.params.lessonIndex;
 	

@@ -5,125 +5,65 @@ import {
   FlatList,
   Text,
   StyleSheet,
-  TouchableOpacity,
   View,
   Dimensions,
-  Modal,
-  Button,
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 import { BackendAdress } from "../utils/BackendAdress";
 
 export default function Practice(props) {
-  const [lessonData, setLessonData] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedWord, setSelectedWord] = useState("");
-  const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
-
-  const token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
+  const user = useSelector((state) => state.user.value);
+  const token = user.token;
   const uri = BackendAdress.uri;
 
   useEffect(() => {
-    // Fetch the lesson data using the lessonId and lessonIndex
+    // Fetch les données d'exercices via le lessonId et le lessonIndex
     fetch(`http://${uri}:3000/practicies/showPractice/${props.lessonId}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.data.themes) {
+        if (data && data.data.themes) {
           const selectedTheme = data.data.themes[props.lessonIndex];
-          if (selectedTheme) {
-            console.log("Selected theme:", selectedTheme);
-
-            // Update the state with the lines and exercises
-            setLessonData(selectedTheme.lines || []);
-            setExercises(selectedTheme.exo || []);
+          if (selectedTheme && selectedTheme.exo) {
+            setExercises(selectedTheme.exo);
           } else {
-            console.warn("No theme found at the specified index.");
+            console.log("No exercises found for the selected theme.");
           }
         } else {
-          console.error("Invalid data format or no themes available.");
+          console.log("Invalid data format or no themes available.");
         }
       })
-      .catch((error) => console.error("Error fetching lesson:", error));
+      .catch((error) => console.log("Error fetching exercises:", error));
   }, [props.lessonId, props.lessonIndex]);
-
-  const handleLongPressWord = (word) => {
-    setSelectedWord(word);
-    setModalVisible(true);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.content}>
+          {/* Liste des exercices */}
           <FlatList
-            data={lessonData}
+            data={exercises}
             keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item, index }) => {
-              const alignment = index % 2 === 0 ? "row" : "row-reverse";
-              return (
-                <View key={index} style={[styles.dialogue]}>
-                  <View
-                    style={[styles.dialogue1, { flexDirection: alignment }]}
-                  >
-                    <Icon
-                      name="user"
-                      size={24}
-                      color={speakerColors[item.speaker] || "blue"}
-                      style={styles.icon}
-                    />
-                    <View style={styles.dialogueChild}>
-                      <Text>Speaker: {item.speaker}</Text>
-                      <Text>Japanese text:</Text>
-                      <View style={styles.wordsContainer}>
-                        {item.japanese
-                          .split(/([\p{Script=Han}]+)/gu)
-                          .map((segment, idx) => {
-                            const isJapaneseWord = /[\p{Script=Han}]+/u.test(
-                              segment
-                            );
-                            return isJapaneseWord ? (
-                              <TouchableOpacity
-                                key={idx}
-                                onLongPress={() => handleLongPressWord(segment)}
-                              >
-                                <Text style={styles.word}>{segment}</Text>
-                              </TouchableOpacity>
-                            ) : (
-                              <Text key={idx} style={styles.nonClickableText}>
-                                {segment}
-                              </Text>
-                            );
-                          })}
-                      </View>
-                    </View>
-                  </View>
+            renderItem={({ item, index }) => (
+              <View key={index} style={styles.exerciseContainer}>
+                <Text style={styles.exerciseQuestion}>
+                  {index + 1}. What does "{item.word_jp}" mean?
+                </Text>
+                <View style={styles.optionsContainer}>
+                  <Text style={styles.option}>A: {item.good_answer}</Text>
+                  <Text style={styles.option}>B: {item.wrong_answer_a}</Text>
+                  <Text style={styles.option}>C: {item.wrong_answer_b}</Text>
+                  <Text style={styles.option}>D: {item.wrong_answer_c}</Text>
                 </View>
-              );
-            }}
+              </View>
+            )}
             ListHeaderComponent={
-              <Text style={[styles.title, styles.dialogueHeader]}>
-                Dialogues for Selected Theme
+              <Text style={[styles.title, styles.exerciseHeader]}>
+                Exercises for Selected Theme
               </Text>
             }
           />
         </View>
-
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>
-                Selected word: {selectedWord}
-              </Text>
-              <Button title="Close" onPress={() => setModalVisible(false)} />
-            </View>
-          </View>
-        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -138,34 +78,24 @@ const styles = StyleSheet.create({
   },
   content: { flex: 1 },
   title: { fontSize: 20, fontWeight: "700", textAlign: "center" },
-  dialogueHeader: { marginTop: 20 },
-  dialogue: { marginBottom: 10, paddingHorizontal: 10 },
-  dialogueChild: {
-    borderWidth: 1,
+  exerciseHeader: { marginTop: 20, color: "green", textAlign: "center" },
+  exerciseContainer: {
     padding: 10,
     marginVertical: 5,
+    borderWidth: 1,
     borderRadius: 5,
+    borderColor: "#ddd",
   },
-  dialogue1: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+  exerciseQuestion: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 5,
   },
-  icon: { marginHorizontal: 10 },
-  wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
-  word: { fontSize: 16, marginHorizontal: 5 },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  optionsContainer: {
+    marginLeft: 10,
   },
-  modalContent: {
-    width: "80%",
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    alignItems: "center",
+  option: {
+    fontSize: 14,
+    marginBottom: 2,
   },
-  modalText: { fontSize: 18, marginBottom: 10 },
 });
