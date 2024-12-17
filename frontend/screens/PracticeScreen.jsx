@@ -1,12 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Practice } from "../components/Practice";
+import Practice from "../components/Practice";
 
-const PracticeScreen = () => {
+const PracticeScreen = (route) => {	
+	let lessonId = route.route.params.lessonId;
+	let practiceIndex = route.route.params.practiceIndex;
 	return (
 		<View>
 			<Text style={styles.title}>Practice</Text>
-			<Text><Practice/></Text>
+			<Text><Practice lessonId={lessonId} lessonIndex={practiceIndex}/></Text>
 		</View>
 	);
 };

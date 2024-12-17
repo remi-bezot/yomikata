@@ -108,16 +108,13 @@ export default function DashboardScreen() {
 
 	const goToSelectedLesson = (lesson,themeIndex) => {
 		navigation.navigate("Dialogue",{"lessonId":lesson._id,"lessonIndex":themeIndex});
-		// console.log(lesson._id,lessonId,'oui');
 		
 	  };
 
-	  const goToSelectedPratice = (lesson,themeIndex) => {
-		navigation.navigate("Practice",{"lessonId":lesson._id,"lessonIndex":themeIndex});
-		// console.log(lesson._id,lessonId,'oui');
-		
+	  const goToSelectedPratice = (lessonPractice, themeIndex) => {
+			navigation.navigate("Practice",{"lessonId":lessonPractice._id,"practiceIndex":themeIndex});
 	  };
-
+	  
 	const renderLegendComponent = () => {
 		return (
 			<>
@@ -292,17 +289,23 @@ export default function DashboardScreen() {
 						showsHorizontalScrollIndicator={false}
 						style={styles.scrollView}
 					>
-						{lessons.map((lesson, lessonIndex) => (
-							<TouchableOpacity onLongPress={() =>goToSelectedPratice(lesson._id,lessonIndex)} key={lessonIndex} style={styles.lessonContainer}>
-								{lesson.themes.map((theme, themeIndex) => (
-									<View key={themeIndex} style={styles.themeBubbleDown}>
-										<Text style={styles.text}>Theme: {theme.theme}</Text>
-										<Text style={styles.text}>
-											Exercises: {theme.exo.length}
-										</Text>
-									</View>
-								))}
-							</TouchableOpacity>
+						{lessons.map((lessonPractice, practiceIndex) => (
+							<View
+							
+
+							key={practiceIndex}
+							style={styles.lessonContainer}
+						  >
+							{lessonPractice.themes.map((theme, themeIndex) => (
+  <TouchableOpacity onLongPress={() => goToSelectedPratice(lessonPractice, themeIndex)} key={themeIndex} style={styles.themeBubbleDown}>
+    <Text style={styles.text}>Theme: {theme.theme}</Text>
+    <Text style={styles.text}>
+      Exercises: {theme.exo ? theme.exo.length : 0}
+    </Text>
+  </TouchableOpacity>
+))}
+						  </View>
+						  
 						))}
 					</ScrollView>
 				</View>

@@ -3184,7 +3184,7 @@ expo-modules-core@2.1.2:
   dependencies:
     invariant "^2.2.4"
 
-expo-speech@~13.0.0:
+expo-speech@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/expo-speech/-/expo-speech-13.0.0.tgz#a37d7091bd6d10b1fd446e361891d6559cac33d1"
   integrity sha512-LscUm2vnRyW6ej8PP8/5E80ivix8PP3hnagOcb/7TGFyDIFVIXy1zyEjT/1kTkpT0FzN2ha+qxtLzQyQvHQcJA==
