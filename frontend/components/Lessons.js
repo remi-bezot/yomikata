@@ -55,7 +55,7 @@ export default function Lessons(props) {
 
   const handleLongPressWord = (word) => {
    
-    fetch(`http://10.10.200.42:3000/word/getWord`, 
+    fetch(`http://${uri}:3000/word/getWord`, 
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,13 +63,10 @@ export default function Lessons(props) {
           word:word
         })
       })
-
       .then((response) => response.json())
       .then((data) => {
         console.log(data, 'omom');
-        
         setFavorites([data])
-      
         setModalVisible(true)
       }
       
@@ -86,7 +83,7 @@ export default function Lessons(props) {
   
   const handleFavoriteButton = (data) => {
 
-    fetch(`http://10.10.200.42:3000/favorites/createFavorite/${token}`, {
+    fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -101,6 +98,13 @@ export default function Lessons(props) {
 .then((data) => {
   console.log(data, 'vers Favoris')
   })
+
+  fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data)
+
+		});
 }
 
   // ajout expo speech modal
@@ -191,8 +195,11 @@ export default function Lessons(props) {
         )}
 		<View>
 
-    {modalVisible && (
+      
+    {favorites.map((favorite, index) => {
+      return(
   <Modal
+    key={index}
     visible={modalVisible}
     transparent={true}
     animationType="slide"
@@ -200,32 +207,34 @@ export default function Lessons(props) {
   >
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
-       
-
-        {favorites.map((favorite, index) => {
-          return(
-          <View key={index} style={{ marginBottom: 10 }}>
+          <View  style={{ marginBottom: 10 }}>
             <Text style={styles.modalText}>Selected word: {favorite.wanikaniLow.Kanji}</Text>
             <Text>Meaning: {favorite.wanikaniLow.English[0]}</Text>
             <Text>Romanji: {favorite.romaji }</Text>
             <Text>Grammar: {favorite.wanikaniLow.Grammar[0]}</Text>
-            <TouchableOpacity onPress={() => speak(favorite.romaji)}>
-              <Text style={styles.speaker}>🔊</Text>
+
+            <View style={styles.icons}> 
+              <TouchableOpacity onPress={() => speak(favorite.romaji)}>
+              <Text style={styles.speakerButton}>🔊</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.speakerbutton}
+              style={styles.iconsStyle}
               onPress={() => handleFavoriteButton(favorite)}
             >
               <Text>❤️</Text>
             </TouchableOpacity>
+            <Button style={styles.closeButton} title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+           
           </View>
-        )})}
       
-        {/* <Button title="Close" onPress={() => setModalVisible(false)} /> */}
+      
+        
       </View>
     </View>
   </Modal>
-)}
+    )})}
+
 
     </View>
         
@@ -273,4 +282,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: { fontSize: 18, marginBottom: 10 },
+  icons: {
+    width: '100%', 
+    flexDirection:'row',
+    justifyContent: 'space-around',
+    alignItems:'center'
+  },
+  iconsStyle:{
+    backgroundColor:'#D56565',
+		width: 30, 
+		height: 30,
+		borderRadius: 30, 
+    display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		margin : 5, 
+  },
+ 
+ 
 });

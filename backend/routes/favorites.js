@@ -19,10 +19,17 @@ router.get("/showFavorites/:token", (req, res) => {
                 });
         }
     });
+
 });
 
 router.post("/createFavorite/:token", (req, res) => {
+
 	User.findOne({ token: req.params.token }).then((data) => {
+		Favorite.findOne({id_user: data._id, Word_JP: req.body.wordjp })
+		.then ((element) => {
+			console.log(element)
+		})
+		
 		const newFavorite = new Favorite({
 			Word_JP: req.body.wordjp,
 			Word_EN: req.body.worden,

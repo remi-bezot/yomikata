@@ -8,12 +8,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from 'expo-speech'
 import { useFonts } from "expo-font";
 import { addFavorite } from "../reducers/favoritesreducer";
+import { useDispatch, useSelector } from "react-redux";
 const uri = BackendAdress.uri;
 
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
-	const favorites = useSelector((state) => state.favorites.value);
 
 	const token = user.token;
 	
@@ -37,12 +37,11 @@ export default function FavoriteScreen() {
 		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
-			if(data.result){
-				setWords(data.result);
-			}
-
+				setWords(data.result);	
+				console.log('haha')	
 		});
-	}, []);
+	}, [words]);
+
 
 
 
@@ -82,7 +81,7 @@ const speak = (text) => {
 
 
 const favoriteswords = words.length > 0 && words.map((data, i) => {
-	console.log(data.Word_JP)
+	
     
 	if(selectedCardId === data._id){
 		return (
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: 100,
+		width: 200,
 		height: 200,
 		margin: 10,
 		borderRadius: 25,
@@ -188,6 +187,7 @@ const styles = StyleSheet.create({
 	},
 	word: {
 		margin: 5,
+		fontSize: 15,
 		
 	},
 	wordjp: {
