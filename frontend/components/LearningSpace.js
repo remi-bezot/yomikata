@@ -10,9 +10,15 @@ import {
   Image,
   Dimensions,
   Alert,
+  Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { customStyles } from "../utils/CustomStyle";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useDispatch, useSelector } from "react-redux";
+import { BackendAdress } from "../utils/BackendAdress";
+import { useNavigation } from "@react-navigation/native";
+import { logout } from "../reducers/users";
 
 const { width, height } = Dimensions.get("window");
 
@@ -26,6 +32,14 @@ export default function LearningSpace() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
+  let token = user.token;
+  const uri = BackendAdress.uri;
 
   useEffect(() => {
     (async () => {
@@ -42,18 +56,33 @@ export default function LearningSpace() {
 
   const pickAvatar = async () => {
     try {
+      // Request permission to access the media library
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Permission to access the media library is required."
+        );
+        return;
+      }
+
+      // Launch the image picker
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: "images", // Directly specify 'images' or 'videos'
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
       });
 
+      // Check if the user canceled the image picking
       if (!result.canceled) {
         setAvatar(result.assets[0].uri);
+      } else {
+        Alert.alert("No Image Selected", "You did not select any image.");
       }
     } catch (error) {
-      console.error("Error picking avatar: ", error);
+      console.error("Error picking avatar:", error);
       Alert.alert("Error", "An error occurred while picking the avatar.");
     }
   };
@@ -67,13 +96,44 @@ export default function LearningSpace() {
     Alert.alert("Submitted", "Password Submitted");
   const handleSubmitAvatar = () => Alert.alert("Submitted", "Avatar Submitted");
 
+  const logoutUser = () => {
+    dispatch(logout());
+    navigation.navigate("Auth");
+  };
+
+  const handleSubmitDeleteAccount = () => {
+    setModalVisible(true);
+  };
+
+  const deleteUser = () => {
+    fetch(`http://${uri}:3000/users/${token}`, {
+      method: "DELETE",
+    }).then((response) => {
+      if (response) {
+        setModalVisible(false);
+        navigation.navigate("Auth");
+      }
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.mainHeader}>Learning Space</Text>
+        <View style={styles.containerHeader}>
+          <Text style={styles.mainHeader}>Learning Space</Text>
+          <Text>
+            <Icon
+              onPress={() => logoutUser()}
+              name="sign-out"
+              size={24}
+              color={"black"}
+              style={styles.icon}
+            />
+          </Text>
+        </View>
 
         {/* Section Current Level */}
         <Text style={styles.header}>Your Current Level</Text>
@@ -225,6 +285,68 @@ export default function LearningSpace() {
           <TouchableOpacity style={styles.button} onPress={handleSubmitAvatar}>
             <Text style={styles.buttonText}>Submit Avatar</Text>
           </TouchableOpacity>
+          <View style={styles.deleteAccount}>
+            <TouchableOpacity
+              style={styles.buttonDeleteAccount}
+              onPress={handleSubmitDeleteAccount}
+            >
+              <Text style={styles.buttonText}>
+                <Icon
+                  name="trash"
+                  size={24}
+                  color={"black"}
+                  style={styles.icon}
+                />
+              </Text>
+              <Text>Delete Account</Text>
+            </TouchableOpacity>
+            {modalVisible && (
+              <Modal
+                visible={modalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.warningText}>
+                      <Icon
+                        name="exclamation-triangle"
+                        size={24}
+                        color="red"
+                        style={styles.icon}
+                      />
+                      Warning: This action cannot be undone!
+                    </Text>
+                    <TouchableOpacity
+                      style={[
+                        styles.buttonDeleteAccount,
+                        { backgroundColor: "red" },
+                      ]}
+                      onPress={() => {
+                        deleteUser();
+                        Alert.alert(
+                          "Account Deleted",
+                          "Your account has been deleted."
+                        );
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Confirm Delete</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.buttonDeleteAccount,
+                        { backgroundColor: "gray" },
+                      ]}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+            )}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -237,6 +359,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8F9FA",
     width: width,
     height: height,
+  },
+  containerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     padding: 20,
@@ -291,7 +419,7 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontSize: 16,
-    color: "#333",
+    color: "white",
   },
   button: {
     backgroundColor: customStyles.buttonBackgroundColor,
@@ -301,7 +429,8 @@ const styles = StyleSheet.create({
     height: customStyles.buttonHeight,
     alignSelf: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 10,
     elevation: 3,
   },
   buttonText: {
@@ -310,9 +439,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   avatarButton: {
-    backgroundColor: "#D56565",
+    backgroundColor: "grey",
     padding: 10,
-    borderRadius: 8,
     alignItems: "center",
     marginBottom: 10,
   },
@@ -323,4 +451,29 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 10,
   },
+  deleteAccount: {
+    marginTop: 30,
+  },
+  buttonDeleteAccount: {
+    paddingVertical: 12,
+    width: customStyles.buttonWidth,
+    height: customStyles.buttonHeight,
+    alignSelf: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: { fontSize: 18, marginBottom: 10 },
 });

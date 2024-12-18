@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
+const Favorite = require("../models/favorites");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 const { checkBody } = require("../modules/checkbody");
@@ -61,21 +62,38 @@ router.post("/signin", (req, res) => {
 
 router.delete("/:token", (req, res) => {
   const { token } = req.params;
+  console.log("Token received for deletion:", token);
 
-  User.deleteOne({ token })
-    .then((result) => {
-      if (result.deletedCount > 0) {
-        res.json({
-          result: true,
-          message: "User account successfully deleted",
-        });
-      } else {
-        res.status(404).json({ result: false, message: "User not found" });
+  // Étape 1 : Trouver l'utilisateur
+  User.findOne({ token })
+    .then((user) => {
+      if (!user) {
+        // Si l'utilisateur n'est pas trouvé
+        return res
+          .status(404)
+          .json({ result: false, message: "User not found" });
       }
+
+      // Étape 2 : Supprimer l'utilisateur
+      return User.deleteOne({ _id: user._id }).then(() => {
+        // Étape 3 : Supprimer les favoris associés
+        return Favorite.deleteMany({ userId: user._id }).then(
+          (deletedFavorites) => {
+            // Succès : Utilisateur et favoris supprimés
+            res.json({
+              result: true,
+              message:
+                "User account and associated favorites successfully deleted",
+              deletedFavoritesCount: deletedFavorites.deletedCount, // Nombre de favoris supprimés
+            });
+          }
+        );
+      });
     })
-    .catch((err) =>
-      res.status(500).json({ result: false, error: err.message })
-    );
+    .catch((error) => {
+      // Gérer les erreurs générales
+      res.status(500).json({ result: false, error: error.message });
+    });
 });
 
 router.post("/updatePractice", (req, res) => {
