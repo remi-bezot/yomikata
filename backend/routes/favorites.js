@@ -19,44 +19,58 @@ router.get("/showFavorites/:token", (req, res) => {
 	});
 });
 
-router.post("/updateFavorite/:token", (req, res) => {
+router.post("/createFavorite/:token", (req, res) => {
 	User.findOne({ token: req.params.token })
 		.then((data) => {
-			if (data) {
-				Favorite.findOne({ Word_JP: req.body.wordjp }).then((element) => {
-					if (!element) {
+			Favorite.findOne({ id_user: data._id, Word_JP: req.body.wordjp })
+				.then((element) => {
+					if (element === null) {
 						const newFavorite = new Favorite({
-							// Word_JP: req.body.wordjp,
-							// Word_EN: req.body.worden,
-							// Romanji: req.body.romanji,
+							Word_JP: req.body.wordjp,
+							Word_EN: req.body.worden,
+							Romanji: req.body.romanji,
 							Grammar: req.body.grammar,
-							// isBook: req.body.isbook,
-							id_user: "675d9c395db1af3def9b657c",
+							isBook: req.body.isbook,
+							id_user: data._id,
 						});
-
 						newFavorite
 							.save()
 							.then((newDoc) => {
-								res.json({ result: "word saved", data: newDoc });
+								res.json({ result: true, status: true, data: newDoc });
 							})
 							.catch((err) => {
-								res
-									.status(500)
-									.json({ result: "error saving word", error: err.message });
+								res.status(500).json({
+									result: false,
+									status: false,
+									message: "Error saving favorite",
+									error: err,
+								});
 							});
 					} else {
 						element.deleteOne();
-						res.json({ result: "word already exists" });
+						res.status(400).json({
+							result: false,
+							status: false,
+							message: "Favorite deleted",
+						});
 					}
+				})
+				.catch((err) => {
+					res.status(500).json({
+						result: false,
+						status: false,
+						message: "Error checking favorite",
+						error: err,
+					});
 				});
-			} else {
-				res.status(404).json({ result: "user not found" });
-			}
 		})
 		.catch((err) => {
-			res
-				.status(500)
-				.json({ result: "error finding user", error: err.message });
+			res.status(500).json({
+				result: false,
+				status: false,
+				message: "Error finding user",
+				error: err,
+			});
 		});
 });
 
