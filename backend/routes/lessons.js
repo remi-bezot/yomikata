@@ -22,13 +22,11 @@ router.get("/showAllLessons/:token", (req, res) => {
 });
 
 // Affiche une leçon grace a son Id
-router.get("/showLesson/:token/:lessonId", (req, res) => {
-	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
-	const { lessonId } = req.params;
+router.get("/showDialogue/:lessonId/:token", (req, res) => {
+	let token = "Uzz57VoeewdCwcFNvf6OioXkwbf2uitz";
+	const lessonId = "675db08ec53a0c941602663a";
 
 	User.findOne({ token: token }).then((dataUser) => {
-		console.log("token ok");
-
 		if (dataUser) {
 			Lesson.findById(lessonId).then((data) => {
 				if (data) {

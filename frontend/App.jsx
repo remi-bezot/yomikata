@@ -12,12 +12,10 @@ import DialogueScreen from "./screens/DialogueScreen";
 import UserScreen from "./screens/UserScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import user from "./reducers/users";
-import LessonsScreen from "./screens/DialogueScreen";
 import { Provider } from "react-redux";
 import { configureStore, Tuple } from "@reduxjs/toolkit";
-import PracticeScreen from "./screens/PracticeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import DialogueScreen from "./screens/DialogueScreen";
+import PracticeScreen from "./screens/PracticeScreen";
 
 const store = configureStore({
 	reducer: { user },
@@ -49,8 +47,14 @@ const TabNavigator = () => {
 				headerShown: false,
 			})}
 		>
-			<Tab.Screen name="favorite" component={FavoriteScreen} />
-			<Tab.Screen name="dashboard" component={DashboardScreen} />
+			<Tab.Screen
+				name="dashboard"
+				component={DashboardScreen}
+				options={{
+					gestureEnabled: false, // Désactive les gestes de retour
+					headerLeft: () => null, // Supprime le bouton de retour
+				}}
+			/>
 			<Tab.Screen name="Search" component={SearchScreen} />
 			<Tab.Screen name="favorite" component={FavoriteScreen} />
 			<Tab.Screen name="user" component={UserScreen} />
@@ -66,6 +70,8 @@ export default function App() {
 					<Stack.Screen name="home" component={HomeScreen} />
 					<Stack.Screen name="Auth" component={AuthScreen} />
 					<Stack.Screen name="Dialogue" component={DialogueScreen} />
+					<Stack.Screen name="Exercise" component={PracticeScreen} />
+
 					<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					<Stack.Screen name="SignUp" component={SignUp} />
 				</Stack.Navigator>

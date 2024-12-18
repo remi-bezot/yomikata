@@ -8,7 +8,8 @@ import { StyleSheet, Text, View, Image } from "react-native";
 
 export default function Authentification() {
 	const [fontsLoaded] = useFonts({
-		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
 	});
 
 	if (!fontsLoaded) {

@@ -1,10 +1,11 @@
 const request = require("supertest");
 const app = require("./app");
 
-describe("DELETE /users/:token", () => {
-	it("should delete a user", async () => {
-		const token = "QSAc-ea3EGgOYy-nryBbXzLCVaBjes7B";
-		const response = await request(app).delete(`/users/${token}`).expect(200);
+describe("GET /word/random", () => {
+	it("should give you a random data about a japanese word", async () => {
+		const response = await request(app).get("/word/random").expect(200);
+
+		// Affiche les logs pour débogage
 		console.log(response.status, response.body);
 
 		// Vérifie que la réponse correspond à l'objet attendu

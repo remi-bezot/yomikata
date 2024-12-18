@@ -16,10 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 // authentification
-<<<<<<< HEAD
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-=======
->>>>>>> ahmed
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
@@ -28,8 +25,8 @@ import { BackendAdress } from "../utils/BackendAdress";
 export default function SignUp() {
 	const dispatch = useDispatch();
 
-  const EMAIL_REGEX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	const EMAIL_REGEX =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 	const navigation = useNavigation();
 	const [signInEmail, setSignInEmail] = useState("");
@@ -65,7 +62,7 @@ export default function SignUp() {
 						console.log("wrong password");
 					} else {
 						dispatch(login({ username: data.username, token: data.token }));
-						console.log(data.username)
+						console.log(data.username);
 						setSignInEmail("");
 						setSignInPassword("");
 						setSignInModalVisible(false);
@@ -78,7 +75,8 @@ export default function SignUp() {
 	// authentification modale
 
 	const [fontsLoaded] = useFonts({
-		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
 	});
 
 	if (!fontsLoaded) {
