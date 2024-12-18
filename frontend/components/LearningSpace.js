@@ -56,7 +56,6 @@ export default function LearningSpace() {
 
   const pickAvatar = async () => {
     try {
-      // Request permission to access the media library
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
@@ -67,15 +66,13 @@ export default function LearningSpace() {
         return;
       }
 
-      // Launch the image picker
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: "images", // Directly specify 'images' or 'videos'
+        mediaTypes: "images",
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
       });
 
-      // Check if the user canceled the image picking
       if (!result.canceled) {
         setAvatar(result.assets[0].uri);
       } else {

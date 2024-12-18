@@ -58,26 +58,19 @@ export default function Practice() {
     return options.sort(() => Math.random() - 0.5);
   };
 
-  // Fonction pour marquer l'exercice comme terminé
-  const handleCompletion = async () => {
-    try {
-      await fetch(`http://${uri}:3000/users/updatePractice`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token, practiceId: lessonId }),
-      });
-
-      // Délai avant la redirection
+  const handleCompletion = () => {
+    fetch(`http://${uri}:3000/users/updatePractice`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: user.token, practiceId: lessonId }),
+    }).then(() => {
       const delay = exercises.length * 3000;
       setTimeout(() => {
         navigation.navigate("TabNavigator", { screen: "dashboard" });
       }, delay);
-    } catch (error) {
-      console.error("Error updating practice:", error);
-    }
+    });
   };
 
-  // Gestion de la sélection d'une option
   const handleOptionSelect = (exerciseIndex, isCorrect) => {
     if (selectedAnswers[exerciseIndex] === undefined) {
       setSelectedAnswers((prevAnswers) => ({

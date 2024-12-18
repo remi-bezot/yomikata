@@ -191,9 +191,6 @@ export default function DashboardScreen() {
 			.then((data) => {
 				if (data.result) {
 					setLessons(data.data);
-					// console.log(data.data);
-				} else {
-					console.error("No data found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
@@ -207,9 +204,6 @@ export default function DashboardScreen() {
 				if (data) {
 					setWord(data.word);
 					setMeaning(data.word.meaning.slice(0, 10));
-					// console.log(data.word);
-				} else {
-					// console.error("No new word found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
@@ -305,7 +299,6 @@ export default function DashboardScreen() {
   </TouchableOpacity>
 ))}
 						  </View>
-						  
 						))}
 					</ScrollView>
 				</View>

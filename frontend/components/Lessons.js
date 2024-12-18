@@ -17,6 +17,7 @@ import * as Speech from "expo-speech";
 import { addFavorite } from "../reducers/favoritesreducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { customStyles } from "../utils/CustomStyle";
 
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
@@ -77,6 +78,16 @@ export default function Lessons(props) {
       themeIndex: props.lessonIndex,
     };
 
+    fetch(
+      `http://${uri}:3000/users/updateDialogue/${user.token}/${props.lessonId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(() => {});
+
     fetch(`http://${uri}:3000/users/progress/checkExercise`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,7 +96,6 @@ export default function Lessons(props) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result && data.isDone) {
-          // Afficher une alerte si l'exercice est déjà fait
           alert(
             "Vous avez déjà effectué cet exercice ! Redirection vers le tableau de bord."
           );
@@ -197,7 +207,7 @@ export default function Lessons(props) {
             </TouchableOpacity>
           </View>
         </View>
-
+        {/* 
         {currentLessonId && (
           <View>
             <TouchableOpacity
@@ -213,7 +223,7 @@ export default function Lessons(props) {
               <Text style={styles.buttonText}>Back to Lessons</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
         <View>
           {modalVisible && (
             <Modal
@@ -301,4 +311,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: { fontSize: 18, marginBottom: 10 },
+  button: {
+    backgroundColor: customStyles.buttonBackgroundColor,
+    borderRadius: customStyles.buttonRadius,
+    width: customStyles.buttonWidth,
+    height: customStyles.buttonHeight,
+    display: customStyles.buttonDisplay,
+    flexDirection: customStyles.buttonFlexDirection,
+    alignItems: customStyles.buttonAlignItems,
+    justifyContent: customStyles.buttonJustifyContent,
+    top: 20,
+  },
 });

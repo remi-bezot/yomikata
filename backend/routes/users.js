@@ -82,6 +82,22 @@ router.delete("/:token", (req, res) => {
   });
 });
 
+router.post("/updateDialogue/:token/:lesson_id", (req, res) => {
+  const { token, lesson_id } = req.params;
+
+  User.findOneAndUpdate(
+    { token },
+    { $addToSet: { "dialogue_progress.dialogues_done": lesson_id } },
+    { new: true }
+  ).then((updatedUser) => {
+    res.json({
+      result: true,
+      message: "Dialogue progress updated successfully",
+      updatedProgress: updatedUser.dialogue_progress,
+    });
+  });
+});
+
 router.post("/updatePractice", (req, res) => {
   const { token, practiceId } = req.body;
 
@@ -93,7 +109,7 @@ router.post("/updatePractice", (req, res) => {
 
   User.findOneAndUpdate(
     { token },
-    { $addToSet: { "practice_progress.practices_done": practiceId } }, // Évite les doublons
+    { $addToSet: { "practice_progress.practices_done": practiceId } },
     { new: true }
   )
     .then((updatedUser) => {
