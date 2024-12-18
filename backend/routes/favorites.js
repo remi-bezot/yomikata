@@ -41,7 +41,7 @@ router.post("/createFavorite/:token", (req, res) => {
 });
 
 router.delete("/deleteFavorite/:token", (req, res) => {
-	Favorite.deleteOne({ _id: req.body.id }).then(() => {
+	Favorite.findbyIdanddelete({ _id: req.body.id }).then(() => {
 		Favorite.find().then((data) => {
 			console.log(data);
 			res.json({ result: "word deleted", data: data });

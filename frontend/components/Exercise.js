@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import * as Speech from "expo-speech";
 import { BackendAdress } from "../utils/BackendAdress";
+import { useNavigation } from "@react-navigation/native";
 
 const LessonComponent = (props) => {
 	const [lessons, setLessons] = useState([]);
@@ -17,6 +18,7 @@ const LessonComponent = (props) => {
 	const [isGood, setIsGood] = useState(false);
 	const [isBad, setIsBad] = useState(false);
 
+	const navigation = useNavigation();
 	const uri = BackendAdress.uri;
 	const user = useSelector((state) => state.user.value);
 
@@ -28,10 +30,12 @@ const LessonComponent = (props) => {
 		});
 	};
 	const Validate = () => {
-		navigation.navigate("Dialogue", {
-			lessonId: lessonId,
-			themeIndex: themeIndex,
+		console.warn('holaaaaaa', props)
+		navigation.navigate("dashboard", {
+		  lessonId: props.id, // Utilisation des props pour passer des données
+		  themeIndex: props.index,
 		});
+		
 	};
 
 	useEffect(() => {

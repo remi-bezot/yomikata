@@ -27,9 +27,6 @@ export default function Dialogue(props) {
 		});
 	};
 
-	let token = "QrKuMTUO4rHBg2gkGW2acAzFbc3w9H7x";
-	let id = "675db08ec53a0c941602663a";
-
 	const uri = BackendAdress.uri;
 
 	// const handleGoLesson = (id) => {};

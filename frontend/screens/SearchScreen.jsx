@@ -39,6 +39,7 @@ export default function SearchScreen() {
       .then((response) => response.json())
       .then((data) => {
         setResults([data]);
+        
       })
       .catch((error) => console.error("Erreur de fetch :", error));
   };

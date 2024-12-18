@@ -17,40 +17,37 @@ import SearchScreen from "./screens/SearchScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 
-
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Correct pour React Native
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 import userReducer from "./reducers/users";
 import continuesReducer from "./reducers/continues";
 
-// Configuration de Persist
 const persistConfig = {
-  key: "Yomikata", // Clé de stockage
-  storage: AsyncStorage, // Méthode de stockage pour React Native
-  whitelist: ["continues"], // Reducers à persister
+  key: "Yomikata",
+  storage: AsyncStorage, 
+  whitelist: ["continues"], 
 };
 
-// Combinaison des reducers
+
 const rootReducer = combineReducers({
-  user: userReducer, // Non persisté
-  continues: continuesReducer, // Persisté
+  user: userReducer, // non persisté
+  continues: continuesReducer, // persisté
 });
 
-// Application de persistReducer
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configuration du store Redux
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
 });
 
-// Création du persistor
 export const persistor = persistStore(store);
 
 
@@ -64,23 +61,23 @@ const TabNavigator = () => {
 	screenOptions={{
 	  tabBarShowLabel: false, // Désactiver les labels
 	  tabBarStyle: {
-		backgroundColor: 'rgba(193, 46, 46, 1)', // Couleur semi-transparente
-		position: 'absolute', // Position flottante
-		borderTopWidth: 0, // Supprime la bordure
-		height:70, // Hauteur personnalisée
-		marginHorizontal: 15, // Espacement horizontal
-		marginBottom: 15, // Espacement en bas
-		borderRadius: 15, // Coins arrondis
-		shadowColor: '#000', // Ombre
+		backgroundColor: 'rgba(193, 46, 46, 1)', 
+		position: 'absolute', 
+		borderTopWidth: 0, 
+		height:70,
+		marginHorizontal: 15,
+		marginBottom: 15, 
+		borderRadius: 15, 
+		shadowColor: '#000', 
 		shadowOffset: { width: 0, height: 5 },
 		shadowOpacity: 0.1,
 		shadowRadius: 10,
 		paddingBottom: 0 ,
-		elevation: 5, // Ombre pour Android
 	  },
-	  tabBarActiveTintColor: "#fff", // Couleur active
-	  tabBarInactiveTintColor: "#b2b2b2", // Couleur inactive
-	  headerShown: false, // Supprimer l'en-tête
+
+	  tabBarActiveTintColor: "#fff", 
+	  tabBarInactiveTintColor: "#b2b2b2", 
+	  headerShown: false,
 	  tabBarLabelStyle :{
 		height :0,
 	  },
@@ -154,6 +151,7 @@ export default function App() {
                     <Stack.Screen name="Auth" component={AuthScreen} />
                     <Stack.Screen name="Dialogue" component={DialogueScreen} />
                     <Stack.Screen name="Exercise" component={PracticeScreen} />
+					<Stack.Screen name="dashboard" component={DashboardScreen} />
 
                     <Stack.Screen name="TabNavigator" component={TabNavigator} />
                    
