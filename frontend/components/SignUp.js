@@ -39,15 +39,16 @@ export default function SignUp() {
 	const [isSucceed, setIsSucceed] = useState(false);
 
 	const [fontsLoaded] = useFonts({
-		Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
 	});
 	if (!fontsLoaded) {
 		return null;
 	}
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-	console.log(uri)
-	
+	console.log(uri);
+
 	const checkForm = () => {
 		setErrorPassword(false);
 		if (EMAIL_REGEX.test(signUpEmail)) {
@@ -149,23 +150,23 @@ export default function SignUp() {
 								autoCorrect={false}
 							></TextInput>
 
-              {emailError && (
-                <Text style={styles.error}>Invalid email address</Text>
-              )}
-              {errorMessage && (
-                <Text style={styles.error}>Email already exists</Text>
-              )}
+							{emailError && (
+								<Text style={styles.error}>Invalid email address</Text>
+							)}
+							{errorMessage && (
+								<Text style={styles.error}>Email already exists</Text>
+							)}
 
-              <TextInput
-                style={styles.inputStyles}
-                onChangeText={(value) => setSignUpPassword(value)}
-                value={signUpPassword}
-                placeholder="password"
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                keyboardType="default"
-                autoCapitalize="none"
-              ></TextInput>
+							<TextInput
+								style={styles.inputStyles}
+								onChangeText={(value) => setSignUpPassword(value)}
+								value={signUpPassword}
+								placeholder="password"
+								placeholderTextColor="grey"
+								secureTextEntry={true}
+								keyboardType="default"
+								autoCapitalize="none"
+							></TextInput>
 
 							<TextInput
 								style={styles.inputStyles}

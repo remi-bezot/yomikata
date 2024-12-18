@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -17,31 +17,33 @@ import SearchScreen from "./screens/SearchScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 
+
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // Utilise localStorage pour le stockage
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Correct pour React Native
+
 import userReducer from "./reducers/users";
 import continuesReducer from "./reducers/continues";
 
 // Configuration de Persist
 const persistConfig = {
   key: "Yomikata", // Clé de stockage
-  storage,         // Méthode de stockage
-  whitelist: ["continues"], // Réducteurs à persister
+  storage: AsyncStorage, // Méthode de stockage pour React Native
+  whitelist: ["continues"], // Reducers à persister
 };
 
-// Combinaison des réducteurs
+// Combinaison des reducers
 const rootReducer = combineReducers({
-  user: userReducer,         // non Persisté
-  continues: continuesReducer, // persisté
+  user: userReducer, // Non persisté
+  continues: continuesReducer, // Persisté
 });
 
-// Application du persistReducer
+// Application de persistReducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configuration du store
+// Configuration du store Redux
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -148,9 +150,13 @@ export default function App() {
 			 <PersistGate loading={null} persistor={persistor}>
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="TabNavigator" component={TabNavigator} />
-					<Stack.Screen name="home" component={HomeScreen} />
-					<Stack.Screen name="Auth" component={AuthScreen} />
+				<Stack.Screen name="home" component={HomeScreen} />
+                    <Stack.Screen name="Auth" component={AuthScreen} />
+                    <Stack.Screen name="Dialogue" component={DialogueScreen} />
+                    <Stack.Screen name="Exercise" component={PracticeScreen} />
+
+                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                   
 				</Stack.Navigator>
 			</NavigationContainer>
 			</PersistGate>
