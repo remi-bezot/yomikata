@@ -213,7 +213,7 @@ const favoriteButtonStyle = isFavorite
             </TouchableOpacity>
           </View>
         </View>
-        {/* 
+        
         {currentLessonId && (
           <View>
             <TouchableOpacity
@@ -273,7 +273,7 @@ const favoriteButtonStyle = isFavorite
     )})}
 
 
-                  {/* <Button title="Close" onPress={() => setModalVisible(false)} /> */}
+                  {/* <Button title="Close" onPress={() => setModalVisible(false)} />
                 </View>
               </View>
             </Modal>
