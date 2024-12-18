@@ -18,20 +18,22 @@ import { addFavorite } from "../reducers/favoritesreducer";
 import { useDispatch, useSelector } from "react-redux";
 
 
+
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
-  const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const [modalVisible, setModalVisible] = useState(true);
-  const [selectedWord, setSelectedWord] = useState("");
+ 
+ 
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
-  const [favorites, setFavorites ]= useState ([])
 
+  const [modalVisible, setModalVisible] = useState(true);
+  const [favorites, setFavorites ]= useState ([])
+  const [isFavorite, setIsFavorite]= useState(false)
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-
   let token = user.token;
+
   const uri = BackendAdress.uri;
 
   useEffect(() => {
@@ -82,6 +84,7 @@ export default function Lessons(props) {
 
   
   const handleFavoriteButton = (data) => {
+    
 
     fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
       method: "POST",
@@ -94,18 +97,40 @@ export default function Lessons(props) {
         isbook: true,
       })
     })
-.then((response) => response.json())
-.then((data) => {
-  console.log(data, 'vers Favoris')
+      .then((response) => response.json())
+      .then((data) => {
+        
+        dispatch(addFavorite(data.data));
   })
 
-  fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data)
 
-		});
+  setIsFavorite(true)
 }
+
+
+
+const favoriteButtonStyle = isFavorite
+    ? {
+        backgroundColor: "#EEC1C0",
+        width: 30,
+        height: 30,
+        borderRadius: 30,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 5,
+      }
+    : {
+        backgroundColor: "#D56565",
+        width: 30,
+        height: 30,
+        borderRadius: 30,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 5,
+      };
+
 
   // ajout expo speech modal
   const speak = (text) => {
@@ -218,7 +243,7 @@ export default function Lessons(props) {
               <Text style={styles.speakerButton}>🔊</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.iconsStyle}
+              style={favoriteButtonStyle}
               onPress={() => handleFavoriteButton(favorite)}
             >
               <Text>❤️</Text>
@@ -299,6 +324,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		margin : 5, 
   },
+  
  
  
 });

@@ -7,13 +7,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from 'expo-speech'
 import { useFonts } from "expo-font";
-import { addFavorite } from "../reducers/favoritesreducer";
 import { useDispatch, useSelector } from "react-redux";
+import { setFavorites, deleteFavorite } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
+	const dispatch = useDispatch();
+  	const favorites = useSelector((state) => state.favorites.value);
+	console.log(favorites, 'hoo')
 
 	const token = user.token;
 	
@@ -37,16 +40,21 @@ export default function FavoriteScreen() {
 		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
-				setWords(data.result);	
-				console.log('haha')	
+			if (data.result){
+				dispatch(setFavorites(data.result[0]));
+			}				
 		});
-	}, [words]);
+	}, []);
+
+
+
 
 
 
 
 	const handleClick = (wordId) => {
-		fetch(`http://${uri}:3000/favorites/deleteFavorite/${token}`, {
+		
+		fetch(`http://${uri}:3000/favorites/deleteFavorite`, {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -56,7 +64,7 @@ export default function FavoriteScreen() {
 		.then((response) => response.json())
 		.then((data) => {
 				if(data.data){
-					setWords(words.filter((e) => e._id !== wordId))
+					dispatch(deleteFavorite(wordId))
 				}
 			})
 	}
@@ -80,9 +88,9 @@ const speak = (text) => {
 	
 
 
-const favoriteswords = words.length > 0 && words.map((data, i) => {
+const favoriteswords = favorites.length > 0 && favorites.map((data, i) => {
 	
-    
+    console.log(data,"d")
 	if(selectedCardId === data._id){
 		return (
 			<View style={styles.card} key={i}>
@@ -126,7 +134,7 @@ const favoriteswords = words.length > 0 && words.map((data, i) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.titlecontainer}>
-				<Text style={styles.title}> Favorites ({words.length})</Text>
+				<Text style={styles.title}> Favorites ({favorites.length})</Text>
 			</View>
 			<ScrollView>
 			<View style={styles.cardsList}>{favoriteswords}</View>

@@ -13,7 +13,6 @@ router.get("/showFavorites/:token", (req, res) => {
             console.log(data);
             
             Favorite.find({id_user: data._id})
-                .populate("id_user")
                 .then((data) => {
                     res.json({ result: data });
                 });
@@ -25,29 +24,34 @@ router.get("/showFavorites/:token", (req, res) => {
 router.post("/createFavorite/:token", (req, res) => {
 
 	User.findOne({ token: req.params.token }).then((data) => {
+console.log('rrr');
+
 		Favorite.findOne({id_user: data._id, Word_JP: req.body.wordjp })
 		.then ((element) => {
-			console.log(element)
+			console.log(element);
+			
+			if (element === null) {
+				const newFavorite = new Favorite({
+					Word_JP: req.body.wordjp,
+					Word_EN: req.body.worden,
+					Romanji: req.body.romanji,
+					Grammar: req.body.grammar,
+					isBook: req.body.isbook,
+					id_user: data._id,
+				});
+		
+				newFavorite.save().then((newDoc) => {
+					res.json({ result: true,status:true, data: newDoc });
+					console.log('hshshshsh')
+				})
+
+			} })
 		})
 		
-		const newFavorite = new Favorite({
-			Word_JP: req.body.wordjp,
-			Word_EN: req.body.worden,
-			Romanji: req.body.romanji,
-			Grammar: req.body.grammar,
-			isBook: req.body.isbook,
-			id_user: data._id,
-		});
-
-		newFavorite.save().then((newDoc) => {
-			console.log(newDoc);
-			res.json({ result: "word saved", data: newDoc });
-		});
-		// res.json({ result: data });
-	});
+		
 });
 
-router.delete("/deleteFavorite/:token", (req, res) => {
+router.delete("/deleteFavorite/", (req, res) => {
 	Favorite.deleteOne({ _id: req.body.id }).then(() => {
 		Favorite.find().then((data) => {
 			console.log(data);
