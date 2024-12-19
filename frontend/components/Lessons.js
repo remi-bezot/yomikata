@@ -23,7 +23,7 @@ export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
   const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -50,12 +50,9 @@ export default function Lessons(props) {
       .catch((error) => console.error("Error fetching lesson:", error));
   }, [props.lessonId, props.lessonIndex]);
 
+  //BOUTON POUR AFFICHER LA MODALE POUR FAVORIS
   const handleLongPressWord = (word) => {
-    fetch(`http://${uri}:3000/word/getWord`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ word }),
-    })
+    fetch(`http://${uri}:3000/word/getWord/${token}/${word}`)
       .then((response) => response.json())
       .then((data) => {
         setFavorites([data]);

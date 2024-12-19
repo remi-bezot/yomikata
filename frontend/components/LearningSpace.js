@@ -275,7 +275,7 @@ export default function LearningSpace() {
 
           <Text style={styles.label}>Avatar</Text>
           <TouchableOpacity style={styles.avatarButton} onPress={pickAvatar}>
-            <Text style={styles.radioText}>Upload Avatar</Text>
+            <Text style={styles.radioTextAvatar}>Upload Avatar</Text>
           </TouchableOpacity>
           {avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
 
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
   radioButton: {
     padding: 10,
     borderRadius: 8,
-    backgroundColor: "#EEE",
+    backgroundColor: "grey",
     width: width * 0.25,
     alignItems: "center",
   },
@@ -436,10 +436,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   avatarButton: {
-    backgroundColor: "grey",
+    backgroundColor: "#grey",
     padding: 10,
     alignItems: "center",
     marginBottom: 10,
+    borderWidth: 2,
+    borderColor: "white",
+    borderStyle: "dotted",
+  },
+  radioTextAvatar: {
+    color: "white",
   },
   avatar: {
     width: 100,
