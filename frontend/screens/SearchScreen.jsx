@@ -29,9 +29,9 @@ export default function SearchScreen() {
 	});
 };
 
-  // Fonction pour lancer la recherche
+  
   const handleSearch = () => {
-    if (word.trim() === "") return; // Empêcher une recherche vide
+    if (word.trim() === "") return; 
 
 	const wordMinuscule = word.trim().toLowerCase()
 
@@ -60,10 +60,9 @@ export default function SearchScreen() {
           placeholderTextColor="black"
 		  placeholderSize='1'
           value={word}
-          onChangeText={(text) => setWord(text)} // Mettre à jour query uniquement
+          onChangeText={(text) => setWord(text)} 
         />
 
-        {/* Bouton pour lancer la recherche */}
        
       </View>
 	  <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>

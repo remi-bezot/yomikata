@@ -13,35 +13,44 @@ router.get("/showFavorites/:token", (req, res) => {
             console.log(data);
             
             Favorite.find({id_user: data._id})
-                .populate("id_user")
                 .then((data) => {
                     res.json({ result: data });
                 });
         }
     });
+
 });
 
 router.post("/createFavorite/:token", (req, res) => {
-	User.findOne({ token: req.params.token }).then((data) => {
-		const newFavorite = new Favorite({
-			Word_JP: req.body.wordjp,
-			Word_EN: req.body.worden,
-			Romanji: req.body.romanji,
-			Grammar: req.body.grammar,
-			isBook: req.body.isbook,
-			id_user: data._id,
-		});
 
-		newFavorite.save().then((newDoc) => {
-			console.log(newDoc);
-			res.json({ result: "word saved", data: newDoc });
-		});
-		// res.json({ result: data });
-	});
+	User.findOne({ token: req.params.token }).then((data) => {
+		
+		Favorite.findOne({id_user: data._id, Word_JP: req.body.wordjp })
+		.then ((element) => {
+			console.log(element);
+			
+			if (element === null) {
+				const newFavorite = new Favorite({
+					Word_JP: req.body.wordjp,
+					Word_EN: req.body.worden,
+					Romanji: req.body.romanji,
+					Grammar: req.body.grammar,
+					isBook: req.body.isbook,
+					id_user: data._id,
+				});
+		
+				newFavorite.save().then((newDoc) => {
+					res.json({ result: true,status:true, data: newDoc });
+				})
+
+			} })
+		})
+		
+		
 });
 
-router.delete("/deleteFavorite/:token", (req, res) => {
-	Favorite.findbyIdanddelete({ _id: req.body.id }).then(() => {
+router.delete("/deleteFavorite/", (req, res) => {
+	Favorite.deleteOne({ _id: req.body.id }).then(() => {
 		Favorite.find().then((data) => {
 			console.log(data);
 			res.json({ result: "word deleted", data: data });

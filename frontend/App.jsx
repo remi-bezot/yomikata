@@ -3,7 +3,6 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, StyleSheet } from "react-native"; // Pour utiliser les styles de layout
 
 import HomeScreen from "./screens/HomeScreen";
 import AuthScreen from "./screens/AuthScreen";
@@ -84,7 +83,6 @@ const TabNavigator = () => {
 	 
 	}}
   >
-
 <Tab.Screen
 	  name="dashboard"
 	  component={DashboardScreen}
@@ -97,7 +95,6 @@ const TabNavigator = () => {
 		},
 	  }}
 	/>
-
 	<Tab.Screen
 	  name="favorite"
 	  component={FavoriteScreen}
@@ -110,7 +107,6 @@ const TabNavigator = () => {
 		},
 	  }}
 	/>
-	
 	<Tab.Screen
 	  name="Search"
 	  component={SearchScreen}
@@ -136,9 +132,7 @@ const TabNavigator = () => {
 	  }}
 	/>
   </Tab.Navigator>
-
-
-	);
+);
 };
 
 export default function App() {
@@ -152,7 +146,6 @@ export default function App() {
                     <Stack.Screen name="Dialogue" component={DialogueScreen} />
                     <Stack.Screen name="Exercise" component={PracticeScreen} />
 					<Stack.Screen name="dashboard" component={DashboardScreen} />
-
                     <Stack.Screen name="TabNavigator" component={TabNavigator} />
                    
 				</Stack.Navigator>

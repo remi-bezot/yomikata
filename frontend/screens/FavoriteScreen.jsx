@@ -1,23 +1,25 @@
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BackendAdress } from "../utils/BackendAdress";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { customStyles } from "../utils/CustomStyle";
 import * as Speech from 'expo-speech'
 import { useFonts } from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { setFavorites, deleteFavorite } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 
 
 export default function FavoriteScreen() {
+
 	const user = useSelector((state) => state.user.value);
+	const dispatch = useDispatch();
+  	const favorites = useSelector((state) => state.favorites.value);
 	const token = user.token;
-	
 	const [selectedCardId, setSelectedCardId] = useState(null)
 	const [words, setWords] = useState([]);
-	// const [displayCard, setDisplayCard]= useState(false)
+	
 	
 
 	const [fontsLoaded] = useFonts({
@@ -26,23 +28,20 @@ export default function FavoriteScreen() {
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf")
 	});
 
-
 		// Récupération des favoris lors de la connexion
 	useEffect(() => {
-
-		fetch(`http://${uri}:3000/showFavorites/${token}`)
+		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
-			if(data.result){
-				setWords(data.result);
-			}
-
+			if (data.result){
+				dispatch(setFavorites(data.result[0]));
+			}				
 		});
 	}, []);
 
-
 	const handleClick = (wordId) => {
-		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
+		
+		fetch(`http://${uri}:3000/favorites/deleteFavorite`, {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -52,7 +51,7 @@ export default function FavoriteScreen() {
 		.then((response) => response.json())
 		.then((data) => {
 				if(data.data){
-					setWords(words.filter((e) => e._id !== wordId))
+					dispatch(deleteFavorite(wordId))
 				}
 			})
 	}
@@ -62,7 +61,6 @@ const handleCard = (wordId) => {
 };
 
 
-	
 const speak = (text) => {
 	Speech.speak(text, {
 		language: 'ja', 
@@ -72,13 +70,9 @@ const speak = (text) => {
 }
 
 
-
+const favoriteswords = favorites.length > 0 && favorites.map((data, i) => {
 	
-
-
-const favoriteswords = words.length > 0 && words.map((data, i) => {
-	console.log(data.Word_JP)
-    
+    console.log(data,"d")
 	if(selectedCardId === data._id){
 		return (
 			<View style={styles.card} key={i}>
@@ -122,7 +116,7 @@ const favoriteswords = words.length > 0 && words.map((data, i) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.titlecontainer}>
-				<Text style={styles.title}> Favorites ({words.length})</Text>
+				<Text style={styles.title}> Favorites ({favorites.length})</Text>
 			</View>
 			<ScrollView>
 			<View style={styles.cardsList}>{favoriteswords}</View>
@@ -157,7 +151,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: 100,
+		width: 200,
 		height: 200,
 		margin: 10,
 		borderRadius: 25,
@@ -183,6 +177,7 @@ const styles = StyleSheet.create({
 	},
 	word: {
 		margin: 5,
+		fontSize: 15,
 		
 	},
 	wordjp: {

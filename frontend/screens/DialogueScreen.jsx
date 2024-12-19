@@ -6,6 +6,7 @@ export default function DialogueScreen(props) {
 	const id = props.route.params.lessonId;
 	const index = props.route.params.themeIndex;
 
+	
 	return (
 		<KeyboardAvoidingView style={styles.container} behavior="padding">
 			<View style={styles.header}>

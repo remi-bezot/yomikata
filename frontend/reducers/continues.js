@@ -15,5 +15,5 @@ export const continueSlice = createSlice({
 	},
 });
 
-export const { getContinue} = continueSlice.actions;
+export const {getContinue} = continueSlice.actions;
 export default continueSlice.reducer;
