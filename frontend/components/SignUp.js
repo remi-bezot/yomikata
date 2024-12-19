@@ -1,5 +1,4 @@
 import {
-<<<<<<< HEAD
 	KeyboardAvoidingView,
 	Text,
 	TextInput,
@@ -8,16 +7,6 @@ import {
 	View,
 	Modal,
 	Image,
-=======
-  KeyboardAvoidingView,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Modal,
-  Image,
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -32,13 +21,8 @@ import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
 export default function SignUp() {
-<<<<<<< HEAD
 	const EMAIL_REGEX =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-=======
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
 
   const navigation = useNavigation();
 
@@ -52,7 +36,6 @@ export default function SignUp() {
   const [errorPassword, setErrorPassword] = useState(false);
   const [signUpModalVisible, setSignUpModalVisible] = useState(false);
 
-<<<<<<< HEAD
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
@@ -114,68 +97,6 @@ export default function SignUp() {
 		setSignUpModalVisible(!signUpModalVisible);
 		dispatch(showModal(!signUpModalVisible));
 	};
-=======
-  const [fontsLoaded] = useFonts({
-    Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  console.log(uri);
-
-  const checkForm = () => {
-    setErrorPassword(false);
-    if (EMAIL_REGEX.test(signUpEmail)) {
-      setEmailError(false);
-      if (
-        signUpPassword !== signUpConfirmPassword ||
-        !signUpPassword ||
-        !signUpConfirmPassword
-      ) {
-        setErrorPassword(true);
-      } else {
-        setErrorPassword(false);
-        fetch(`http://${uri}:3000/users/signup`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: signUpName,
-            username: signUpUsername,
-            email: signUpEmail,
-            password: signUpPassword,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.result === true) {
-              dispatch(login({ username: signUpUsername, token: data.token }));
-              setSignUpUsername("");
-              setSignUpPassword("");
-              setSignUpConfirmPassword("");
-              setsignUpName("");
-              setsignUpEmail("");
-              setSignUpModalVisible(false);
-              setIsSucceed(true);
-              navigation.navigate("TabNavigator", { screen: "dashboard" });
-            }
-            if (data.error) {
-              setEmailError(false);
-              setErrorMessage(true);
-            }
-          });
-      }
-    } else {
-      setEmailError(true);
-    }
-  };
-
-  const showSignUpModal = () => {
-    setSignUpModalVisible(!signUpModalVisible);
-    dispatch(showModal(!signUpModalVisible));
-  };
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
 
   return (
     <View>

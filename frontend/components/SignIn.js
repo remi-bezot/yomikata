@@ -14,11 +14,6 @@ import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
-<<<<<<< HEAD
-// authentification
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-=======
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
@@ -27,13 +22,10 @@ import { BackendAdress } from "../utils/BackendAdress";
 export default function SignUp() {
   const dispatch = useDispatch();
 
-<<<<<<< HEAD
-	const EMAIL_REGEX =
-		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-=======
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
+  
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  
 
   const navigation = useNavigation();
   const [signInEmail, setSignInEmail] = useState("");
@@ -79,25 +71,9 @@ export default function SignUp() {
     return null;
   }
 
-<<<<<<< HEAD
-						setIsValid(false);
-						console.log("wrong password");
-					} else {
-						dispatch(login({ username: data.username, token: data.token }));
-						console.log(data.username);
-						setSignInEmail("");
-						setSignInPassword("");
-						setSignInModalVisible(false);
-						navigation.navigate("TabNavigator", { screen: "dashboard" });
-					}
-				});
-		}
-	};
-=======
   const showSignInModal = () => {
     setSignInModalVisible(!signInModalVisible);
   };
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
 
   return (
     <View>
@@ -117,60 +93,53 @@ export default function SignUp() {
               />
             </View>
 
-<<<<<<< HEAD
-	const [fontsLoaded] = useFonts({
-		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
-		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
-	});
-=======
-            <KeyboardAvoidingView style={styles.container}>
-              <Text style={styles.headerText}>Access your account</Text>
-              {formError && <Text style={styles.error}>Invalid Form</Text>}
-              <TextInput
-                style={styles.inputStyles}
-                onChangeText={(value) => {
-                  setSignInEmail(value);
-                  if (EMAIL_REGEX.test(value)) {
-                    setEmailError(false);
-                  }
-                }}
-                value={signInEmail}
-                placeholder="email"
-                placeholderTextColor="grey"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                autoCorrect={false}
-              />
-              {emailError && (
-                <Text style={styles.error}>Invalid email address</Text>
-              )}
-              <TextInput
-                style={[styles.inputStyles, !isValid && { borderColor: "red" }]}
-                onChangeText={(value) => setSignInPassword(value)}
-                value={signInPassword}
-                placeholder="password"
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                keyboardType="default"
-                autoCapitalize="none"
-              />
-              {!isValid && <Text style={{ color: "red" }}>Wrong password</Text>}
-              <TouchableOpacity style={styles.button} onPress={checkForm}>
-                <Text>Sign in</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-          </View>
-        </View>
-      </Modal>
->>>>>>> 69503ca8cb178249cd2b13e5052d777f97e7fa7e
-
-      <TouchableOpacity
-        onPress={() => showSignInModal(true)}
-        style={styles.login}
-      >
-        <Text style={styles.buttonTitle}>Already have an account ?</Text>
-      </TouchableOpacity>
+        <KeyboardAvoidingView style={styles.container}>
+          <Text style={styles.headerText}>Access your account</Text>
+          {formError && <Text style={styles.error}>Invalid Form</Text>}
+          <TextInput
+            style={styles.inputStyles}
+            onChangeText={(value) => {
+              setSignInEmail(value);
+              if (EMAIL_REGEX.test(value)) {
+                setEmailError(false);
+              }
+            }}
+            value={signInEmail}
+            placeholder="email"
+            placeholderTextColor="grey"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoCorrect={false}
+          />
+          {emailError && (
+            <Text style={styles.error}>Invalid email address</Text>
+          )}
+          <TextInput
+            style={[styles.inputStyles, !isValid && { borderColor: "red" }]}
+            onChangeText={(value) => setSignInPassword(value)}
+            value={signInPassword}
+            placeholder="password"
+            placeholderTextColor="grey"
+            secureTextEntry={true}
+            keyboardType="default"
+            autoCapitalize="none"
+          />
+          {!isValid && <Text style={{ color: "red" }}>Wrong password</Text>}
+          <TouchableOpacity style={styles.button} onPress={checkForm}>
+            <Text>Sign in</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </View>
     </View>
+  </Modal>
+
+  <TouchableOpacity
+    onPress={() => showSignInModal(true)}
+    style={styles.login}
+  >
+    <Text style={styles.buttonTitle}>Already have an account ?</Text>
+  </TouchableOpacity>
+</View>
   );
 }
 

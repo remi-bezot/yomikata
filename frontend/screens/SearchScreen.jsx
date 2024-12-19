@@ -17,7 +17,6 @@ const uri = BackendAdress.uri;
 
 export default function SearchScreen() {
 
-// const user = useSelector((state) => state.user.value);
   const [word, setWord] = useState("");
   const [results, setResults] = useState([]);
 
@@ -43,10 +42,6 @@ export default function SearchScreen() {
       })
       .catch((error) => console.error("Erreur de fetch :", error));
   };
-
-  console.log(results, 'here')
-
-
 
   return (
     <View style={styles.container}>
