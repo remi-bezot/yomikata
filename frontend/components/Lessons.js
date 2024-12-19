@@ -19,22 +19,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { customStyles } from "../utils/CustomStyle";
 
-
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
+  const [allThemes, setAllThemes] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
- 
- 
+  const [modalVisible, setModalVisible] = useState(true);
+  const [selectedWord, setSelectedWord] = useState("");
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const navigation = useNavigation();
 
-  const [modalVisible, setModalVisible] = useState(true);
-  const [favorites, setFavorites ]= useState ([])
-  const [isFavorite, setIsFavorite]= useState(false)
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  let token = user.token;
 
+  let token = user.token;
   const uri = BackendAdress.uri;
 
   useEffect(() => {
@@ -53,27 +52,16 @@ export default function Lessons(props) {
   }, [props.lessonId, props.lessonIndex]);
 
   const handleLongPressWord = (word) => {
-   
-    fetch(`http://${uri}:3000/word/getWord`, 
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          word:word
-        })
-      })
+    fetch(`http://10.10.200.42:3000/word/getWord`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        word: word,
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data, 'omom');
-        setFavorites([data])
-        setModalVisible(true)
-      }
-      
-      )
-        
-      // setWordApi([...wordApi, word]);
-	  
-      
+        console.log(data, "omom");
 
         setFavorites([data]);
 
@@ -83,10 +71,45 @@ export default function Lessons(props) {
     // setWordApi([...wordApi, word]);
   };
 
-  
-  const handleFavoriteButton = (data) => {
-    
+  const handleGoToExercise = () => {
+    const body = {
+      token: user.token,
+      lessonId: props.lessonId,
+      themeIndex: props.lessonIndex,
+    };
 
+    fetch(
+      `http://${uri}:3000/users/updateDialogue/${user.token}/${props.lessonId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(() => {});
+
+    fetch(`http://${uri}:3000/users/progress/checkExercise`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result && data.isDone) {
+          alert(
+            "Vous avez déjà effectué cet exercice ! Redirection vers le tableau de bord."
+          );
+          navigation.navigate("TabNavigator", { screen: "dashboard" });
+        } else {
+          navigation.navigate("Practice", {
+            lessonId: props.lessonId,
+            lessonIndex: props.lessonIndex,
+          });
+        }
+      });
+  };
+
+  const handleFavoriteButton = (data) => {
     fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,38 +123,9 @@ export default function Lessons(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        
-        dispatch(addFavorite(data.data));
-  })
-
-
-  setIsFavorite(true)
-}
-
-
-
-const favoriteButtonStyle = isFavorite
-    ? {
-        backgroundColor: "#EEC1C0",
-        width: 30,
-        height: 30,
-        borderRadius: 30,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 5,
-      }
-    : {
-        backgroundColor: "#D56565",
-        width: 30,
-        height: 30,
-        borderRadius: 30,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 5,
-      };
-
+        console.log(data, "vers Favoris");
+      });
+  };
 
   // ajout expo speech modal
   const speak = (text) => {
@@ -213,65 +207,39 @@ const favoriteButtonStyle = isFavorite
             </TouchableOpacity>
           </View>
         </View>
-        {/* 
-        {currentLessonId && (
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => console.log("Redirect to Exercises:", exercises)}
+        <View>
+          {modalVisible && (
+            <Modal
+              visible={modalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={() => setModalVisible(false)}
             >
-              <Text style={styles.buttonText}>Go to Exercises</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setCurrentLessonId(null)}
-            >
-              <Text style={styles.buttonText}>Back to Lessons</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-		<View>
-
-      
-    {favorites.map((favorite, index) => {
-      return(
-  <Modal
-    key={index}
-    visible={modalVisible}
-    transparent={true}
-    animationType="slide"
-    onRequestClose={() => setModalVisible(false)}
-  >
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-          <View  style={{ marginBottom: 10 }}>
-            <Text style={styles.modalText}>Selected word: {favorite.wanikaniLow.Kanji}</Text>
-            <Text>Meaning: {favorite.wanikaniLow.English[0]}</Text>
-            <Text>Romanji: {favorite.romaji }</Text>
-            <Text>Grammar: {favorite.wanikaniLow.Grammar[0]}</Text>
-
-            <View style={styles.icons}> 
-              <TouchableOpacity onPress={() => speak(favorite.romaji)}>
-              <Text style={styles.speakerButton}>🔊</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={favoriteButtonStyle}
-              onPress={() => handleFavoriteButton(favorite)}
-            >
-              <Text>❤️</Text>
-            </TouchableOpacity>
-            <Button style={styles.closeButton} title="Close" onPress={() => setModalVisible(false)} />
-            </View>
-           
-          </View>
-      
-      
-        
-      </View>
-    </View>
-  </Modal>
-    )})}
-
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  {favorites.map((favorite, index) => {
+                    return (
+                      <View key={index} style={{ marginBottom: 10 }}>
+                        <Text style={styles.modalText}>
+                          Selected word: {favorite.wanikaniLow.Kanji}
+                        </Text>
+                        <Text>Meaning: {favorite.wanikaniLow.English[0]}</Text>
+                        <Text>Romanji: {favorite.romaji}</Text>
+                        <Text>Grammar: {favorite.wanikaniLow.Grammar[0]}</Text>
+                        <TouchableOpacity
+                          onPress={() => speak(favorite.romaji)}
+                        >
+                          <Text style={styles.speaker}>🔊</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.speakerbutton}
+                          onPress={() => handleFavoriteButton(favorite)}
+                        >
+                          <Text>❤️</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
 
                   {/* <Button title="Close" onPress={() => setModalVisible(false)} /> */}
                 </View>
@@ -326,24 +294,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: { fontSize: 18, marginBottom: 10 },
-  icons: {
-    width: '100%', 
-    flexDirection:'row',
-    justifyContent: 'space-around',
-    alignItems:'center'
+  button: {
+    backgroundColor: customStyles.buttonBackgroundColor,
+    borderRadius: customStyles.buttonRadius,
+    width: customStyles.buttonWidth,
+    height: customStyles.buttonHeight,
+    display: customStyles.buttonDisplay,
+    flexDirection: customStyles.buttonFlexDirection,
+    alignItems: customStyles.buttonAlignItems,
+    justifyContent: customStyles.buttonJustifyContent,
+    top: 20,
   },
-  iconsStyle:{
-    backgroundColor:'#D56565',
-		width: 30, 
-		height: 30,
-		borderRadius: 30, 
-    display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		margin : 5, 
-  },
-  
- 
- 
 });
