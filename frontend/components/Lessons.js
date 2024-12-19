@@ -16,21 +16,15 @@ import { BackendAdress } from "../utils/BackendAdress";
 import * as Speech from "expo-speech";
 import { addFavorite } from "../reducers/favoritesreducer";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { customStyles } from "../utils/CustomStyle";
-
 
 export default function Lessons(props) {
   const [lessonData, setLessonData] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
- 
- 
   const [speakerColors, setSpeakerColors] = useState({});
   const [exercises, setExercises] = useState([]);
-
-  const [modalVisible, setModalVisible] = useState(true);
-  const [favorites, setFavorites ]= useState ([])
-  const [isFavorite, setIsFavorite]= useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [favorites, setFavorites] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   let token = user.token;
@@ -53,40 +47,19 @@ export default function Lessons(props) {
   }, [props.lessonId, props.lessonIndex]);
 
   const handleLongPressWord = (word) => {
-   
-    fetch(`http://${uri}:3000/word/getWord`, 
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          word:word
-        })
-      })
+    fetch(`http://${uri}:3000/word/getWord`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word }),
+    })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data, 'omom');
-        setFavorites([data])
-        setModalVisible(true)
-      }
-      
-      )
-        
-      // setWordApi([...wordApi, word]);
-	  
-      
-
         setFavorites([data]);
-
         setModalVisible(true);
       });
-
-    // setWordApi([...wordApi, word]);
   };
 
-  
   const handleFavoriteButton = (data) => {
-    
-
     fetch(`http://${uri}:3000/favorites/createFavorite/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,17 +73,20 @@ export default function Lessons(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        
         dispatch(addFavorite(data.data));
-  })
+        setIsFavorite(true);
+      });
+  };
 
+  const speak = (text) => {
+    Speech.speak(text, {
+      language: "ja",
+      pitch: 1,
+      rate: 0.5,
+    });
+  };
 
-  setIsFavorite(true)
-}
-
-
-
-const favoriteButtonStyle = isFavorite
+  const favoriteButtonStyle = isFavorite
     ? {
         backgroundColor: "#EEC1C0",
         width: 30,
@@ -132,16 +108,6 @@ const favoriteButtonStyle = isFavorite
         margin: 5,
       };
 
-
-  // ajout expo speech modal
-  const speak = (text) => {
-    Speech.speak(text, {
-      language: "ja",
-      pitch: 1,
-      rate: 0.5,
-    });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container}>
@@ -152,10 +118,8 @@ const favoriteButtonStyle = isFavorite
             renderItem={({ item, index }) => {
               const alignment = index % 2 === 0 ? "row" : "row-reverse";
               return (
-                <View key={index} style={[styles.dialogue]}>
-                  <View
-                    style={[styles.dialogue1, { flexDirection: alignment }]}
-                  >
+                <View key={index} style={styles.dialogue}>
+                  <View style={[styles.dialogue1, { flexDirection: alignment }]}>
                     <Icon
                       name="user"
                       size={24}
@@ -204,81 +168,45 @@ const favoriteButtonStyle = isFavorite
               </Text>
             }
           />
-          <View style={{ alignItems: "center", marginVertical: 20 }}>
-            <TouchableOpacity
-              style={styles.button} // Réutilisation du style
-              onPress={handleGoToExercise} // Fonction déjà définie
-            >
-              <Text style={styles.buttonText}>Go to Exercises</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-        {/* 
-        {currentLessonId && (
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => console.log("Redirect to Exercises:", exercises)}
-            >
-              <Text style={styles.buttonText}>Go to Exercises</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setCurrentLessonId(null)}
-            >
-              <Text style={styles.buttonText}>Back to Lessons</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-		<View>
 
-      
-    {favorites.map((favorite, index) => {
-      return(
-  <Modal
-    key={index}
-    visible={modalVisible}
-    transparent={true}
-    animationType="slide"
-    onRequestClose={() => setModalVisible(false)}
-  >
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-          <View  style={{ marginBottom: 10 }}>
-            <Text style={styles.modalText}>Selected word: {favorite.wanikaniLow.Kanji}</Text>
-            <Text>Meaning: {favorite.wanikaniLow.English[0]}</Text>
-            <Text>Romanji: {favorite.romaji }</Text>
-            <Text>Grammar: {favorite.wanikaniLow.Grammar[0]}</Text>
-
-            <View style={styles.icons}> 
-              <TouchableOpacity onPress={() => speak(favorite.romaji)}>
-              <Text style={styles.speakerButton}>🔊</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={favoriteButtonStyle}
-              onPress={() => handleFavoriteButton(favorite)}
-            >
-              <Text>❤️</Text>
-            </TouchableOpacity>
-            <Button style={styles.closeButton} title="Close" onPress={() => setModalVisible(false)} />
-            </View>
-           
-          </View>
-      
-      
-        
-      </View>
-    </View>
-  </Modal>
-    )})}
-
-
-                  {/* <Button title="Close" onPress={() => setModalVisible(false)} /> */}
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {favorites.map((favorite, index) => (
+                <View key={index} style={{ marginBottom: 10 }}>
+                  <Text style={styles.modalText}>
+                    Selected word: {favorite?.wanikaniLow?.Kanji}
+                  </Text>
+                  <Text>Meaning: {favorite?.wanikaniLow?.English[0]}</Text>
+                  <Text>Romanji: {favorite?.romaji}</Text>
+                  <Text>Grammar: {favorite?.wanikaniLow?.Grammar[0]}</Text>
+                  <View style={styles.icons}>
+                    <TouchableOpacity onPress={() => speak(favorite.romaji)}>
+                      <Text style={styles.speakerButton}>🔊</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={favoriteButtonStyle}
+                      onPress={() => handleFavoriteButton(favorite)}
+                    >
+                      <Text>❤️</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            </Modal>
-          )}
-        </View>
+              ))}
+              <Button
+                style={styles.closeButton}
+                title="Close"
+                onPress={() => setModalVisible(false)}
+              />
+            </View>
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -309,9 +237,7 @@ const styles = StyleSheet.create({
   icon: { marginHorizontal: 10 },
   wordsContainer: { flexDirection: "row", flexWrap: "wrap" },
   word: { fontSize: 16, marginHorizontal: 5 },
-  romaji: {
-    flexDirection: "column",
-  },
+  romaji: { flexDirection: "column" },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -327,23 +253,9 @@ const styles = StyleSheet.create({
   },
   modalText: { fontSize: 18, marginBottom: 10 },
   icons: {
-    width: '100%', 
-    flexDirection:'row',
-    justifyContent: 'space-around',
-    alignItems:'center'
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
-  iconsStyle:{
-    backgroundColor:'#D56565',
-		width: 30, 
-		height: 30,
-		borderRadius: 30, 
-    display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		margin : 5, 
-  },
-  
- 
- 
 });
