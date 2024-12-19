@@ -27,7 +27,6 @@ export default function FavoriteScreen() {
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
-		Playfair: require("../assets/fonts/PlayfairDisplay-Regular.ttf"),
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf")
 	});
 
@@ -40,8 +39,8 @@ export default function FavoriteScreen() {
 		fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
 		.then((response) => response.json())
 		.then((data) => {
-			if (data.result){
-				dispatch(setFavorites(data.result[0]));
+			if (data.data){
+				dispatch(setFavorites(data.data[0]));
 			}				
 		});
 	}, []);
@@ -88,17 +87,17 @@ const speak = (text) => {
 	
 
 
-const favoriteswords = favorites.length > 0 && favorites.map((data, i) => {
+const favoriteswords = favorites !== 'undefined' && favorites.length > 0  && favorites.map((data, i) => {
 	
     console.log(data,"d")
 	if(selectedCardId === data._id){
 		return (
 			<View style={styles.card} key={i}>
-				<View>
+				<TouchableOpacity style={styles.icon}  onPress={() => handleClick(data._id)}>
 					<View style={styles.deleteIcon}>
-						<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id)} />
+						<FontAwesome name="close" size={15} color="#000000" />
 					</View>
-				</View>
+				</TouchableOpacity>
 				<Text style={styles.wordjp} onPress={() => handleCard(data._id)}>{data.Word_JP}</Text>
 						<View style={styles.traduction}>
 						<Text style={styles.word}>{data.Word_EN}</Text>
@@ -117,12 +116,12 @@ const favoriteswords = favorites.length > 0 && favorites.map((data, i) => {
 		
 	} else {
 		return (
-			<View style={styles.cardOpen} key={i}>
-				<View>
+			<View style={styles.cardClose} key={i}>
+				<TouchableOpacity style={styles.icon}  onPress={() => handleClick(data._id)}>
 					<View style={styles.deleteIcon}>
-						<FontAwesome name="close" size={15} color="#000000" onPress={() => handleClick(data._id)} />
+						<FontAwesome name="close" size={15} color="#000000"  />
 					</View>
-				</View>
+				</TouchableOpacity>
 				<Text style={styles.wordjp} onPress={() => handleCard(data._id)}>{data.Word_JP}</Text>
 			</View>)
 
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
 		borderRadius: 25,
 		backgroundColor: "#EEC1C0",
 	},
-	cardOpen:{
+	cardClose:{
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
@@ -208,7 +207,8 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "flex-end",
-		width: "80%",
+		
+		
 	},
 	speakerbutton: {
 		backgroundColor:'#D56565',
@@ -226,6 +226,10 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	icon: {
+		padding: 5, 
+		borderRadius:'50%', 
 	}
 });
 
