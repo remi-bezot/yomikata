@@ -32,11 +32,9 @@ export default function Dialogue(props) {
 
 	//BOUTON POUR AFFICHER LA MODALE POUR FAVORIS
 	const handleLongPressWord = (word) => {
-		fetch(`http://${uri}:3000/word/getWord/${token}/${word}`)
+		fetch(`http://${uri}:3000/word/getWord/${word}`)
 			.then((response) => response.json())
 			.then((data) => {
-				console.log("test");
-
 				setFavorites([data]);
 				setModalVisible(true);
 			});
@@ -85,7 +83,7 @@ export default function Dialogue(props) {
 	// const handleGoLesson = (id) => {};
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons/`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {

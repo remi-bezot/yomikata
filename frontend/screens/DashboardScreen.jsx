@@ -214,7 +214,7 @@ export default function DashboardScreen() {
 	}, [dispatch]); // Le tableau de dépendances s'assure que ça se fait seulement une fois au montage du composant
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
@@ -225,25 +225,25 @@ export default function DashboardScreen() {
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, [uri, user.token]);
+	}, [uri]);
 
-	useFocusEffect(
-		React.useCallback(() => {
-			setLoading(true);
-			fetch(`http://${uri}:3000/lessons/showOne/${lessonId}/${user.token}/`)
-				.then((res) => res.json())
-				.then((data) => {
-					if (data) {
-						console.warn(data, "holaaaaaaaaa");
-						setDone([data]);
-					} else {
-						console.error("No new word found.");
-					}
-				})
-				.catch((error) => console.error("Erreur with lessons :", error))
-				.finally(() => setLoading(false));
-		}, [uri, lessonId, user.token]) // Ajoute ici les dépendances
-	);
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		setLoading(true);
+	// 		fetch(`http://${uri}:3000/lessons/showOne/${lessonId}/`)
+	// 			.then((res) => res.json())
+	// 			.then((data) => {
+	// 				if (data) {
+	// 					console.warn(data, "holaaaaaaaaa");
+	// 					setDone([data]);
+	// 				} else {
+	// 					console.error("No new word found.");
+	// 				}
+	// 			})
+	// 			.catch((error) => console.error("Erreur with lessons :", error))
+	// 			.finally(() => setLoading(false));
+	// 	}, [uri, lessonId, user.token]) // Ajoute ici les dépendances
+	// );
 
 	useEffect(() => {
 		fetch(`http://${uri}:3000/word/random/`)
@@ -261,7 +261,7 @@ export default function DashboardScreen() {
 	}, [uri, user.token]);
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons/`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
@@ -274,7 +274,7 @@ export default function DashboardScreen() {
 			.finally(() => setLoading(false));
 	}, [uri, user.token]);
 
-	done && console.log(done, "ICICICI");
+	console.log(user.token, "okokokokokokokok");
 
 	return (
 		<ScrollView style={styles.container}>

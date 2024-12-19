@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import {
 	StyleSheet,
 	Text,
@@ -20,6 +19,7 @@ const ExerciseComponent = (props) => {
 	const [loading, setLoading] = useState(true);
 	const [isGood, setIsGood] = useState(false);
 	const [isBad, setIsBad] = useState(false);
+
 	const dispatch = useDispatch();
 	const uri = BackendAdress.uri;
 	const user = useSelector((state) => state.user.value);
@@ -49,7 +49,7 @@ const ExerciseComponent = (props) => {
 	};
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons/`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
@@ -60,7 +60,7 @@ const ExerciseComponent = (props) => {
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, [uri, user.token]);
+	}, [uri]);
 
 	const exerciseToDisplay = lessons.find((lesson) => lesson._id === props.id);
 

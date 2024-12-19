@@ -1,6 +1,5 @@
 import { useState } from "react";
 import * as Speech from "expo-speech";
-import { useSelector } from "react-redux";
 import {
 	Text,
 	StyleSheet,
@@ -28,12 +27,8 @@ export default function SearchScreen() {
 
 	const handleSearch = () => {
 		if (word.trim() === "") return;
-
 		const wordMinuscule = word.trim().toLowerCase();
-
-		fetch(
-			`http://${uri}:3000/word/getWord/he8G56G5cU2ideOMyGG6DWcYXxaFvXxz/${wordMinuscule}`
-		)
+		fetch(`http://${uri}:3000/word/getWord/${wordMinuscule}`)
 			.then((response) => response.json())
 			.then((data) => {
 				setResults([data]);

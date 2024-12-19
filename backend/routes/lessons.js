@@ -4,11 +4,10 @@ var router = express.Router();
 require("../models/connection");
 const User = require("../models/users");
 const Lesson = require("../models/lessons");
-
+const token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
 //Affiche toutes les lecons
-router.get("/showAllLessons/:token", (req, res) => {
-	let token = req.params.token;
-
+//ELLE MARCHE
+router.get("/showAllLessons/", (req, res) => {
 	User.findOne({ token: token }).then((dataUser) => {
 		if (dataUser) {
 			let userLevel = dataUser.level;
@@ -22,8 +21,7 @@ router.get("/showAllLessons/:token", (req, res) => {
 });
 
 // Affiche une leçon grace a son Id
-router.get("/showOne/:lessonId/:token", (req, res) => {
-	let token = req.params.token;
+router.get("/showOne/:lessonId/", (req, res) => {
 	const lessonId = req.params.lessonId;
 
 	User.findOne({ token: token }).then((dataUser) => {
@@ -42,49 +40,49 @@ router.get("/showOne/:lessonId/:token", (req, res) => {
 });
 
 //UPDATE DIALOGUE PROGRESS NEXT BUTTON
-router.post("/Progress_Dial/:user_id/:lesson_id", (req, res) => {
-	let user_id = req.params.user_id;
-	let lesson_id = req.params.lesson_id;
+// router.post("/Progress_Dial/:user_id/:lesson_id", (req, res) => {
+// 	let user_id = req.params.user_id;
+// 	let lesson_id = req.params.lesson_id;
 
-	User.findByIdAndUpdate(
-		user_id,
-		{
-			$push: { "dialogue_progress.dialogues_done": lesson_id }, // Ajoute un nouvel élément au tableau
-		} // Retourne le document après mise à jour
-	)
-		.then((updatedProgress) => {
-			if (updatedProgress) {
-				res.json({ result: true, updatedProgress });
-			} else {
-				res.json({ result: false, message: "Élément non trouvé" });
-			}
-		})
-		.catch((err) => {
-			res.json({ result: false, error: err.message });
-		});
-});
+// 	User.findByIdAndUpdate(
+// 		user_id,
+// 		{
+// 			$push: { "dialogue_progress.dialogues_done": lesson_id }, // Ajoute un nouvel élément au tableau
+// 		} // Retourne le document après mise à jour
+// 	)
+// 		.then((updatedProgress) => {
+// 			if (updatedProgress) {
+// 				res.json({ result: true, updatedProgress });
+// 			} else {
+// 				res.json({ result: false, message: "Élément non trouvé" });
+// 			}
+// 		})
+// 		.catch((err) => {
+// 			res.json({ result: false, error: err.message });
+// 		});
+// });
 
-//UPDATE EXERCICE PROGRESS NEXT BUTTON
-router.post("/Progress_Pract/:user_id/:practice_id", (req, res) => {
-	let user_id = req.params.user_id;
-	let lesson_id = req.params.lesson_id;
+// //UPDATE EXERCICE PROGRESS NEXT BUTTON
+// router.post("/Progress_Pract/:user_id/:practice_id", (req, res) => {
+// 	let user_id = req.params.user_id;
+// 	let lesson_id = req.params.lesson_id;
 
-	User.findByIdAndUpdate(
-		user_id,
-		{
-			$push: { "practice_progress.practices_done": lesson_id }, // Ajoute un nouvel élément au tableau
-		} // Retourne le document après mise à jour
-	)
-		.then((updatedPractice) => {
-			if (updatedPractice) {
-				res.json({ result: true, updatedPractice });
-			} else {
-				res.json({ result: false, message: "Élément non trouvé" });
-			}
-		})
-		.catch((err) => {
-			res.json({ result: false, error: err.message });
-		});
-});
+// 	User.findByIdAndUpdate(
+// 		user_id,
+// 		{
+// 			$push: { "practice_progress.practices_done": lesson_id }, // Ajoute un nouvel élément au tableau
+// 		} // Retourne le document après mise à jour
+// 	)
+// 		.then((updatedPractice) => {
+// 			if (updatedPractice) {
+// 				res.json({ result: true, updatedPractice });
+// 			} else {
+// 				res.json({ result: false, message: "Élément non trouvé" });
+// 			}
+// 		})
+// 		.catch((err) => {
+// 			res.json({ result: false, error: err.message });
+// 		});
+// });
 
 module.exports = router;

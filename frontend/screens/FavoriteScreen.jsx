@@ -8,7 +8,6 @@ import {
 import React from "react";
 import { useEffect, useState } from "react";
 import { BackendAdress } from "../utils/BackendAdress";
-import { customStyles } from "../utils/CustomStyle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Speech from "expo-speech";
@@ -16,7 +15,6 @@ import { useFonts } from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { setFavorites } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 
 export default function FavoriteScreen() {
@@ -29,7 +27,6 @@ export default function FavoriteScreen() {
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
-		Playfair: require("../assets/fonts/PlayfairDisplay-Regular.ttf"),
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
 	});
 
@@ -83,7 +80,7 @@ export default function FavoriteScreen() {
 			rate: 0.5,
 		});
 	};
-	console.log(words.length, "yessssssssssssssss");
+	console.log(words.length);
 
 	const favoriteswords =
 		words.length > 0 &&

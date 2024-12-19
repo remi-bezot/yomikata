@@ -35,6 +35,8 @@ export default function SignUp() {
 	const [formError, setFormError] = useState(false);
 	const [isValid, setIsValid] = useState(true);
 	const [signInModalVisible, setSignInModalVisible] = useState(false);
+	const [words, setWords] = useState([]);
+	const [isShuffled, setIsShuffled] = useState(false);
 
 	const checkForm = () => {
 		console.log("step 1:checkform");
