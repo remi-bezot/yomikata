@@ -18,25 +18,34 @@ router.get("/showFavorites/:token", (req, res) => {
 		}
 	});
 });
-
 router.post("/createFavorite/:token", (req, res) => {
 	User.findOne({ token: req.params.token })
 		.then((data) => {
-			Favorite.findOne({ id_user: data._id, Word_JP: req.body.wordjp })
+			Favorite.findOne({
+				id_user: "675d9c395db1af3def9b657c",
+				Word_JP: req.body.wordjp,
+			})
 				.then((element) => {
-					if (element === null) {
+					console.log(element, "iciiiiiii");
+
+					if (!element) {
 						const newFavorite = new Favorite({
 							Word_JP: req.body.wordjp,
 							Word_EN: req.body.worden,
 							Romanji: req.body.romanji,
 							Grammar: req.body.grammar,
 							isBook: req.body.isbook,
-							id_user: data._id,
+							id_user: "675d9c395db1af3def9b657c",
 						});
 						newFavorite
 							.save()
 							.then((newDoc) => {
-								res.json({ result: true, status: true, data: newDoc });
+								res.json({
+									result: true,
+									status: true,
+									data: newDoc,
+									info: "ADDED",
+								});
 							})
 							.catch((err) => {
 								res.status(500).json({
@@ -47,6 +56,8 @@ router.post("/createFavorite/:token", (req, res) => {
 								});
 							});
 					} else {
+						console.log((element, "va etre supprimé"));
+
 						element.deleteOne();
 						res.status(400).json({
 							result: false,

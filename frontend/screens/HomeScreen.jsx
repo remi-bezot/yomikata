@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
 
 	// Navigation function
 	const handleSubmit = () => {
-		navigation.navigate("Auth");
+		navigation.replace("Auth");
 	};
 
 	// Animation values for each text

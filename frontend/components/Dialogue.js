@@ -32,9 +32,7 @@ export default function Dialogue(props) {
 
 	//BOUTON POUR AFFICHER LA MODALE POUR FAVORIS
 	const handleLongPressWord = (word) => {
-		fetch(`http://${uri}:3000/word/getWord/${word}`, {
-			method: "POST",
-		})
+		fetch(`http://${uri}:3000/word/getWord/${token}/${word}`)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log("test");
@@ -118,7 +116,9 @@ export default function Dialogue(props) {
 						return (
 							<View key={themeIndex}>
 								{/* Affiche le titre du thème */}
-								<Text style={styles.themeTitle}>{theme.theme}</Text>
+								<Text style={styles.themeTitle}>
+									{theme.theme.replace(/\d$/, "").toUpperCase()}
+								</Text>
 
 								{/* Affiche les lignes de dialogues pour ce thème */}
 								{theme.lines.map((line, lineIndex) => (
@@ -191,11 +191,7 @@ export default function Dialogue(props) {
 								</TouchableOpacity>
 								<TouchableOpacity
 									style={styles.favoriteButtonStyle}
-									onPress={() =>
-										isFavorite
-											? handleFavoriteButton(favorite)
-											: deleteFavoriteButton(favorite._id)
-									}
+									onPress={() => handleFavoriteButton(favorite)}
 								>
 									<Text>{!isFavorite ? "❤️" : "❌"}</Text>
 								</TouchableOpacity>
@@ -247,6 +243,13 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "600",
 		marginBottom: 5,
+	},
+	themeTitle: {
+		fontSize: 24,
+		fontStyle: "italic",
+		color: "#666",
+		alignSelf: "center",
+		marginBottom: 30,
 	},
 	button: {
 		backgroundColor: customStyles.buttonBackgroundColor,
@@ -323,7 +326,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 20,
-		backgroundColor: "#F8F9FA",
+		backgroundColor: "#EEC1C0",
 	},
 	dialogue: {
 		borderWidth: 0,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
 	StyleSheet,
 	Text,
@@ -7,18 +8,22 @@ import {
 	TouchableHighlight,
 	Animated,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import * as Speech from "expo-speech";
 import { BackendAdress } from "../utils/BackendAdress";
+import { getContinue } from "../reducers/continues";
 
+//--------------------------------------------------------debut de la page---------------------------------------------------
 const ExerciseComponent = (props) => {
 	const [lessons, setLessons] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [isGood, setIsGood] = useState(false);
 	const [isBad, setIsBad] = useState(false);
-
+	const dispatch = useDispatch();
 	const uri = BackendAdress.uri;
 	const user = useSelector((state) => state.user.value);
+	const navigation = useNavigation();
 
 	const speak = (text) => {
 		Speech.speak(text, {
@@ -27,11 +32,20 @@ const ExerciseComponent = (props) => {
 			rate: 0.8,
 		});
 	};
+
+	const handleOptionSelect = (exerciseIndex, isCorrect) => {
+		if (selectedAnswers[exerciseIndex] === undefined) {
+			setSelectedAnswers((prevAnswers) => ({
+				...prevAnswers,
+				[exerciseIndex]: isCorrect,
+			}));
+			setAnsweredCount((prevCount) => prevCount + 1);
+		}
+	};
+
 	const Validate = () => {
-		navigation.navigate("Dialogue", {
-			lessonId: lessonId,
-			themeIndex: themeIndex,
-		});
+		dispatch(getContinue({ lesson_id: props.id }));
+		navigation.navigate("dashboard");
 	};
 
 	useEffect(() => {
@@ -49,6 +63,8 @@ const ExerciseComponent = (props) => {
 	}, [uri, user.token]);
 
 	const exerciseToDisplay = lessons.find((lesson) => lesson._id === props.id);
+
+	console.log(props.id, "id a verifier");
 
 	if (loading) {
 		return <Text>Loading...</Text>;
@@ -124,7 +140,7 @@ const ExerciseComponent = (props) => {
 
 			{isGood && (
 				<TouchableHighlight
-					onPress={Validate}
+					onPress={() => Validate()}
 					style={styles.answer}
 					key1={singleExercise.good_answer}
 				>

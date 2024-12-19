@@ -82,7 +82,7 @@ export default function SignUp() {
 							setsignUpEmail("");
 							setSignUpModalVisible(false);
 							setIsSucceed(true);
-							navigation.navigate("TabNavigator", { screen: "dashboard" });
+							navigation.replace("TabNavigator", { screen: "Dashboard" });
 						}
 						if (data.error) {
 							setEmailError(false);

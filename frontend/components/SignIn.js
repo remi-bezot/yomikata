@@ -66,7 +66,7 @@ export default function SignUp() {
 						setSignInEmail("");
 						setSignInPassword("");
 						setSignInModalVisible(false);
-						navigation.navigate("TabNavigator", { screen: "dashboard" });
+						navigation.replace("TabNavigator", { screen: "Dashboard" });
 					}
 				});
 		}

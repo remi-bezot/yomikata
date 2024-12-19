@@ -7,24 +7,24 @@ const Lesson = require("../models/lessons");
 
 //Affiche toutes les lecons
 router.get("/showAllLessons/:token", (req, res) => {
-	User.findOne({ token: "Uzz57VoeewdCwcFNvf6OioXkwbf2uitz" }).then(
-		(dataUser) => {
-			if (dataUser) {
-				let userLevel = dataUser.level;
-				Lesson.find({ level: userLevel }).then((data) => {
-					res.json({ result: true, data: data });
-				});
-			} else {
-				res.json({ result: false });
-			}
+	let token = req.params.token;
+
+	User.findOne({ token: token }).then((dataUser) => {
+		if (dataUser) {
+			let userLevel = dataUser.level;
+			Lesson.find({ level: userLevel }).then((data) => {
+				res.json({ result: true, data: data });
+			});
+		} else {
+			res.json({ result: false });
 		}
-	);
+	});
 });
 
 // Affiche une leçon grace a son Id
-router.get("/showDialogue/:lessonId/:token", (req, res) => {
-	let token = "Uzz57VoeewdCwcFNvf6OioXkwbf2uitz";
-	const lessonId = "675db08ec53a0c941602663a";
+router.get("/showOne/:lessonId/:token", (req, res) => {
+	let token = req.params.token;
+	const lessonId = req.params.lessonId;
 
 	User.findOne({ token: token }).then((dataUser) => {
 		if (dataUser) {

@@ -21,18 +21,19 @@ export default function DialogueScreen(props) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#f8f9fa",
+		backgroundColor: "#EEC1C0",
 	},
 	header: {
-		padding: 30,
-		backgroundColor: "#EEC1C0",
+		padding: 40,
+		backgroundColor: "rgba(193, 46, 46, 1)",
+
 		alignItems: "center",
 	},
 	title: {
 		fontSize: 20,
 		color: "#fff",
 		fontWeight: "bold",
-		top: 10,
+		top: 25,
 	},
 	content: {
 		flex: 1,

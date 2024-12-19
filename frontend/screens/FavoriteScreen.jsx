@@ -6,53 +6,70 @@ import {
 	ScrollView,
 } from "react-native";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BackendAdress } from "../utils/BackendAdress";
+import { customStyles } from "../utils/CustomStyle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
 import * as Speech from "expo-speech";
+import { useFonts } from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
+
+import { setFavorites } from "../reducers/favoritesreducer";
 const uri = BackendAdress.uri;
 
 export default function FavoriteScreen() {
 	const user = useSelector((state) => state.user.value);
 	const token = user.token;
-
 	const [selectedCardId, setSelectedCardId] = useState(null);
 	const [words, setWords] = useState([]);
-	// const [displayCard, setDisplayCard]= useState(false)
+	const [loading, setLoading] = useState(false);
+	const [refresh, setRefresh] = useState(true);
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		Playfair: require("../assets/fonts/PlayfairDisplay-Regular.ttf"),
 		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
 	});
 
-	// Récupération des favoris lors de la connexion
-	useEffect(() => {
-		fetch(`http://${uri}:3000/showFavorites/${token}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.result) {
-					setWords(data.result);
-				}
-			});
-	}, []);
+	// Récupération des favoris lors du chargement de la page
+
+	useFocusEffect(
+		React.useCallback(() => {
+			setLoading(true);
+			fetch(`http://${uri}:3000/favorites/showFavorites/${token}`)
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.result) {
+						setWords(data.result); // Met à jour les données
+					} else {
+						console.error("No favorites found.");
+					}
+				})
+				.catch((error) =>
+					console.error("Erreur lors de la récupération des favoris :", error)
+				)
+				.finally(() => setLoading(false), setRefresh(!refresh)); // Fin du chargement
+		}, [handleClick, token])
+	);
+
+	if (loading) {
+		return <Text>Loading favorites...</Text>;
+	}
+
+	if (words.length === 0) {
+		return <Text>No favorites found.</Text>;
+	}
 
 	const handleClick = (wordId) => {
-		fetch(`http://${uri}:3000/deleteFavorite/${token}`, {
+		fetch(`http://${uri}:3000/favorites/deleteFavorite/${user.token}`, {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				id: wordId,
 			}),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.data) {
-					setWords(words.filter((e) => e._id !== wordId));
-				}
-			});
+		});
 	};
 
 	const handleCard = (wordId) => {
@@ -66,12 +83,11 @@ export default function FavoriteScreen() {
 			rate: 0.5,
 		});
 	};
+	console.log(words.length, "yessssssssssssssss");
 
 	const favoriteswords =
 		words.length > 0 &&
 		words.map((data, i) => {
-			console.log(data.Word_JP);
-
 			if (selectedCardId === data._id) {
 				return (
 					<View style={styles.card} key={i}>
@@ -97,7 +113,7 @@ export default function FavoriteScreen() {
 							style={styles.speakerbutton}
 							onPress={() => speak(data.Word_JP)}
 						>
-							<Text style={styles.speaker}>🔊</Text>
+							<Text style={styles.speaker}>🔉</Text>
 						</TouchableOpacity>
 					</View>
 				);
@@ -160,7 +176,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: 100,
+		width: 200,
 		height: 200,
 		margin: 10,
 		borderRadius: 25,
@@ -186,12 +202,13 @@ const styles = StyleSheet.create({
 	},
 	word: {
 		margin: 5,
+		fontSize: 15,
 	},
 	wordjp: {
 		fontSize: 20,
 		fontWeight: "bold",
 		margin: 10,
-		backgroundColor: "white",
+		backgroundColor: "EEC1C0",
 	},
 	deleteIcon: {
 		display: "flex",
@@ -200,7 +217,6 @@ const styles = StyleSheet.create({
 		width: "80%",
 	},
 	speakerbutton: {
-		backgroundColor: "#D56565",
 		width: 30,
 		height: 30,
 		borderRadius: 30,
@@ -215,5 +231,8 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	speaker: {
+		fontSize: 23,
 	},
 });
