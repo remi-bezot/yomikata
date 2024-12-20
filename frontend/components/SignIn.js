@@ -14,6 +14,8 @@ import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
 
+// authentification
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { customStyles } from "../utils/CustomStyle";
@@ -22,16 +24,18 @@ import { BackendAdress } from "../utils/BackendAdress";
 export default function SignUp() {
   const dispatch = useDispatch();
 
-  const EMAIL_REGEX = 
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	const EMAIL_REGEX =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  const navigation = useNavigation();
-  const [signInEmail, setSignInEmail] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [formError, setFormError] = useState(false);
-  const [isValid, setIsValid] = useState(true);
-  const [signInModalVisible, setSignInModalVisible] = useState(false);
+	const navigation = useNavigation();
+	const [signInEmail, setSignInEmail] = useState("");
+	const [signInPassword, setSignInPassword] = useState("");
+	const [emailError, setEmailError] = useState(false);
+	const [formError, setFormError] = useState(false);
+	const [isValid, setIsValid] = useState(true);
+	const [signInModalVisible, setSignInModalVisible] = useState(false);
+	const [words, setWords] = useState([]);
+	const [isShuffled, setIsShuffled] = useState(false);
 
   const checkForm = () => {
     if (!signInEmail || !EMAIL_REGEX.test(signInEmail)) {
@@ -69,9 +73,19 @@ export default function SignUp() {
     return null;
   }
 
-  const showSignInModal = () => {
-    setSignInModalVisible(!signInModalVisible);
-  };
+						setIsValid(false);
+						console.log("wrong password");
+					} else {
+						dispatch(login({ username: data.username, token: data.token }));
+						console.log(data.username);
+						setSignInEmail("");
+						setSignInPassword("");
+						setSignInModalVisible(false);
+						navigation.replace("TabNavigator", { screen: "Dashboard" });
+					}
+				});
+		}
+	};
 
   return (
     <View>
@@ -91,45 +105,10 @@ export default function SignUp() {
               />
             </View>
 
-            <KeyboardAvoidingView style={styles.container}>
-              <Text style={styles.headerText}>Access your account</Text>
-              {formError && <Text style={styles.error}>Invalid Form</Text>}
-              <TextInput
-                style={styles.inputStyles}
-                onChangeText={(value) => {
-                  setSignInEmail(value);
-                  if (EMAIL_REGEX.test(value)) {
-                    setEmailError(false);
-                  }
-                }}
-                value={signInEmail}
-                placeholder="email"
-                placeholderTextColor="grey"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                autoCorrect={false}
-              />
-              {emailError && (
-                <Text style={styles.error}>Invalid email address</Text>
-              )}
-              <TextInput
-                style={[styles.inputStyles, !isValid && { borderColor: "red" }]}
-                onChangeText={(value) => setSignInPassword(value)}
-                value={signInPassword}
-                placeholder="password"
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                keyboardType="default"
-                autoCapitalize="none"
-              />
-              {!isValid && <Text style={{ color: "red" }}>Wrong password</Text>}
-              <TouchableOpacity style={styles.button} onPress={checkForm}>
-                <Text>Sign in</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-          </View>
-        </View>
-      </Modal>
+	const [fontsLoaded] = useFonts({
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
+	});
 
       <TouchableOpacity
         onPress={() => showSignInModal(true)}

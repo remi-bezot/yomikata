@@ -2,6 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { BarChart, PieChart } from "react-native-gifted-charts";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import { loadContinue } from "../reducers/continues";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native"; // Assure-toi d'importer useFocusEffect
+
 import {
 	View,
 	Text,
@@ -9,11 +14,13 @@ import {
 	Image,
 	TouchableOpacity,
 	ScrollView,
+	TouchableHighlight,
 } from "react-native";
 import React from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useNavigation } from "@react-navigation/native";
 import { BackendAdress } from "../utils/BackendAdress";
+import Dialogue from "./DialogueScreen";
 const uri = BackendAdress.uri;
 
 export default function DashboardScreen() {
@@ -165,7 +172,6 @@ export default function DashboardScreen() {
 			</>
 		);
 	};
-
 	const centerLabelComponent = () => {
 		return (
 			<View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -181,21 +187,72 @@ export default function DashboardScreen() {
 	const [lessons, setLessons] = useState([]);
 	const [word, setWord] = useState([]);
 	const [meaning, setMeaning] = useState([]);
-
 	const [loading, setLoading] = useState(false);
+	const progress = useSelector((state) => state.continues.value);
+	const lessonId = useSelector((state) => state.continues.value.lesson_id);
+	const [done, setDone] = useState([]);
+
 	const navigation = useNavigation();
 
+	const goDialogue = (lessonId, themeIndex) => {
+		navigation.navigate("Dialogue", {
+			lessonId: lessonId,
+			themeIndex: themeIndex,
+		});
+	};
+	const goExercise = (lessonId, themeIndex) => {
+		navigation.navigate("Exercise", {
+			lessonId: lessonId,
+			themeIndex: themeIndex,
+		});
+	};
+
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
+		// Récupère lesson_id depuis AsyncStorage
+		AsyncStorage.getItem("lesson_id")
+			.then((storedLessonId) => {
+				if (storedLessonId) {
+					// Si la valeur est trouvée, on la charge dans le store Redux
+					dispatch(loadContinue({ lesson_id: storedLessonId }));
+				}
+			})
+
+			.catch((err) =>
+				console.error("Error loading lesson_id from AsyncStorage:", err)
+			);
+	}, [dispatch]); // Le tableau de dépendances s'assure que ça se fait seulement une fois au montage du composant
+
+	useEffect(() => {
+		fetch(`http://${uri}:3000/lessons/showAllLessons`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
 					setLessons(data.data);
+				} else {
+					console.error("No data found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, []);
+	}, [uri]);
+
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		setLoading(true);
+	// 		fetch(`http://${uri}:3000/lessons/showOne/${lessonId}/`)
+	// 			.then((res) => res.json())
+	// 			.then((data) => {
+	// 				if (data) {
+	// 					console.warn(data, "holaaaaaaaaa");
+	// 					setDone([data]);
+	// 				} else {
+	// 					console.error("No new word found.");
+	// 				}
+	// 			})
+	// 			.catch((error) => console.error("Erreur with lessons :", error))
+	// 			.finally(() => setLoading(false));
+	// 	}, [uri, lessonId, user.token]) // Ajoute ici les dépendances
+	// );
 
 	useEffect(() => {
 		fetch(`http://${uri}:3000/word/random/`)
@@ -204,16 +261,43 @@ export default function DashboardScreen() {
 				if (data) {
 					setWord(data.word);
 					setMeaning(data.word.meaning.slice(0, 10));
+				} else {
+					console.error("No new word found.");
 				}
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
 	}, [uri, user.token]);
 
+	useEffect(() => {
+		fetch(`http://${uri}:3000/lessons/showAllLessons/`)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					setLessons(data.data);
+				} else {
+					console.error("No data found.");
+				}
+			})
+			.catch((error) => console.error("Erreur with lessons :", error))
+			.finally(() => setLoading(false));
+	}, [uri, user.token]);
+
+	console.log(user.token, "okokokokokokokok");
+
 	return (
 		<ScrollView style={styles.container}>
 			<View style={styles.header}>
-				<Text style={styles.font}>Welcome User</Text>
+				<Image
+					source={{
+						uri: "https://media.istockphoto.com/id/1492364557/fr/vectoriel/samoura%C3%AF-japonais-%C3%A0-l%C3%A9p%C3%A9e.jpg?s=612x612&w=0&k=20&c=qLHUBNq9hS2AZLQQjkg-d-rerGUzlDRSYTMsqnpd3kg=",
+					}}
+					style={styles.avatar}
+				/>
+				<Text style={styles.headerText}>
+					おはようございます{"\n"}
+					{user.username}!
+				</Text>
 				<TouchableOpacity style={styles.settings}>
 					<FontAwesome6 name="gear" size={24} color="#000" />
 				</TouchableOpacity>
@@ -228,35 +312,38 @@ export default function DashboardScreen() {
 						<Text style={styles.text}>{word.furigana}</Text>
 						<Text style={styles.text}>{word.romaji}</Text>
 						<Text style={styles.text}>{meaning}</Text>
-						<Text style={styles.italicText}>...More</Text>
-						<MaterialCommunityIcons
-							style={styles.Arrow}
-							name="arrow-bottom-right-thin-circle-outline"
-							size={24}
-							color="black"
-						/>
 					</View>
 
 					<View
 						style={[styles.ThemeBubbleTop, { minHeight: 149, maxHeight: 150 }]}
 					>
 						<Text style={styles.BubbleHeaderTwo}>Continue ?</Text>
-						<View>
-							<Text>blablabla</Text>
-							<Text>blablabla</Text>
-							<Text>blablabla</Text>
 
-							<MaterialCommunityIcons
-								style={styles.Arrow}
-								name="arrow-bottom-right-thin-circle-outline"
-								size={24}
-								color="black"
-							/>
-						</View>
+						{done &&
+							Array.isArray(done) &&
+							done.length > 0 &&
+							done[0].data &&
+							Array.isArray(done[0].data.themes) &&
+							done[0].data.themes.length > 0 && (
+								<View key={0}>
+									<View>
+										<Text style={styles.text}>
+											Theme : {done[0].data.themes[0].theme} is done
+										</Text>
+
+										<SimpleLineIcons
+											style={styles.Arrow}
+											name="bubbles"
+											size={24}
+											color="black"
+										/>
+									</View>
+								</View>
+							)}
 					</View>
 				</View>
 				<View style={styles.BubbleBottomContainer}>
-					<Text style={styles.text}>Dialogues</Text>
+					<Text style={styles.title}>Dialogues</Text>
 					<ScrollView
 						horizontal={true}
 						showsHorizontalScrollIndicator={false}
@@ -265,40 +352,66 @@ export default function DashboardScreen() {
 						{lessons.map((lesson, lessonIndex) => (
 							<View key={lessonIndex} style={styles.lessonContainer}>
 								{lesson.themes.map((theme, themeIndex) => (
-									<TouchableOpacity  onLongPress={() =>
-										goToSelectedLesson(lesson,themeIndex)
-									  } key={themeIndex} style={styles.ThemeBubbleUp}>
-										<Text style={styles.text}>
-											Speaker Number: {theme.speaker_number}
-										</Text>
-										<Text style={styles.text}>Theme: {theme.theme}</Text>
-									</TouchableOpacity >
+									<TouchableHighlight
+										onPress={() => goDialogue(lesson._id, themeIndex)} //envoi du props dans la fonction pour l'enfant
+										key={themeIndex}
+										style={styles.ThemeBubbleUp}
+										underlayColor="#CC4646"
+									>
+										<View>
+											<Text style={styles.text}>Touch to start</Text>
+											<Text style={styles.text}>
+												your {theme.speaker_number}-person dialogue
+											</Text>
+											<Text style={styles.text}>at the {theme.theme}</Text>
+											<SimpleLineIcons
+												style={styles.Arrow}
+												name="bubbles"
+												size={24}
+												color="black"
+											/>
+										</View>
+									</TouchableHighlight>
 								))}
 							</View>
 						))}
 					</ScrollView>
-					<Text style={styles.text}>Practice</Text>
+					<Text style={styles.title}>Practice</Text>
 					<ScrollView
 						horizontal={true}
 						showsHorizontalScrollIndicator={false}
 						style={styles.scrollView}
 					>
-						{lessons.map((lessonPractice, practiceIndex) => (
-							<View
-							
+						{lessons.map((lesson, lessonIndex) => (
+							<View key={lessonIndex} style={styles.lessonContainer}>
+								{lesson.themes.map((theme, themeIndex) => (
+									<View key={themeIndex} style={styles.themeBubbleDown}>
+										<TouchableHighlight
+											onPress={() => goExercise(lesson._id, themeIndex)}
+											key={themeIndex}
+											style={styles.ThemeBubbleUp}
+											underlayColor="#CC4646"
+										>
+											<View>
+												<Text style={styles.text}>Start the Word </Text>
+												<Text style={styles.text}>Flash Card - </Text>
+												<Text style={styles.text}>
+													Theme:
+													{theme.theme.replace(/\d$/, "")}
+												</Text>
 
-							key={practiceIndex}
-							style={styles.lessonContainer}
-						  >
-							{lessonPractice.themes.map((theme, themeIndex) => (
-  <TouchableOpacity onLongPress={() => goToSelectedPratice(lessonPractice, themeIndex)} key={themeIndex} style={styles.themeBubbleDown}>
-    <Text style={styles.text}>Theme: {theme.theme}</Text>
-    <Text style={styles.text}>
-      Exercises: {theme.exo ? theme.exo.length : 0}
-    </Text>
-  </TouchableOpacity>
-))}
-						  </View>
+												<Text></Text>
+												<SimpleLineIcons
+													style={styles.Arrow2}
+													name="note"
+													size={24}
+													color="black"
+												/>
+											</View>
+										</TouchableHighlight>
+									</View>
+								))}
+							</View>
 						))}
 					</ScrollView>
 				</View>
@@ -405,8 +518,9 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: 20,
 		padding: 20,
-		backgroundColor: "#EEC1C0", // Couleur issue de la navBarBackgroundColor
+		backgroundColor: "#EEC1C0",
 	},
 	diagonalLine: {
 		position: "absolute",
@@ -415,15 +529,28 @@ const styles = StyleSheet.create({
 		right: 0,
 		left: 4,
 		bottom: 1,
-		borderBottomWidth: 2, // Largeur de la ligne
-		borderColor: "#090909", // Couleur de la ligne noire
-		transform: [{ rotate: "146deg" }], // Rotation de 45° pour la ligne diagonale
+		borderBottomWidth: 2,
+		borderColor: "#090909",
+		transform: [{ rotate: "146deg" }],
 		zIndex: 1,
 	},
 	header: {
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "space-between",
 		marginTop: 30,
+	},
+	headerText: {
+		fontSize: 20,
+		fontWeight: 400,
+		textAlign: "center",
+	},
+	avatar: {
+		width: 80,
+		height: 80,
+		borderRadius: 40,
+		borderWidth: 2,
+		borderColor: "rgba(193, 46, 46, 1)",
 	},
 	scrollView: {
 		flex: 1,
@@ -446,11 +573,11 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		margin: 10,
 		marginTop: 30,
-		backgroundColor: "#CC4646", // headingColor pour harmoniser avec les titres
+		backgroundColor: "#CC4646",
 		borderRadius: 15,
 		elevation: 10,
-		borderWidth: 0.5, // headingBorderSize
-		borderColor: "#090909", // headingBorderColor
+		borderWidth: 0.5,
+		borderColor: "#090909",
 		right: 4,
 	},
 	BubbleHeaderOne: {
@@ -466,8 +593,8 @@ const styles = StyleSheet.create({
 		width: "172",
 		borderColor: "#090909",
 		borderWidth: 1,
-		borderTopLeftRadius: 15, // Arrondir le coin supérieur gauche
-		borderTopRightRadius: 15, // Arrondir le coin supérieur droit
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
 	},
 	BubbleHeaderTwo: {
 		position: "relative",
@@ -478,19 +605,24 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: "black",
 		fontWeight: "bold",
-		top: -33,
+		top: -35,
 		width: "172",
 		borderColor: "#090909",
 		borderWidth: 1,
-		borderTopLeftRadius: 15, // Arrondir le coin supérieur gauche
-		borderTopRightRadius: 15, // Arrondir le coin supérieur droit
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
 	},
 	Arrow: {
 		position: "relative",
-		bottom: 5,
+		bottom: -5,
+
 		left: 65,
 	},
-
+	Arrow2: {
+		position: "relative",
+		bottom: 5,
+		right: -60,
+	},
 	ThemeBubbleUp: {
 		width: 180,
 		height: 120,
@@ -498,11 +630,11 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		margin: 10,
 		marginVertical: 30,
-		backgroundColor: "#D56565", // headingColor pour harmoniser avec les titres
+		backgroundColor: "#D56565",
 		borderRadius: 15,
 		elevation: 10,
-		borderWidth: 0.5, // headingBorderSize
-		borderColor: "#090909", // headingBorderColor
+		borderWidth: 0.5,
+		borderColor: "#090909",
 	},
 	themeBubbleDown: {
 		width: 180,
@@ -511,50 +643,59 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		margin: 10,
 		marginVertical: 30,
-		backgroundColor: "#D56565", // navBarIconSelectedColor
+		backgroundColor: "#D56565",
 		borderRadius: 20,
 		elevation: 10,
-		borderWidth: 0.5, // headingBorderSize
-		borderColor: "#090909", // headingBorderColor
+		borderWidth: 0.5,
+		borderColor: "#090909",
 	},
 	BubbleTopContainer: {
-		flexDirection: "row", // Positionne les éléments côte à côte
-		justifyContent: "space-between", // Ajuste l'espace entre les éléments (modifiable selon le besoin)
-		alignItems: "center", // Centre les éléments verticalement
-		padding: 10,
+		flexDirection: "row",
+		alignSelf: "center",
 	},
 	text: {
 		fontSize: 15,
-		fontFamily: "Comic sans MS", // headingFont
-		color: "#090909", // headingBorderColor
+		fontFamily: "noto sans jp",
+		fontWeight: 400,
+		color: "#090909",
 		textAlign: "center",
-		textShadowColor: "#CC4646", // headingColor comme effet de texte
+		textShadowColor: "#CC4646",
 		textShadowOffset: { width: 1, height: 1 },
 		textShadowRadius: 2,
 	},
+	title: {
+		fontSize: 15,
+		fontFamily: "noto sans jp",
+		color: "#090909",
+		textAlign: "center",
+		textShadowColor: "#CC4646",
+		textShadowOffset: { width: 1, height: 1 },
+		textShadowRadius: 2,
+		right: 8,
+	},
 	italicText: {
-		fontStyle: "italic", // Mettre en italique
-		color: "blue", // Optionnel : changer la couleur
+		fontStyle: "italic",
+		color: "blue",
 	},
 	button: {
-		backgroundColor: "#EEC1C0", // buttonBackgroundColor
-		width: "90%", // buttonWidth
-		height: 50, // buttonHeight
+		backgroundColor: "#EEC1C0",
+		width: "90%",
+		height: 50,
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 12, // buttonRadius
+		borderRadius: 12,
 		marginBlock: 10,
 	},
 	buttonText: {
-		fontSize: 20, // buttonTextSize
-		color: "#070000", // navBarBorderColor pour le contraste
+		fontSize: 20,
+		color: "#070000",
 		textAlign: "center",
-		fontFamily: "Noto Sans JP", // defaultFontFamily
+		fontFamily: "Noto Sans JP",
 	},
 	horizontalSeparator: {
 		height: 1,
 		width: "100%",
-		backgroundColor: "#070000", // navBarBorderColor pour un contraste subtil
+		backgroundColor: "#070000",
 		marginVertical: 10,
 	},
 });

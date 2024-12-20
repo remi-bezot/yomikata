@@ -1,70 +1,139 @@
-import { KeyboardAvoidingView, Text, StyleSheet } from "react-native";
-import React from "react";
-import { Link } from "@react-navigation/native";
-import SignUp from "../components/SignUp";
-import SignIn from "../components/SignIn";
+import React, { useRef, useEffect } from "react";
+import {
+	Animated,
+	View,
+	StyleSheet,
+	Text,
+	KeyboardAvoidingView,
+} from "react-native";
+import { useFonts } from "expo-font";
 
 export default function HomeScreen({ navigation }) {
-	const handlesubmit = () => {
-		navigation.navigate("Auth");
+	// Fonts loading
+	const [fontsLoaded] = useFonts({
+		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
+	});
+
+	// Navigation function
+	const handleSubmit = () => {
+		navigation.replace("Auth");
 	};
 
+	// Animation values for each text
+	const fadeAnim1 = useRef(new Animated.Value(0)).current;
+	const fadeAnim2 = useRef(new Animated.Value(0)).current;
+	const fadeAnim3 = useRef(new Animated.Value(0)).current;
+	const fadeAnim4 = useRef(new Animated.Value(0)).current;
+	const fadeAnim5 = useRef(new Animated.Value(0)).current;
+
+	// Trigger fade effect with delays
+	useEffect(() => {
+		Animated.stagger(800, [
+			Animated.timing(fadeAnim1, {
+				toValue: 1,
+				duration: 2000, // Durée réduite pour un fade plus rapide
+				useNativeDriver: true,
+			}),
+			Animated.timing(fadeAnim2, {
+				toValue: 1,
+				duration: 3500, // Durée réduite pour un fade plus rapide
+				useNativeDriver: true,
+			}),
+			Animated.timing(fadeAnim3, {
+				toValue: 1,
+				duration: 5500, // Durée réduite pour un fade plus rapide
+				useNativeDriver: true,
+			}),
+			Animated.timing(fadeAnim4, {
+				toValue: 1,
+				duration: 6700, // Durée réduite pour un fade plus rapide
+				useNativeDriver: true,
+			}),
+			Animated.timing(fadeAnim5, {
+				toValue: 1,
+				duration: 8300, // Durée réduite pour un fade plus rapide
+				useNativeDriver: true,
+			}),
+		]).start();
+	}, []);
+
+	// Loading state if fonts are not loaded
+	if (!fontsLoaded) {
+		return (
+			<View style={styles.container}>
+				<Text style={{ fontSize: 20 }}>Loading...</Text>
+			</View>
+		);
+	}
+
+	// Render the UI with animated fade
 	return (
-		<KeyboardAvoidingView style={styles.container}>
-			<Text onPress={() => handlesubmit()}>HomeScreen</Text>
-		</KeyboardAvoidingView>
+		<View style={styles.container}>
+			<Text style={styles.title} onPress={handleSubmit}>
+				YOMIKATA
+			</Text>
+			<View styles={styles.box}>
+				<Animated.Text style={[styles.text, { opacity: fadeAnim1 }]}>
+					So you want to learn Japanese?
+				</Animated.Text>
+				<Animated.Text style={[styles.text, { opacity: fadeAnim2 }]}>
+					And you want to personalize your learning?
+				</Animated.Text>
+				<Animated.Text style={[styles.text, { opacity: fadeAnim3 }]}>
+					Are you ready to be surrounded by Kanji all day?
+				</Animated.Text>
+				<Animated.Text style={[styles.text, { opacity: fadeAnim4 }]}>
+					Then...
+				</Animated.Text>
+			</View>
+			<Animated.View style={[styles.box, { opacity: fadeAnim5 }]}>
+				<Text style={styles.Button} onPress={handleSubmit}>
+					Start Now 🍣
+				</Text>
+			</Animated.View>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	background: {
-		width: "100%",
-		height: "100%",
-	},
 	container: {
 		flex: 1,
+		paddingTop: 100,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "rgba(	255, 190, 11, 0.4)",
+		backgroundColor: "black", // Noir pur
+		opacity: 1, // Assure que l'opacité est à 1
 	},
-	image: {
-		width: "100%",
-		height: "50%",
-	},
-	title: {
-		fontSize: 40,
-		fontWeight: "600",
-		fontFamily: "Futura",
-		marginBottom: 20,
-	},
-	inputContainer: {
-		width: "85%",
-		backgroundColor: "#ffffff",
-		padding: 30,
-		borderRadius: 1,
-	},
-	input: {
-		width: "100%",
-		borderBottomColor: "#000000",
-		borderBottomWidth: 1,
-		fontSize: 16,
-	},
-	button: {
+
+	box: {
+		backgroundColor: "black", // Noir pur
+		flex: 1,
+		justifyContent: "center",
 		alignItems: "center",
-		paddingTop: 8,
-		width: "100%",
-		marginTop: 30,
-		backgroundColor: "#fbe29c",
-		borderRadius: 1,
+		opacity: 1, // Assure que l'opacité est à 1
 	},
-	textButton: {
-		fontFamily: "Futura",
-		height: 30,
+
+	title: {
+		fontSize: 36,
 		fontWeight: "600",
-		fontSize: 16,
-	},
-	error: {
-		marginTop: 10,
+		fontFamily: "Satoshi",
 		color: "red",
+		paddingBottom: 30,
+	},
+	text: {
+		fontSize: 24,
+		fontWeight: "600",
+		fontFamily: "NotoSansJP",
+		textAlign: "center",
+		marginBottom: 15,
+		color: "#fff",
+	},
+	Button: {
+		fontSize: 30,
+		fontWeight: "600",
+		fontFamily: "NotoSansJP",
+		color: "red",
+		paddingBottom: 10,
 	},
 });

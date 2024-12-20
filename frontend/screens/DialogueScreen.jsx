@@ -1,18 +1,18 @@
 import React from "react";
 import { KeyboardAvoidingView, View, Text, StyleSheet } from "react-native";
-import Lessons from "../components/Lessons";
+import Dialogue from "../components/Dialogue";
 
-export default function Dialogue(route) {
-	let lessonId = route.route.params.lessonId;
-	let lessonIndex = route.route.params.lessonIndex;
-	
+export default function DialogueScreen(props) {
+	const id = props.route.params.lessonId;
+	const index = props.route.params.themeIndex;
+
 	return (
 		<KeyboardAvoidingView style={styles.container} behavior="padding">
 			<View style={styles.header}>
 				<Text style={styles.title}>Dialogue Screen</Text>
 			</View>
 			<View style={styles.content}>
-				<Lessons lessonId={lessonId} lessonIndex={lessonIndex}/>
+				<Dialogue id={id} index={index} />
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -21,18 +21,19 @@ export default function Dialogue(route) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#f8f9fa",
+		backgroundColor: "#EEC1C0",
 	},
 	header: {
 		padding: 40,
-		backgroundColor: "#EEC1C0",
+		backgroundColor: "rgba(193, 46, 46, 1)",
+
 		alignItems: "center",
 	},
 	title: {
 		fontSize: 20,
 		color: "#fff",
 		fontWeight: "bold",
-		top: 10,
+		top: 25,
 	},
 	content: {
 		flex: 1,

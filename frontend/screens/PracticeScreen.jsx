@@ -1,17 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Practice from "../components/Practice";
+import { View, Text, StyleSheet, KeyboardAvoidingView } from "react-native";
+import Exercise from "../components/Exercise";
 
-const PracticeScreen = (route) => {	
-	let lessonId = route.route.params.lessonId;
-	let practiceIndex = route.route.params.practiceIndex;
+export default function PracticeScreen(props) {
+	const id = props.route.params.lessonId;
+	const index = props.route.params.themeIndex;
 	return (
-		<View>
-			<Text style={styles.title}>Practice</Text>
-			<Text><Practice lessonId={lessonId} lessonIndex={practiceIndex}/></Text>
-		</View>
+		<KeyboardAvoidingView style={styles.container} behavior="padding">
+			<View style={styles.header}>
+				<Text style={styles.title}>Exercises</Text>
+			</View>
+			<View style={styles.content}>
+				<Exercise id={id} index={index} />
+			</View>
+		</KeyboardAvoidingView>
 	);
-};
+}
 const styles = StyleSheet.create({
 	title: {
 		fontSize: 20,
@@ -20,5 +24,3 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
-
-export default PracticeScreen;
