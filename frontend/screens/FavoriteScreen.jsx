@@ -23,7 +23,7 @@ export default function FavoriteScreen() {
 	const [selectedCardId, setSelectedCardId] = useState(null);
 	const [words, setWords] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [refresh, setRefresh] = useState(true);
+	const [refresh, setRefresh] = useState(false);
 
 	const [fontsLoaded] = useFonts({
 		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
@@ -47,8 +47,8 @@ export default function FavoriteScreen() {
 				.catch((error) =>
 					console.error("Erreur lors de la récupération des favoris :", error)
 				)
-				.finally(() => setLoading(false), setRefresh(!refresh)); // Fin du chargement
-		}, [ token])
+				.finally(() => setLoading(false)); // Fin du chargement
+		}, [ token, refresh])
 	);
 
 	if (loading) {
@@ -59,6 +59,9 @@ export default function FavoriteScreen() {
 		return <Text style={styles.nofavorite}>You have no favorite ...</Text>;
 	}
 
+
+
+
 	const handleClick = (wordId) => {
 		fetch(`http://${uri}:3000/favorites/deleteFavorite/${user.token}`, {
 			method: "DELETE",
@@ -66,8 +69,18 @@ export default function FavoriteScreen() {
 			body: JSON.stringify({
 				id: wordId,
 			}),
-		});
+		})
+			.then((response) => response.json()) // Parse la réponse JSON
+			.then((data) => {
+				if (data.result) {
+					setRefresh((prev) => !prev); // Toggle refresh state to trigger useFocusEffect
+				}
+			})
+			.catch((error) => {
+				console.error("Erreur lors de la suppression :", error);
+			});
 	};
+
 
 	const handleCard = (wordId) => {
 		setSelectedCardId((e) => (e === wordId ? null : wordId));
