@@ -28,8 +28,10 @@ router.post("/signup", (req, res) => {
 		});
 		newUser
 			.save()
-			.then(() =>
-				res.json({ result: true, message: "User registered successfully" })
+			.then((data) =>
+{console.log(data);
+
+				res.json({ result: true, message: "User registered successfully", data : data })}
 			)
 			.catch((err) =>
 				res.status(500).json({ result: false, error: err.message })

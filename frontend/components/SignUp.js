@@ -73,8 +73,10 @@ export default function SignUp() {
 				})
 					.then((response) => response.json())
 					.then((data) => {
+
+						console.log(data); 
 						if (data.result === true) {
-							dispatch(login({ username: signUpUsername, token: data.token }));
+							dispatch(login({ username: signUpUsername, token: data.data.token }));
 							setSignUpUsername("");
 							setSignUpPassword("");
 							setSignUpConfirmPassword("");
@@ -94,6 +96,9 @@ export default function SignUp() {
 			setEmailError(true); // Si l'email est invalide, mettre errorEmail à true
 		}
 	};
+
+	
+	
 
 	const showSignUpModal = () => {
 		setSignUpModalVisible(!signUpModalVisible);

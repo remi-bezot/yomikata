@@ -49,7 +49,7 @@ const ExerciseComponent = (props) => {
 	};
 
 	useEffect(() => {
-		fetch(`http://${uri}:3000/lessons/showAllLessons/`)
+		fetch(`http://${uri}:3000/lessons/showAllLessons/${user.token}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {

@@ -440,7 +440,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 		alignItems: "center",
 		marginBottom: 10,
-	},
+		borderWidth: 2,
+		borderColor: "white",
+		borderStyle: "dotted",
+	  },
 	avatar: {
 		width: 100,
 		height: 100,

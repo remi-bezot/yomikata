@@ -22,7 +22,7 @@ router.post("/createFavorite/:token", (req, res) => {
 	User.findOne({ token: req.params.token })
 		.then((data) => {
 			Favorite.findOne({
-				id_user: "675d9c395db1af3def9b657c",
+				id_user: data._id,
 				Word_JP: req.body.wordjp,
 			})
 				.then((element) => {
@@ -35,7 +35,7 @@ router.post("/createFavorite/:token", (req, res) => {
 							Romanji: req.body.romanji,
 							Grammar: req.body.grammar,
 							isBook: req.body.isbook,
-							id_user: "675d9c395db1af3def9b657c",
+							id_user: data._id,
 						});
 						newFavorite
 							.save()

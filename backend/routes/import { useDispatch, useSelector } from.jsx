@@ -5,7 +5,6 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { loadContinue } from "../reducers/continues";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native"; // Assure-toi d'importer useFocusEffect
 
 import {
 	View,
@@ -181,7 +180,6 @@ export default function DashboardScreen() {
 	const [loading, setLoading] = useState(false);
 	const progress = useSelector((state) => state.continues.value);
 	const lessonId = useSelector((state) => state.continues.value.lesson_id);
-	console.log(lessonId, 'IIIIIIDDDDD')
 	const [done, setDone] = useState([]);
 
 	const navigation = useNavigation();
@@ -226,7 +224,9 @@ export default function DashboardScreen() {
 			})
 			.catch((error) => console.error("Erreur with lessons :", error))
 			.finally(() => setLoading(false));
-	}, [uri]);
+	}, [uri, user.token]);
+
+	import { useFocusEffect } from "@react-navigation/native"; // Assure-toi d'importer useFocusEffect
 
 	useFocusEffect(
 		React.useCallback(() => {
@@ -243,7 +243,7 @@ export default function DashboardScreen() {
 				})
 				.catch((error) => console.error("Erreur with lessons :", error))
 				.finally(() => setLoading(false));
-		}, [uri, lessonId,  user.token]) // Ajoute ici les dépendances
+		}, [uri, lessonId, user.token]) // Ajoute ici les dépendances
 	);
 
 	useEffect(() => {
@@ -275,7 +275,7 @@ export default function DashboardScreen() {
 			.finally(() => setLoading(false));
 	}, [uri, user.token]);
 
-	console.log(user.token, "okokokokokokokok");
+	done && console.log(done, "ICICICI");
 
 	return (
 		<ScrollView style={styles.container}>
@@ -304,6 +304,7 @@ export default function DashboardScreen() {
 						<Text style={styles.text}>{word.furigana}</Text>
 						<Text style={styles.text}>{word.romaji}</Text>
 						<Text style={styles.text}>{meaning}</Text>
+						<Text style={styles.italicText}>...More</Text>
 					</View>
 
 					<View
@@ -317,7 +318,7 @@ export default function DashboardScreen() {
 							done[0].data &&
 							Array.isArray(done[0].data.themes) &&
 							done[0].data.themes.length > 0 && (
-								<View key={0}>
+								<View key={0} style={styles.ThemeBubbleUp}>
 									<View>
 										<Text style={styles.text}>
 											Theme : {done[0].data.themes[0].theme} is done
@@ -325,7 +326,7 @@ export default function DashboardScreen() {
 
 										<SimpleLineIcons
 											style={styles.Arrow}
-											name="check"
+											name="bubbles"
 											size={24}
 											color="black"
 										/>
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: "black",
 		fontWeight: "bold",
-		top: -35,
+		top: -33,
 		width: "172",
 		borderColor: "#090909",
 		borderWidth: 1,
@@ -643,7 +644,9 @@ const styles = StyleSheet.create({
 	},
 	BubbleTopContainer: {
 		flexDirection: "row",
-		alignSelf: "center",
+		justifyContent: "space-between",
+		alignItems: "center",
+		padding: 10,
 	},
 	text: {
 		fontSize: 15,

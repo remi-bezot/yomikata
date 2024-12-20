@@ -4,10 +4,11 @@ var router = express.Router();
 require("../models/connection");
 const User = require("../models/users");
 const Lesson = require("../models/lessons");
-const token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
+// const token = "inaVhmzsm2S_Aq0Aik2ZcJjFX7M_2Uw9";
 //Affiche toutes les lecons
 //ELLE MARCHE
-router.get("/showAllLessons/", (req, res) => {
+router.get("/showAllLessons/:token", (req, res) => {
+	let token = req.params.token;
 	User.findOne({ token: token }).then((dataUser) => {
 		if (dataUser) {
 			let userLevel = dataUser.level;
@@ -21,9 +22,9 @@ router.get("/showAllLessons/", (req, res) => {
 });
 
 // Affiche une leçon grace a son Id
-router.get("/showOne/:lessonId/", (req, res) => {
-	const lessonId = req.params.lessonId;
-
+router.get("/showOne/:lessonId/:token", (req, res) => {
+	let lessonId = req.params.lessonId;
+	let token = req.params.token;
 	User.findOne({ token: token }).then((dataUser) => {
 		if (dataUser) {
 			Lesson.findById(lessonId).then((data) => {
