@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+
 import { login } from "../reducers/users";
 import { useNavigation } from "@react-navigation/native";
 const uri = BackendAdress.uri;
@@ -24,22 +25,25 @@ import { BackendAdress } from "../utils/BackendAdress";
 export default function SignUp() {
   const dispatch = useDispatch();
 
-	const EMAIL_REGEX =
-		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-	const navigation = useNavigation();
-	const [signInEmail, setSignInEmail] = useState("");
-	const [signInPassword, setSignInPassword] = useState("");
-	const [emailError, setEmailError] = useState(false);
-	const [formError, setFormError] = useState(false);
-	const [isValid, setIsValid] = useState(true);
-	const [signInModalVisible, setSignInModalVisible] = useState(false);
-	const [words, setWords] = useState([]);
-	const [isShuffled, setIsShuffled] = useState(false);
+  const navigation = useNavigation();
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const [signInModalVisible, setSignInModalVisible] = useState(false);
+  const [words, setWords] = useState([]);
+  const [isShuffled, setIsShuffled] = useState(false);
 
   const checkForm = () => {
+    console.log("step 1:checkform");
+
     if (!signInEmail || !EMAIL_REGEX.test(signInEmail)) {
       setEmailError(true);
+      console.log(emailError, "step 2:ERROR");
     } else {
       fetch(`http://${uri}:3000/users/signin`, {
         method: "POST",
@@ -51,41 +55,39 @@ export default function SignUp() {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log("step 3:fetch done");
+
           if (data.result === false) {
+            console.log("step 4:check result account");
+
             setIsValid(false);
+            console.log("wrong password");
           } else {
             dispatch(login({ username: data.username, token: data.token }));
             console.log(data.username);
             setSignInEmail("");
             setSignInPassword("");
             setSignInModalVisible(false);
-            navigation.navigate("TabNavigator", { screen: "dashboard" });
+            navigation.replace("TabNavigator", { screen: "Dashboard" });
           }
         });
     }
   };
 
+  // authentification modale
+
   const [fontsLoaded] = useFonts({
-    Satoshi: require("../assets/fonts/Satoshi-Black.otf"),
+    Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
+    NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
   });
 
   if (!fontsLoaded) {
     return null;
   }
 
-						setIsValid(false);
-						console.log("wrong password");
-					} else {
-						dispatch(login({ username: data.username, token: data.token }));
-						console.log(data.username);
-						setSignInEmail("");
-						setSignInPassword("");
-						setSignInModalVisible(false);
-						navigation.replace("TabNavigator", { screen: "Dashboard" });
-					}
-				});
-		}
-	};
+  const showSignInModal = () => {
+    setSignInModalVisible(!signInModalVisible);
+  };
 
   return (
     <View>
@@ -105,10 +107,45 @@ export default function SignUp() {
               />
             </View>
 
-	const [fontsLoaded] = useFonts({
-		Satoshi: require("../assets/fonts/Satoshi-BlackKotf.otf"),
-		NotoSansJP: require("../assets/fonts/NotoSansJP-Thin.ttf"),
-	});
+            <KeyboardAvoidingView style={styles.container}>
+              <Text style={styles.headerText}>Access your account</Text>
+              {formError && <Text style={styles.error}>Invalid Form</Text>}
+              <TextInput
+                style={styles.inputStyles}
+                onChangeText={(value) => {
+                  setSignInEmail(value);
+                  if (EMAIL_REGEX.test(value)) {
+                    setEmailError(false);
+                  }
+                }}
+                value={signInEmail}
+                placeholder="email"
+                placeholderTextColor="grey"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoCorrect={false}
+              />
+              {emailError && (
+                <Text style={styles.error}>Invalid email address</Text>
+              )}
+              <TextInput
+                style={[styles.inputStyles, !isValid && { borderColor: "red" }]}
+                onChangeText={(value) => setSignInPassword(value)}
+                value={signInPassword}
+                placeholder="password"
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                keyboardType="default"
+                autoCapitalize="none"
+              />
+              {!isValid && <Text style={{ color: "red" }}>Wrong password</Text>}
+              <TouchableOpacity style={styles.button} onPress={checkForm}>
+                <Text>Sign in</Text>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+          </View>
+        </View>
+      </Modal>
 
       <TouchableOpacity
         onPress={() => showSignInModal(true)}
