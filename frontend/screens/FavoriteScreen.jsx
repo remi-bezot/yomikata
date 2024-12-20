@@ -48,15 +48,15 @@ export default function FavoriteScreen() {
 					console.error("Erreur lors de la récupération des favoris :", error)
 				)
 				.finally(() => setLoading(false), setRefresh(!refresh)); // Fin du chargement
-		}, [handleClick, token])
+		}, [ token])
 	);
 
 	if (loading) {
-		return <Text>Loading favorites...</Text>;
+		return <Text style={styles.nofavorite}>You have no favorite ...</Text>;
 	}
 
 	if (words.length === 0) {
-		return <Text>No favorites found.</Text>;
+		return <Text style={styles.nofavorite}>You have no favorite ...</Text>;
 	}
 
 	const handleClick = (wordId) => {
@@ -231,5 +231,12 @@ const styles = StyleSheet.create({
 	},
 	speaker: {
 		fontSize: 23,
+	},
+	nofavorite: {
+		fontSize: 25,
+		fontFamily: "Satoshi-Black",
+		color: "#CC4646",
+		marginTop : 50, 
+		alignSelf : "center",
 	},
 });
